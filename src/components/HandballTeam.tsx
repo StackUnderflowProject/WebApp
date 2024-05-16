@@ -1,5 +1,5 @@
 import { CSSProperties } from "react";
-import {IHandballTeam} from "../interfaces/HandballTeam.ts";
+import {IHandballTeam} from "../interfaces/IHandballTeam.ts";
 
 const clubCardStyle: CSSProperties = {
     display: "flex",
@@ -20,7 +20,11 @@ const imgStyle: CSSProperties = {
     borderRadius: "50%",
 };
 
-export const HandballTeam = (team: IHandballTeam) => {
+interface HandballTeamProps {
+    team: IHandballTeam
+}
+
+export const HandballTeam = ({team}: HandballTeamProps) => {
     return (
         <div style={clubCardStyle}>
             <img src={team.logoPath} alt={team.name} style={imgStyle} />

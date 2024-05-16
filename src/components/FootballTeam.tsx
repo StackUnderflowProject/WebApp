@@ -1,4 +1,4 @@
-import { IFootballTeam } from "../interfaces/FootballTeam";
+import { IFootballTeam } from "../interfaces/IFootballTeam.ts";
 import { CSSProperties } from "react";
 
 const clubCardStyle: CSSProperties = {
@@ -20,7 +20,11 @@ const imgStyle: CSSProperties = {
     borderRadius: "50%",
 };
 
-export const FootballTeam = (team: IFootballTeam) => {
+interface FootballTeamProps {
+    team: IFootballTeam
+}
+
+export const FootballTeam = ({team}: FootballTeamProps) => {
     return (
         <div style={clubCardStyle}>
             <img src={team.logoPath} alt={team.name} style={imgStyle} />

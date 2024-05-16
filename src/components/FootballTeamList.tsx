@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {IFootballTeam} from "../interfaces/FootballTeam.ts";
+import {IFootballTeam} from "../interfaces/IFootballTeam.ts";
 import {FootballTeam} from "./FootballTeam.tsx";
 
 export const FootballTeamList = () => {
@@ -9,7 +9,7 @@ export const FootballTeamList = () => {
 
     useEffect(() => {
         const fetchData = () => {
-            fetch(`http://20.56.20.111:3000/footballTeam/filterBySeason/${season}`)
+            fetch(`${import.meta.env.API_URL}/footballTeam/filterBySeason/${season}`)
                 .then(response => response.json())
                 .then(data => {
                     setData(data);
@@ -32,7 +32,7 @@ export const FootballTeamList = () => {
             <h1>Football Teams {season}</h1>
             {loading ? <h2>Loading...</h2> : <div style={{display: 'flex', flexWrap: 'wrap'}}>
                 {data.map((team: IFootballTeam) => (
-                    <FootballTeam key={team._id} {...team}/>
+                    <FootballTeam key={team._id} team={team}/>
                 ))}
             </div>}
         </>
