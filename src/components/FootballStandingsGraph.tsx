@@ -21,37 +21,18 @@ export const FootballStandingsGraph = () => {
     if (loading) return <h2>Loading...</h2>;
 
     return (
-        <div style={{height: "50em"}}>
+        <div style={
+            {
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "95vh",
+                gap: "2em",
+            }
+        }>
             <h1>Football Standings</h1>
             <StandingsLineChart data={data}/>
-            {false && <StandingsTable data={data}/>}
         </div>
     );
-}
-
-const StandingsTable = ({data}: { data: IStanding[]}) => {
-    return <table>
-        <thead>
-        <tr>
-            <th>Season</th>
-            <th>Place</th>
-            <th>Team</th>
-            <th>Logo</th>
-            <th>Points</th>
-        </tr>
-        </thead>
-        <tbody>
-        {data.filter((standing: IStanding) => standing.season === 2024)
-            .map((standing: IStanding) => (
-                <tr key={standing._id}>
-                    <td>{standing.season}</td>
-                    <td>{standing.place}</td>
-                    <td>{standing.team.name}</td>
-                    <td><img src={standing.team.logoPath} alt={standing.team.name}
-                             style={{height: "3em", width: "auto"}}/></td>
-                    <td>{standing.points}</td>
-                </tr>
-            ))}
-        </tbody>
-    </table>
 }

@@ -21,7 +21,17 @@ export const HandballStandingsGraph = () => {
     if (loading) return <h2>Loading...</h2>;
 
     return (
-        <div style={{height: "50em"}}>
+        <div style={
+            {
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "100%",
+                height: "95vh",
+                gap: "2em",
+            }
+        }>
             <h1>Handball Standings</h1>
             <StandingsLineChart data={data}/>
         </div>

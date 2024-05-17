@@ -1,5 +1,4 @@
-import React from 'react';
-import { Line } from 'react-chartjs-2';
+import {Line} from 'react-chartjs-2';
 import {
     ChartData,
     ChartOptions,
@@ -10,19 +9,18 @@ import {
     LineElement,
     Title,
     Tooltip,
-    Legend,
     ChartDataset
 } from 'chart.js';
-import { IStanding } from '../interfaces/IStanding.ts';
+import {IStanding} from '../interfaces/IStanding.ts';
 
 // Register necessary Chart.js components
-Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip);
 
 interface StandingsLineChartProps {
     data: IStanding[];
 }
 
-export const StandingsLineChart: React.FC<StandingsLineChartProps> = ({ data }) => {
+export const StandingsLineChart = ({data}: StandingsLineChartProps) => {
     // Prepare datasets for each club based on provided data
     const clubDatasets: Record<string, ChartDataset> = {};
     const labels = [2020, 2021, 2022, 2023, 2024]; // Assuming fixed years for the chart
@@ -54,8 +52,8 @@ export const StandingsLineChart: React.FC<StandingsLineChartProps> = ({ data }) 
                 )}, ${Math.floor(Math.random() * 128 + 50)})`, // Random color for each club
                 tension: 0.0,
                 pointStyle: logo,
-                pointRadius: 5,
-                pointHoverRadius: 10,
+                pointRadius: 50,
+                pointHoverRadius: 50,
             };
         } else {
             // Update existing dataset with place data at the corresponding year
@@ -78,26 +76,21 @@ export const StandingsLineChart: React.FC<StandingsLineChartProps> = ({ data }) 
         maintainAspectRatio: false,
         plugins: {
             legend: {
-                position: 'bottom',
-            },
-            title: {
-                display: true,
-                text: 'Football Standings',
+                display: false
             },
         },
         scales: {
             x: {
                 type: 'category', // Use 'category' scale for x-axis (registered as part of CategoryScale)
-                title: {
-                    display: true,
-                    text: 'Year',
-                },
+                ticks: {
+                    padding: 30,
+                }
             },
             y: {
-                title: {
-                    display: true,
-                    text: 'Place',
-                    padding: { bottom: 10}
+                ticks: {
+                    stepSize: 1, // Display integer values on y-axis ticks
+                    callback: (value) => (value === 1 ? '1st' : value === 2 ? '2nd' : value === 3 ? '3rd' : `${value}th`), // Customize tick labels
+                    padding: 30,
                 },
                 reverse: true, // Invert y-axis so that higher place is at the top
             },
@@ -107,8 +100,14 @@ export const StandingsLineChart: React.FC<StandingsLineChartProps> = ({ data }) 
     // Render the Line chart with the configured data and options
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     return (
-        <div style={{ width: '80em', height: '90%' }}>
-            <Line data={chartData} options={options} />
+        <div style={{
+            width: '60%',
+            height: '100%',
+            backgroundColor: "#030303",
+            border: "2px solid #f3f3f3",
+            borderRadius: "2em",
+        }}>
+            <Line data={chartData} options={options}/>
         </div>
     );
 };
