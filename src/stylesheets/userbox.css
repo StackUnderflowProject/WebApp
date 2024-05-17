@@ -1,0 +1,31 @@
+:root {
+    --bg: #818181;
+}
+
+#profile-picture {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: var(--bg);
+    border: 1px solid gray;
+}
+
+#user-box {
+    background-color: var(--bg);
+}
+
+#user-profile-menu {
+    background-color: var(--bg);
+    position: sticky;
+    z-index: 100;
+}
+
+#user-profile-menu * {
+    background-color: #333;
+}
+
+.option {
+    background-color: #333;
+    display: flex;
+    gap: 5px;
+}
