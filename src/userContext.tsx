@@ -5,6 +5,7 @@ type User = {
     _id: string,
     username: string,
     email: string,
+    token: string,
     image?: string,
     __v?: number
 }
@@ -12,11 +13,13 @@ type User = {
 type UserContextType = {
     user: User | null;
     setUserContext: (user: User | null) => void;
+    isTokenExpired: () => boolean; 
 }
 
 export const UserContext = createContext<UserContextType>({
     user: null,
-    setUserContext: () => {}
+    setUserContext: () => {},
+    isTokenExpired: () => {return true}
 });
 
 type UserProviderProps = {
@@ -30,8 +33,17 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     setUser(newUser);
   };
 
+  const isTokenExpired = (): boolean => {
+    if (user === null || !user.token) return true;
+
+    const decoded: { exp: number } = jwtDecode(user.token);
+    const currentTime = Date.now() / 1000;
+
+    return decoded.exp < currentTime;
+  };
+
   return (
-    <UserContext.Provider value={{ user, setUserContext }}>
+    <UserContext.Provider value={{ user, setUserContext, isTokenExpired }}>
       {children}
     </UserContext.Provider>
   );
@@ -39,40 +51,3 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
 // Create a custom hook to use the UserContext
 export const useUserContext = () => useContext(UserContext);
-
-
-
-// JWT Context
-
-type JWTContextType = {
-    token: string | null;
-    setToken: (token: string | null) => void;
-    isTokenExpired: () => boolean;
-};
-  
-export const JWTContext = createContext<JWTContextType>({
-    token: null,
-    setToken: () => {},
-    isTokenExpired: () => true
-});
-  
-export const JWTProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [token, setToken] = useState<string | null>(null);
-  
-    const isTokenExpired = (): boolean => {
-      if (!token) return true;
-  
-      const decoded: { exp: number } = jwtDecode(token);
-      const currentTime = Date.now() / 1000;
-  
-      return decoded.exp < currentTime;
-    };
-  
-    return (
-      <JWTContext.Provider value={{ token, setToken, isTokenExpired }}>
-        {children}
-      </JWTContext.Provider>
-    );
-};
-
-export const useJWTContext = () => useContext(JWTContext);
