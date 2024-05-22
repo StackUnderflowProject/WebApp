@@ -1,6 +1,7 @@
 import {useState, useEffect} from "react";
 import {IStanding} from "../interfaces/IStanding.ts";
 import {StandingsLineChart} from "./StandingsLineChart.tsx";
+import {Loading} from "./Loading.tsx";
 
 export const FootballStandingsGraph = () => {
     const [data, setData] = useState<IStanding[]>([]);
@@ -18,19 +19,10 @@ export const FootballStandingsGraph = () => {
         fetchData();
     }, []);
 
-    if (loading) return <h2>Loading...</h2>;
+    if (loading) return <Loading />;
 
     return (
-        <div style={
-            {
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "center",
-                alignItems: "center",
-                height: "95vh",
-                gap: "2em",
-            }
-        }>
+        <div className="flex flex-row justify-center items-center h-dvh gap-8">
             <h1>Football Standings</h1>
             <StandingsLineChart data={data}/>
         </div>
