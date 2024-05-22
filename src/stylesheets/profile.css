@@ -1,0 +1,42 @@
+.center {
+    display: flex;
+    justify-content: center;
+}
+
+.profile-picture {
+    width: 150px;
+    height: 150px;
+    border-radius: 100%;
+    grid-area: 1 / 1;
+}
+
+.profile-container {
+    margin-top: 50px;
+    background-color: var(--fg);
+    border-radius: 3%;
+    padding: 40px
+}
+
+#uploadProfilePicture {
+    margin-top: 30px;
+    display: block;
+}
+
+.custom-file-upload {
+    display: block;
+}
+
+#file-upload {
+    display: block;
+}
+
+.image-container {
+    display: grid;
+    grid-template-columns: 1;
+    grid-template-rows: 1;
+    place-items: center;
+}
+
+#hover-picture {
+    z-index: 1; 
+}
