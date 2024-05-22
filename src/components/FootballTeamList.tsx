@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import {IFootballTeam} from "../interfaces/IFootballTeam.ts";
 import {FootballTeam} from "./FootballTeam.tsx";
+import {Loading} from "./Loading.tsx";
 
 export const FootballTeamList = () => {
     const [season, setSeason] = useState<number>(2024);
@@ -30,7 +31,7 @@ export const FootballTeamList = () => {
                 setSeason(season + 1);
             }}>Next</button>
             <h1>Football Teams {season}</h1>
-            {loading ? <h2>Loading...</h2> : <div style={{display: 'flex', flexWrap: 'wrap'}}>
+            {loading ? <Loading /> : <div style={{display: 'flex', flexWrap: 'wrap'}}>
                 {data.map((team: IFootballTeam) => (
                     <FootballTeam key={team._id} team={team}/>
                 ))}
