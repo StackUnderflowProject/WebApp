@@ -100,13 +100,7 @@ export const StandingsLineChart = ({data}: StandingsLineChartProps) => {
     // Render the Line chart with the configured data and options
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     return (
-        <div style={{
-            width: '60%',
-            height: '100%',
-            backgroundColor: "#030303",
-            border: "2px solid #f3f3f3",
-            borderRadius: "2em",
-        }}>
+        <div className="w-3/5 h-full bg-gray-900 border-2 border-gray-300 rounded-2xl">
             <Line data={chartData} options={options}/>
         </div>
     );

@@ -10,7 +10,9 @@ import {
     Legend,
     ChartData,
 } from 'chart.js';
-import {CSSProperties} from "react";
+import {CSSProperties, useEffect, useState} from "react";
+import {Sport} from "../types/SportType.ts";
+import {Loading} from "./Loading.tsx";
 
 ChartJS.register(
     CategoryScale,
@@ -21,16 +23,31 @@ ChartJS.register(
     Legend
 );
 
-interface StandingsBarChartProps {
-    data: IStanding[];
+interface TeamStatsGraphProps {
+    name: string,
+    sport: Sport
 }
 
-export const TeamStatsGraph = ({data}: StandingsBarChartProps) => {
-    if (data.length === 0) return (
-        <div>
-            <h1>404 Team Not Found</h1>
-        </div>
-    );
+export const TeamStatsGraph = ({name, sport}: TeamStatsGraphProps) => {
+    const [data, setData] = useState<IStanding[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+
+    useEffect(() => {
+        const fetchTeamStats = () => {
+            fetch(`${import.meta.env.API_URL}/${sport}Standing/filterByTeamName/${name}`)
+                .then(response => response.json())
+                .then(data => {
+                    setData(data);
+                    setLoading(false);
+                }).catch(error => {
+                    setError(error);
+                    setLoading(false);
+                }
+            )
+        }
+        fetchTeamStats();
+    }, [name, sport])
 
 
     const barLabels = [2020, 2021, 2022, 2023, 2024] // Use team names as labels
@@ -101,16 +118,14 @@ export const TeamStatsGraph = ({data}: StandingsBarChartProps) => {
         padding: "1em",
     }
 
+    if (error) return <h2>Error: {error}</h2>;
+
+    if (loading) return <Loading />;
+
     return (
-        <>
-            <h1>{data[0].team.name} Stats</h1>
-            <div style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "center",
-                alignItems: "center",
-                gap: "2em",
-            }}>
+        <div className="m-4 p-8 bg-gray-500 rounded-xl">
+            <h1 className="mb-4">{data[0].team.name} Stats</h1>
+            <div className="flex flex-row justify-center items-center gap-8">
                 <div style={graphStyle}>
                     <Bar data={pointsChartData}/>
                 </div>
@@ -118,6 +133,6 @@ export const TeamStatsGraph = ({data}: StandingsBarChartProps) => {
                     <Bar data={goalsChartData}/>
                 </div>
             </div>
-        </>
+        </div>
     );
 }
