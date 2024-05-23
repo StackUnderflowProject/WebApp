@@ -1,0 +1,100 @@
+:root {
+    --bg: hsl(0, 0%, 51%);
+    --fg: #7b7b7b;
+    --inputColor: #fff;
+}
+
+.wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+/* Container for the login form */
+.container {
+    background-color: var(--fg);
+    padding: 20px 40px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 300px;
+  }
+  
+  /* Form styles */
+  .loginForm {
+    background-color: var(--fg);
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .container h2 {
+    background-color: var(--fg);
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  /* Form group styles */
+  .form-group {
+    padding-bottom: 15px;
+    background-color: var(--fg);
+  }
+  
+  .form-group label {
+    background-color: var(--fg);
+    font-weight: bold;
+    display: block;
+    padding-bottom: 7px;
+  }
+  
+  .form-group input {
+    background-color: var(--inputColor);
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  /* Button styles */
+  button[type="submit"] {
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+  }
+  
+  button[type="submit"]:hover {
+    background-color: #0056b3;
+  }
+
+  #nav-register-wrapper {
+    background-color: var(--fg);
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+  }
+
+  #nav-register {
+    background-color: var(--fg);
+    display: flex;
+    gap: 5px;
+  }
+
+  #nav-register p {
+    font-weight: bold;
+    background-color: var(--fg);
+  }
+
+  #nav-register a {
+    font-weight: bold;
+    background-color: var(--fg);
+  }
+
+  #auth-failed {
+    color: red;
+    padding-bottom: 7px;
+  }
