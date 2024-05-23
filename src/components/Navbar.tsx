@@ -8,28 +8,31 @@ import '../stylesheets/navbar.css';
 function Navbar() {
   const { user } = useUserContext(); //  setUserC  return (
 
-  return (    
+  return (
     <nav>
-        <div id="left-side"><Link to="/">Home</Link></div>  
+        <div id="left-side"><Link to="/">Domov</Link></div>  
         <div id="right-side">
-          <div id="pages-links">
-            <Link to="/schedule">Razpored tekem</Link>
-            <Link to="/standings">Lestvice</Link>
-            <Link to="/">Grafi</Link>
-          </div>
-          <div id="user-container">
-            {user ?
-              <UserBox />
-            :
-            <>
-              <p><Link to="/login">Prijava</Link></p>
-              <p><Link to="/register">Registracija</Link></p>
-            </>
-            }
-          </div>
+            <div id="pages-links">
+                <Link to="/schedule">Razpored tekem</Link>
+                <Link to="/standings">Lestvice</Link>
+                <Link to="/">Grafi</Link>
+            </div>
+            <div id="user-container">
+                {user ?
+                    <div id="user-box">
+                        <UserBox />
+                    </div>
+                    :
+                    <>
+                        <p><Link to="/login">Prijava</Link></p>
+                        <p><Link to="/register">Registracija</Link></p>
+                    </>
+                }
+            </div>
         </div>
-      </nav>
-  );
+    </nav>
+);
 }
+
 
 export default Navbar;

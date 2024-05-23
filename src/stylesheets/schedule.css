@@ -82,7 +82,7 @@ p {
     position: -webkit-sticky;
     position: sticky;
     top: 100px;
-    z-index: 1000;
+    z-index: 500;
     background-color: black;
     border-radius: 10px;
     border: none;
@@ -94,7 +94,7 @@ p {
     position: absolute;
     top: 0;
     right: 50px;
-    z-index: 1000;
+    z-index: 500;
     background-color: rgb(88, 110, 255);
     border-radius: 10px;
     border: none;
@@ -106,6 +106,6 @@ p {
     position: -webkit-sticky;
     position: sticky;
     top: 100px;
-    z-index: 1000;
+    z-index: 500;
   }
   
