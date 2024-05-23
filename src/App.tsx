@@ -11,7 +11,8 @@ import Register from './components/Register.tsx';
 import Profile from './components/Profile.tsx';
 import Schedule from './components/Schedule.tsx';
 import Standings from './components/Standings.tsx';
-import FootballClub from './components/FootballClub.tsx';
+import FootballTeam from './components/FootballTeam.tsx';
+import HandballTeam from './components/HandballTeam.tsx';
 
 function App() {
   //const [showFootball, setShowFootball] = useState(true);
@@ -31,7 +32,8 @@ function App() {
                 <Route path="/settings" element={<p></p>} />
                 <Route path="/schedule" element={<Schedule />} />
                 <Route path="/standings" element={<Standings />} />
-                <Route path="/footballClub/:clubId" element={<FootballClub />} />
+                <Route path="/footballTeam/:teamId" element={<FootballTeam />} />
+                <Route path="/handballTeam/:teamId" element={<HandballTeam />} />
               </Routes>
       </UserProvider>
     </BrowserRouter>

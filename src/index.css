@@ -1,6 +1,15 @@
 * {
-  background-color: #222222;
   margin: 0;
+}
+
+:root {
+  --bg: hsl(0, 0%, 51%);
+  --fg: #7b7b7b;
+  --inputColor: #fff;
+}
+
+body {
+  background-color: #222222;
 }
 
 /*:root {
