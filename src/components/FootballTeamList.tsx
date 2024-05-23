@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { IFootballTeam } from '../interfaces/IFootballTeam.ts'
-import { FootballTeam } from './FootballTeam.tsx'
 import { Loading } from './Loading.tsx'
 import { useQuery } from '@tanstack/react-query'
+import { FootballTeamSimple } from './FootballTeamSimple.tsx'
 
 const fetchFootballTeams = async (season: number) => {
     const response = await fetch(`${import.meta.env.API_URL}/footballTeam/filterBySeason/${season}`)
@@ -46,7 +46,7 @@ export const FootballTeamList = () => {
             ) : (
                 <div className="flex flex-wrap">
                     {data.map((team: IFootballTeam) => (
-                        <FootballTeam key={team._id} team={team} />
+                        <FootballTeamSimple key={team._id} team={team} />
                     ))}
                 </div>
             )}

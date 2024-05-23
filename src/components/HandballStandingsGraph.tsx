@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react'
 import { IStanding } from '../interfaces/IStanding.ts'
 import { StandingsLineChart } from './StandingsLineChart.tsx'
 import { Loading } from './Loading.tsx'

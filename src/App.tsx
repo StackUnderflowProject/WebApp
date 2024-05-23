@@ -3,7 +3,6 @@
 import { UserProvider } from './userContext'
 import Navbar from './components/Navbar'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { useState } from 'react'
 import FilterMapComponent from './components/FilterMapComponent.tsx'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { FootballStandingsGraph } from './components/FootballStandingsGraph.tsx'
@@ -11,6 +10,7 @@ import { FootballTeamList } from './components/FootballTeamList.tsx'
 import { HandballStandingsGraph } from './components/HandballStandingsGraph.tsx'
 import { HandballTeamList } from './components/HandballTeamList.tsx'
 import { TeamsStats } from './components/TeamsStats.tsx'
+import { JWTProvider } from './userContext.tsx'
 
 const queryClient = new QueryClient()
 
