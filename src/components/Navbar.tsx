@@ -19,9 +19,12 @@ function Navbar() {
             </div>
             <div id="user-container">
                 {user ?
-                    <div id="user-box">
-                        <UserBox />
-                    </div>
+                    <>
+                      <Link className="center-self-y" to="/createEvent">Ustvari dogodek</Link>
+                      <div id="user-box">
+                          <UserBox />
+                      </div>
+                    </>
                     :
                     <>
                         <p><Link to="/login">Prijava</Link></p>
