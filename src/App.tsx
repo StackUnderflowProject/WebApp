@@ -5,13 +5,14 @@ import Navbar from './components/Navbar'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
-import Login from './components/Login.tsx'
-import Register from './components/Register.tsx'
-import Profile from './components/Profile.tsx'
-import Schedule from './components/Schedule.tsx'
-import Standings from './components/Standings.tsx'
-import { FootballTeam } from './components/FootballTeam.tsx'
-import { HandballTeam } from './components/HandballTeam.tsx'
+import Login from './components/Login.tsx';
+import Register from './components/Register.tsx';
+import Profile from './components/Profile.tsx';
+import Schedule from './components/Schedule.tsx';
+import Standings from './components/Standings.tsx';
+import {FootballTeam} from './components/FootballTeam.tsx';
+import {HandballTeam} from './components/HandballTeam.tsx';
+import CreateEvent from './components/CreateEvent.tsx';
 import { HomePage } from './components/HomePage.tsx'
 
 const queryClient = new QueryClient()
@@ -33,6 +34,7 @@ function App() {
                             <Route path="/standings" element={<Standings />} />
                             <Route path="/footballTeam/:teamId" element={<FootballTeam />} />
                             <Route path="/handballTeam/:teamId" element={<HandballTeam />} />{' '}
+                            <Route path="/createEvent" element={<CreateEvent />} />  
                         </Routes>
                     </QueryClientProvider>
                 </UserProvider>
