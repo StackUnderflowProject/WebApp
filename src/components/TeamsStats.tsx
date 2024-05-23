@@ -1,54 +1,58 @@
-import {useEffect, useState} from "react";
-import {IFootballTeam} from "../interfaces/IFootballTeam.ts";
-import {Sport} from "../types/SportType.ts";
-import {TeamStatsGraph} from "./TeamStatsGraph.tsx";
-import {Loading} from "./Loading.tsx";
+import { useEffect, useState } from 'react'
+import { IFootballTeam } from '../interfaces/IFootballTeam.ts'
+import { Sport } from '../types/SportType.ts'
+import { TeamStatsGraph } from './TeamStatsGraph.tsx'
+import { Loading } from './Loading.tsx'
+import { useQuery } from '@tanstack/react-query'
+import { IHandballTeam } from '../interfaces/IHandballTeam.ts'
+
+const fetchTeamNames = async (sport: Sport) => {
+    const response = await fetch(`${import.meta.env.API_URL}/${sport}Team`)
+    if (!response.ok) {
+        throw new Error('Failed to fetch team names')
+    }
+    return await response.json()
+}
 
 export const TeamsStats = () => {
-    const [footballTeamNames, setFootballTeamNames] = useState<Set<string>>(new Set());
-    const [handballTeamNames, setHandballTeamNames] = useState<Set<string>>(new Set());
-    const [selectedSport, setSelectedSport] = useState<Sport>("football");
-    const [selectedTeam, setSelectedTeam] = useState<string>("Maribor");
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState("");
+    const [selectedSport, setSelectedSport] = useState<Sport>('football')
+    const [selectedTeam, setSelectedTeam] = useState<string>('')
+
+    const {
+        data: footballTeams,
+        error: footballError,
+        isLoading: isFootballLoading,
+        isSuccess: isFootballSuccess
+    } = useQuery<IFootballTeam[]>({
+        queryKey: ['footballTeamNames'],
+        queryFn: () => fetchTeamNames('football')
+    })
+
+    const {
+        data: handballTeams,
+        error: handballError,
+        isLoading: isHandballLoading,
+        isSuccess: isHandballSuccess
+    } = useQuery<IHandballTeam[]>({
+        queryKey: ['handballTeamNames'],
+        queryFn: () => fetchTeamNames('handball')
+    })
 
     useEffect(() => {
-        const fetchFootballTeamNames = () => {
-            fetch(`${import.meta.env.API_URL}/footballTeam`)
-                .then(response => response.json())
-                .then(data => {
-                    setFootballTeamNames(new Set<string>(data.map((team: IFootballTeam) => team.name)))
-                    setLoading(false);
-                }).catch(error => {
-                    setError(error);
-                    setLoading(false);
-                }
-            )
-        }
-        const fetchHandballTeamNames = () => {
-            setLoading(true)
-            fetch(`${import.meta.env.API_URL}/handballTeam`)
-                .then(response => response.json())
-                .then(data => {
-                    setHandballTeamNames(new Set<string>(data.map((team: IFootballTeam) => team.name)))
-                    setLoading(false);
-                }).catch(error => {
-                    setError(error);
-                    setLoading(false);
-                }
-            )
-        }
-        fetchFootballTeamNames()
-        fetchHandballTeamNames()
-    }, []);
+        setSelectedTeam('')
+    }, [selectedSport])
 
-    useEffect(() => {
-        setSelectedTeam("")
-    }, [selectedSport]);
+    if (footballError && selectedSport == 'football') return <h2>Error: {footballError.message}</h2>
+    if (handballError && selectedSport == 'handball') return <h2>Error: {handballError.message}</h2>
 
-    if (error) return <h2>Error: {error}</h2>;
+    if (isFootballLoading && selectedSport == 'football') return <Loading />
+    if (isHandballLoading && selectedSport == 'handball') return <Loading />
 
-    if (loading) return <Loading />;
+    if (!isFootballSuccess) return <h2>No football data available</h2>
+    if (!isHandballSuccess) return <h2>No handball data available</h2>
+
+    const footballTeamNames = new Set<string>(footballTeams.map((team) => team.name))
+    const handballTeamNames = new Set<string>(handballTeams.map((team) => team.name))
 
     return (
         <div className="text-center p-4 m-4 bg-amber-600 rounded-xl">
@@ -65,7 +69,7 @@ export const TeamsStats = () => {
                     <option value="handball">Handball</option>
                 </select>
             </div>
-            {selectedSport === "football" && (
+            {selectedSport === 'football' && (
                 <div className="m-4 flex gap-8 text-2xl">
                     <h2>Football</h2>
                     <select
@@ -76,12 +80,14 @@ export const TeamsStats = () => {
                     >
                         <option></option>
                         {[...footballTeamNames].map((teamName, index) => (
-                            <option key={index} value={teamName}>{teamName}</option>
+                            <option key={index} value={teamName}>
+                                {teamName}
+                            </option>
                         ))}
                     </select>
                 </div>
             )}
-            {selectedSport === "handball" && (
+            {selectedSport === 'handball' && (
                 <div className="m-4 flex gap-8 text-2xl">
                     <h2>Handball</h2>
                     <select
@@ -91,12 +97,14 @@ export const TeamsStats = () => {
                     >
                         <option></option>
                         {[...handballTeamNames].map((teamName, index) => (
-                            <option key={index} value={teamName}>{teamName}</option>
+                            <option key={index} value={teamName}>
+                                {teamName}
+                            </option>
                         ))}
                     </select>
                 </div>
             )}
-            {selectedTeam.length > 0 && <TeamStatsGraph name={selectedTeam} sport={selectedSport}/>}
+            {selectedTeam.length > 0 && <TeamStatsGraph name={selectedTeam} sport={selectedSport} />}
         </div>
     )
 }

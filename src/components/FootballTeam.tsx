@@ -1,24 +1,4 @@
 import { IFootballTeam } from "../interfaces/IFootballTeam.ts";
-import { CSSProperties } from "react";
-
-const clubCardStyle: CSSProperties = {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    border: "1px solid #ddd",
-    padding: "10px",
-    margin: "10px",
-    borderRadius: "10px",
-    width: "200px",
-    backgroundColor: "#6e6e6e",
-};
-
-const imgStyle: CSSProperties = {
-    width: "100px",
-    height: "100px",
-    borderRadius: "50%",
-};
 
 interface FootballTeamProps {
     team: IFootballTeam
@@ -26,8 +6,8 @@ interface FootballTeamProps {
 
 export const FootballTeam = ({team}: FootballTeamProps) => {
     return (
-        <div style={clubCardStyle}>
-            <img src={team.logoPath} alt={team.name} style={imgStyle} />
+        <div className="flex flex-col items-center justify-center border border-gray-400 p-4 m-4 rounded-xl w-56 bg-gray-700">
+            <img src={team.logoPath} alt={team.name} className="w-28 h-28 rounded-full" />
             <h2>{team.name}</h2>
             <p>President: {team.president}</p>
             <p>Director: {team.director}</p>

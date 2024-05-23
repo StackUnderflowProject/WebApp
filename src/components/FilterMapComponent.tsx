@@ -1,7 +1,9 @@
 import {MapComponent} from './Map'
 import {ChangeEvent, useState} from "react";
 import {Sport} from "../types/SportType.ts";
+import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 
+const queryClient = new QueryClient();
 
 const FilterMapComponent = () => {
     const year = new Date().getFullYear();
@@ -17,7 +19,7 @@ const FilterMapComponent = () => {
     }
 
     return (
-        <div className="m-4 p-4 bg-gray-600 rounded-xl">
+        <div className="m-4 p-4 bg-gray-600 rounded-xl w-max">
             <div className="flex flex-row justify-around text-2xl mb-4">
                 <select value={season} onChange={handleSeasonChange} className="pl-4 pr-4 pt-2 pb-2 rounded-xl">
                     <option value={2020}>2020</option>
@@ -31,7 +33,9 @@ const FilterMapComponent = () => {
                     <option value="handball">Handball</option>
                 </select>
             </div>
-            <MapComponent sport={sport} season={season}/>
+            <QueryClientProvider client={queryClient}>
+                <MapComponent sport={sport} season={season}/>
+            </QueryClientProvider>
         </div>
     )
 }
