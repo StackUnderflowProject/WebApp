@@ -14,6 +14,7 @@ import {FootballTeam} from './components/FootballTeam.tsx';
 import {HandballTeam} from './components/HandballTeam.tsx';
 import CreateEvent from './components/CreateEvent.tsx';
 import { HomePage } from './components/HomePage.tsx'
+import EventList from './components/EventList.tsx';
 
 const queryClient = new QueryClient()
 
@@ -35,6 +36,7 @@ function App() {
                             <Route path="/footballTeam/:teamId" element={<FootballTeam />} />
                             <Route path="/handballTeam/:teamId" element={<HandballTeam />} />{' '}
                             <Route path="/createEvent" element={<CreateEvent />} />  
+                            <Route path="/events" element={<EventList />} />  
                         </Routes>
                     </QueryClientProvider>
                 </UserProvider>

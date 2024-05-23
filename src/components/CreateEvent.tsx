@@ -185,6 +185,45 @@ export default function CreateEvent() {
         }
     };
 
+    const getCurrentDate = (): string => {
+        const today = new Date();
+        const year = today.getFullYear();
+        let month: number = today.getMonth() + 1;
+        let day: number = today.getDate();
+
+        let monthS = month.toString();
+        let dayS = day.toString();
+    
+        if (month < 10) {
+            monthS = `0${month}`;
+        }
+        if (day < 10) {
+            dayS = `0${day}`;
+        }
+    
+        return `${year}-${monthS}-${dayS}`;
+    };
+    
+    const getCurrentTime = (): string => {
+        const today = new Date();
+        let hours: number = today.getHours();
+        let minutes: number = today.getMinutes();
+    
+        let hoursS = hours.toString();
+        let minutesS = minutes.toString();
+
+        if (hours < 10) {
+            hoursS = `0${hours}`;
+        }
+        if (minutes < 10) {
+            minutesS = `0${minutes}`;
+        }
+    
+        return `${hoursS}:${minutesS}`;
+    };
+    
+    
+
     return (
         <>
         <div className="center-wrapper2">
@@ -202,12 +241,27 @@ export default function CreateEvent() {
             <div className="small-manager">
                 <div className="form-group">
                     <label htmlFor="event-date">Datum</label>
-                    <input value={date} type="date" id="event-date" name="event-date" onChange={e => setDate(e.target.value)}/>
+                    <input 
+                        value={date} 
+                        type="date" 
+                        id="event-date" 
+                        name="event-date" 
+                        onChange={e => setDate(e.target.value)}
+                        min={getCurrentDate()} 
+                    />
                 </div>
                 <div className="form-group">
                     <label htmlFor="event-time">Čas</label>
-                    <input value={time} type="time" id="event-time" name="event-time" onChange={e => setTime(e.target.value)}/>
+                    <input 
+                        value={time} 
+                        type="time" 
+                        id="event-time" 
+                        name="event-time" 
+                        onChange={e => setTime(e.target.value)}
+                        min={getCurrentTime()} 
+                    />
                 </div>
+
                 <div className="form-group">
                 <label htmlFor="event-activity">Aktivnost</label>
                 <select value={activity} id="event-activity" name="event-activity" onChange={e => setActivity(e.target.value)}>
