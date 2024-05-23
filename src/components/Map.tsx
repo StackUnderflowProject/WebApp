@@ -1,53 +1,52 @@
-import {MapContainer, TileLayer, Marker, Popup} from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
-import L, {LatLng} from 'leaflet';
-
-// Fix for default icon issues with Leaflet in React
-import icon from 'leaflet/dist/images/marker-icon.png';
-import iconShadow from 'leaflet/dist/images/marker-shadow.png';
-import {useEffect, useState} from "react";
-import {IStadium} from "../interfaces/IStadium.ts";
-import {Loading} from "./Loading.tsx";
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
+import 'leaflet/dist/leaflet.css'
+import L, { LatLng } from 'leaflet'
+import icon from 'leaflet/dist/images/marker-icon.png'
+import iconShadow from 'leaflet/dist/images/marker-shadow.png'
+import { useQuery } from '@tanstack/react-query'
+import { IStadium } from '../interfaces/IStadium.ts'
+import { Loading } from './Loading.tsx'
 
 const DefaultIcon = L.icon({
     iconUrl: icon,
     shadowUrl: iconShadow
-});
+})
 
-L.Marker.prototype.options.icon = DefaultIcon;
+L.Marker.prototype.options.icon = DefaultIcon
 
 interface MapComponentProps {
-    sport: string,
+    sport: string
     season: number
 }
 
-export const MapComponent = ({sport, season}: MapComponentProps) => {
-    const [stadiums, setStadiums] = useState<IStadium[]>([]); // Example state for stadiums
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState("");
-    const [positions, setPositions] = useState<LatLng[]>([]); // Example state for positions of stadiums
+const fetchStadiums = async (sport: string, season: number) => {
+    const response = await fetch(`${import.meta.env.API_URL}/${sport}Stadium/filterBySeason/${season}`)
+    if (!response.ok) {
+        throw new Error('Network response was not ok')
+    }
+    return response.json()
+}
 
-    useEffect(() => {
-        const fetchStadiums = () => {
-            fetch(`${import.meta.env.API_URL}/${sport}Stadium/filterBySeason/${season}`)
-                .then(response => response.json())
-                .then(data => {
-                    setStadiums(data);
-                    console.log(data)
-                    setLoading(false);
-                    setPositions(data.map((stadium: IStadium) => new LatLng(stadium.location.coordinates[0], stadium.location.coordinates[1])));
-                }).catch(error => {
-                    setError(error);
-                    setLoading(false);
-                }
-            )
-        }
-        fetchStadiums();
-    }, [sport, season]);
+export const MapComponent = ({ sport, season }: MapComponentProps) => {
+    const {
+        data: stadiums,
+        error,
+        isLoading,
+        isSuccess
+    } = useQuery<IStadium[]>({
+        queryKey: ['stadiums', sport, season],
+        queryFn: () => fetchStadiums(sport, season)
+    })
 
-    if (error) return <h2>Error: {error}</h2>;
+    if (error) return <h2>Error: {error.message}</h2>
 
-    if (loading) return <Loading />;
+    if (isLoading) return <Loading />
+
+    if (!isSuccess) return <h2>No data</h2>
+
+    const positions: LatLng[] = stadiums.map(
+        (stadium: IStadium) => new LatLng(stadium.location.coordinates[0], stadium.location.coordinates[1])
+    )
 
     return (
         <div className="h-[40em] w-[50em] border-2 border-gray-300">
@@ -62,13 +61,16 @@ export const MapComponent = ({sport, season}: MapComponentProps) => {
                             <div className="flex flex-col justify-center items-center w-80">
                                 <h3 className="text-xl mb-2">{stadiums[index].name}</h3>
                                 {stadiums[index].imageUrl && (
-                                    <img src={stadiums[index].imageUrl} alt={stadiums[index].name}
-                                         className="h-36 max-h-full w-auto rounded-lg"/>
+                                    <img
+                                        src={stadiums[index].imageUrl}
+                                        alt={stadiums[index].name}
+                                        className="h-36 max-h-full w-auto rounded-lg"
+                                    />
                                 )}
                                 {stadiums[index].capacity && (
                                     <h4 className="text-base mt-2">
                                         Capacity: {stadiums[index].capacity}
-                                        <br/>
+                                        <br />
                                         Build Year: {stadiums[index].buildYear}
                                     </h4>
                                 )}
@@ -78,5 +80,5 @@ export const MapComponent = ({sport, season}: MapComponentProps) => {
                 ))}
             </MapContainer>
         </div>
-    );
-};
+    )
+}
