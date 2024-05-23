@@ -3,6 +3,10 @@
     --fontColor: rgb(255, 255, 255);
 }
 
+.center-self-y {
+    align-self: center;
+}
+
 nav {
     margin: 0;
     padding: 15px;

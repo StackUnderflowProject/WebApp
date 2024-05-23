@@ -10,7 +10,14 @@ import { FootballTeamList } from './components/FootballTeamList.tsx'
 import { HandballStandingsGraph } from './components/HandballStandingsGraph.tsx'
 import { HandballTeamList } from './components/HandballTeamList.tsx'
 import { TeamsStats } from './components/TeamsStats.tsx'
-import { JWTProvider } from './userContext.tsx'
+
+import Login from './components/Login.tsx';
+import Register from './components/Register.tsx';
+import Profile from './components/Profile.tsx';
+import Schedule from './components/Schedule.tsx';
+import Standings from './components/Standings.tsx';
+import {FootballTeam} from './components/FootballTeam.tsx';
+import {HandballTeam} from './components/HandballTeam.tsx';
 
 const queryClient = new QueryClient()
 
@@ -19,25 +26,27 @@ function App() {
         <>
             <BrowserRouter>
                 <UserProvider>
-                    <JWTProvider>
                         <Navbar />
                         <QueryClientProvider client={queryClient}>
-                            <FilterMapComponent />
-                            <TeamsStats />
-                            <FootballStandingsGraph />
-                            <HandballStandingsGraph />
-                            <FootballTeamList />
-                            <HandballTeamList />
+                            <Routes>
+                                <Route path="/" element={<>
+                                    <FilterMapComponent />
+                                    <TeamsStats />
+                                    <FootballStandingsGraph />
+                                    <HandballStandingsGraph />
+                                    <FootballTeamList />
+                                    <HandballTeamList />
+                                </>} 
+                                />
+                                <Route path="/register" element={<Register />} /> 
+                                <Route path="/login" element={<Login />} />
+                                <Route path="/profile/:userId" element={<Profile />} />
+                                <Route path="/settings" element={<p></p>} />
+                                <Route path="/schedule" element={<Schedule />} />
+                                <Route path="/standings" element={<Standings />} />
+                                <Route path="/footballTeam/:teamId" element={<FootballTeam />} />
+                                <Route path="/handballTeam/:teamId" element={<HandballTeam />} />                            </Routes>
                         </QueryClientProvider>
-                        <Routes>
-                            <Route path="/" element={<p></p>} />
-                            <Route path="/register" element={<p></p>} />
-                            <Route path="/login" element={<p></p>} />
-                            <Route path="/profile" element={<p></p>} />
-                            <Route path="/settings" element={<p></p>} />
-                            <Route path="/logout" element={<p></p>} />
-                        </Routes>
-                    </JWTProvider>
                 </UserProvider>
             </BrowserRouter>
         </>
