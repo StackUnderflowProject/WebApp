@@ -1,19 +1,20 @@
 //import React from 'react';
 import { Link } from 'react-router-dom';  // useNavigate
 import UserBox from './UserBox';
+//import { useEffect } from 'react';
 import {useUserContext} from '../userContext';
 import '../stylesheets/navbar.css';
 
 function Navbar() {
-  const { user } = useUserContext(); //  setUserContext 
+  const { user } = useUserContext(); //  setUserC  return (
 
-  return (
-      <nav>
+  return (    
+    <nav>
         <div id="left-side"><Link to="/">Home</Link></div>  
         <div id="right-side">
           <div id="pages-links">
-            <Link to="/">Razpored tekem</Link>
-            <Link to="/">Lestvice</Link>
+            <Link to="/schedule">Razpored tekem</Link>
+            <Link to="/standings">Lestvice</Link>
             <Link to="/">Grafi</Link>
           </div>
           <div id="user-container">
