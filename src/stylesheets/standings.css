@@ -1,0 +1,81 @@
+.standings-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1em;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: left;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    margin: 0; 
+    box-sizing: border-box; 
+  }
+  
+  .standings-table thead {
+    background-color: #333;
+    color: white;
+  }
+  
+  .standings-table th,
+  .standings-table td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+  }
+  
+  .standings-table th {
+    background-color: #555;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  
+  .standings-table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  .standings-table tbody tr:hover {
+    background-color: #ddd;
+  }
+  
+  .team-logo {
+    height: 3em;
+    width: auto;
+    display: block;
+    margin: 0 auto;
+  }
+  
+  .center-wrapper {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .filter-display {
+    display: flex;
+    gap: 20px;
+    padding-bottom: 10px;
+  }
+  
+  #sport-filter-label {
+    color: gold;
+  }
+  
+  .content-container {
+    margin-top: 50px;
+    border: 1px solid grey;
+    overflow-x: auto; 
+    padding: 10px; 
+    box-sizing: border-box; 
+  }
+
+  .filters {
+    display: flex;
+    gap: 20px;
+  }
+
+  #sport-filter2 {
+    background-color: rgb(88, 110, 255);
+    border-radius: 10px;
+    border: none;
+    padding: 10px 15px;
+    color: white;
+  }
+  
