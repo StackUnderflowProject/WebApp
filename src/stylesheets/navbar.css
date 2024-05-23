@@ -1,5 +1,6 @@
 :root {
-    --bg: #818181;
+    --bg: hsl(0deg 0% 21.73%);
+    --fontColor: rgb(255, 255, 255);
 }
 
 nav {
@@ -12,6 +13,7 @@ nav {
     position: -webkit-sticky; /* For Safari */
     position: sticky;
     top: 0;
+    color: var(--fontColor);
     z-index: 1000;
 }
 
@@ -29,11 +31,13 @@ nav {
 #user-container p {
     margin: 0;
     background-color: var(--bg);
+    color: var(--fontColor);
 }
 
 a {
     text-decoration: none;
     color: white;
+    color: var(--fontColor);
     background-color: var(--bg);
 }
 

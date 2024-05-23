@@ -1,31 +1,47 @@
-:root {
-    --bg: #818181;
+@keyframes slideInFromRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
 }
 
 #profile-picture {
-    width: 30px;
-    height: 30px;
+    cursor: pointer;
+    height: 40px;
+    width: 40px;
     border-radius: 50%;
-    background-color: var(--bg);
-    border: 1px solid gray;
-}
-
-#user-box {
-    background-color: var(--bg);
 }
 
 #user-profile-menu {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    margin-top: 35px;
     background-color: var(--bg);
-    position: sticky;
-    z-index: 100;
-}
-
-#user-profile-menu * {
-    background-color: #333;
+    padding: 10px;
+    z-index: 999;
+    animation: slideInFromRight 0.5s ease-out;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .option {
-    background-color: #333;
     display: flex;
-    gap: 5px;
+    align-items: center;
+    padding: 5px 10px;
+    cursor: pointer;
+    gap: 10px;
+}
+
+.option p {
+    margin: 0;
+    margin-left: 5px;
+}
+
+#user-profile-menu a {
+    text-decoration: none;
+    color: white;
 }
