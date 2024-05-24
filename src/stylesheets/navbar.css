@@ -16,7 +16,6 @@ nav {
     background-color: var(--bg);
     position: -webkit-sticky; /* For Safari */
     position: sticky;
-    top: 0;
     color: var(--fontColor);
     z-index: 10000;
 }
@@ -30,6 +29,10 @@ nav {
     background-color: var(--bg);
     gap: 30px;
     align-items: center;
+}
+
+#right-side * {
+    background-color: var(--bg);
 }
 
 #user-container p {

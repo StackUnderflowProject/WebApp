@@ -22,10 +22,13 @@ interface MatchesMapProps {
     fromDate: Date
     toDate: Date
     sport: Sport
+    team: string
 }
 
 const fetchMatches = async (sport: Sport, fromDate: Date, toDate: Date) => {
-    const response = await fetch(`${import.meta.env.API_URL}/${sport}Match/filterByDateRange/${fromDate}/${toDate}`)
+    const response = await fetch(
+        `${import.meta.env.API_URL}/${sport}Match/filterByDateRange/${fromDate.toISOString().split('T')[0]}/${toDate.toISOString().split('T')[0]}`
+    )
     if (!response.ok) {
         throw new Error('Network response was not ok')
     }
@@ -62,7 +65,7 @@ interface IMatch {
     stadium: IStadium
 }
 
-export const MatchesMap = ({ sport, fromDate, toDate }: MatchesMapProps) => {
+export const MatchesMap = ({ sport, fromDate, toDate, team }: MatchesMapProps) => {
     const {
         data: matches,
         error,
@@ -87,57 +90,62 @@ export const MatchesMap = ({ sport, fromDate, toDate }: MatchesMapProps) => {
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     />
-                    {matches.map((match, index) => (
-                        <Marker
-                            key={index}
-                            position={
-                                new LatLng(match.stadium.location.coordinates[0], match.stadium.location.coordinates[1])
-                            }
-                        >
-                            <Popup>
-                                <div className="flex flex-col justify-center items-center w-80">
-                                    <span className="text-xl flex flex-row justify-center items-center">
-                                        <div className=" p-2 m-2 border-2 rounded-xl flex-col flex items-center justify-center gap-2">
-                                            {match.home.name}
-                                            <br />
-                                            {match.home.logoPath && (
+                    {matches
+                        .filter((x) => team === '' || x.home.name === team || x.away.name === team)
+                        .map((match, index) => (
+                            <Marker
+                                key={index}
+                                position={
+                                    new LatLng(
+                                        match.stadium.location.coordinates[0],
+                                        match.stadium.location.coordinates[1]
+                                    )
+                                }
+                            >
+                                <Popup>
+                                    <div className="flex flex-col justify-center items-center w-80">
+                                        <span className="text-xl flex flex-row justify-center items-center">
+                                            <div className=" p-2 m-2 border-2 rounded-xl flex-col flex items-center justify-center gap-2">
+                                                {match.home.name}
+                                                <br />
+                                                {match.home.logoPath && (
+                                                    <img
+                                                        src={match.home.logoPath}
+                                                        alt={match.home.name + ' logo'}
+                                                        className="w-16 h-16"
+                                                    />
+                                                )}
+                                            </div>
+                                            vs
+                                            <div className=" p-2 m-2 text-center border-2 rounded-xl flex-col flex items-center justify-center gap-2">
+                                                {match.away.name}
+                                                {match.away.logoPath && (
+                                                    <img
+                                                        src={match.away.logoPath}
+                                                        alt={match.away.name + ' logo'}
+                                                        className="w-16 h-16"
+                                                    />
+                                                )}
+                                            </div>
+                                        </span>
+                                        <span className="text-xl p-0 m-0">
+                                            {match.date.split('T')[0]} {match.time}
+                                        </span>
+                                        <span className="text-2xl text-black p-0 m-0">{match.score}</span>
+                                        <div className="text-black">
+                                            <h1>{match.stadium.name}</h1>
+                                            {match.stadium.imageUrl && (
                                                 <img
-                                                    src={match.home.logoPath}
-                                                    alt={match.home.name + ' logo'}
-                                                    className="w-16 h-16"
+                                                    src={match.stadium.imageUrl}
+                                                    alt={match.stadium.name}
+                                                    className="h-36 max-h-full w-auto rounded-lg"
                                                 />
                                             )}
                                         </div>
-                                        vs
-                                        <div className=" p-2 m-2 text-center border-2 rounded-xl flex-col flex items-center justify-center gap-2">
-                                            {match.away.name}
-                                            {match.away.logoPath && (
-                                                <img
-                                                    src={match.away.logoPath}
-                                                    alt={match.away.name + ' logo'}
-                                                    className="w-16 h-16"
-                                                />
-                                            )}
-                                        </div>
-                                    </span>
-                                    <span className="text-xl p-0 m-0">
-                                        {match.date.split('T')[0]} {match.time}
-                                    </span>
-                                    <span className="text-2xl text-black p-0 m-0">{match.score}</span>
-                                    <div className="text-black">
-                                        <h1>{match.stadium.name}</h1>
-                                        {match.stadium.imageUrl && (
-                                            <img
-                                                src={match.stadium.imageUrl}
-                                                alt={match.stadium.name}
-                                                className="h-36 max-h-full w-auto rounded-lg"
-                                            />
-                                        )}
                                     </div>
-                                </div>
-                            </Popup>
-                        </Marker>
-                    ))}
+                                </Popup>
+                            </Marker>
+                        ))}
                 </MapContainer>
             </div>
         </QueryClientProvider>

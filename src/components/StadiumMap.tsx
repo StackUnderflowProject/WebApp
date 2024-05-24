@@ -19,6 +19,7 @@ L.Marker.prototype.options.icon = DefaultIcon
 interface MapComponentProps {
     sport: string
     season: number
+    team: string
 }
 
 const fetchStadiums = async (sport: string, season: number) => {
@@ -31,7 +32,7 @@ const fetchStadiums = async (sport: string, season: number) => {
 
 const queryClient = new QueryClient()
 
-export const StadiumMap = ({ sport, season }: MapComponentProps) => {
+export const StadiumMap = ({ sport, season, team }: MapComponentProps) => {
     const {
         data: stadiums,
         error,
@@ -48,14 +49,14 @@ export const StadiumMap = ({ sport, season }: MapComponentProps) => {
 
     if (!isSuccess) return <h2>No data</h2>
 
-    const positions: LatLng[] = stadiums.map(
-        (stadium: IStadium) => new LatLng(stadium.location.coordinates[0], stadium.location.coordinates[1])
-    )
+    const positions: LatLng[] = stadiums
+        .filter((x) => team === '' || x.teamId.name === team)
+        .map((stadium: IStadium) => new LatLng(stadium.location.coordinates[0], stadium.location.coordinates[1]))
 
     return (
         <QueryClientProvider client={queryClient}>
             <div className="h-full w-full border-8 rounded-xl border-white">
-                <MapContainer center={[46.19200522709865, 14.891171889045815]} zoom={9} className="h-full w-full z-40">
+                <MapContainer center={[46.19200522709865, 14.891171889045815]} zoom={8} className="h-full w-full z-40">
                     <TileLayer
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
