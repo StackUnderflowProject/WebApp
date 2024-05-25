@@ -12,6 +12,7 @@ import {
     ChartDataset
 } from 'chart.js'
 import { IStanding } from '../interfaces/IStanding.ts'
+import { useEffect, useState } from 'react'
 
 // Register necessary Chart.js components
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip)
@@ -25,12 +26,26 @@ export const StandingsLineChart = ({ data }: StandingsLineChartProps) => {
     const clubDatasets: Record<string, ChartDataset> = {}
     const labels = [2020, 2021, 2022, 2023, 2024] // Assuming fixed years for the chart
 
+    const [windowSize, setWindowSize] = useState({ width: window.innerWidth, height: window.innerHeight })
+
+    useEffect(() => {
+        const handleResize = () => {
+            setWindowSize({ width: window.innerWidth, height: window.innerHeight })
+        }
+
+        window.addEventListener('resize', handleResize)
+
+        return () => {
+            window.removeEventListener('resize', handleResize)
+        }
+    }, [])
+
     // Iterate over standings data to populate datasets
     data.forEach((standing: IStanding) => {
         const clubName = standing.team.name
 
         if (!clubDatasets[clubName]) {
-            const logo = new Image(60, 60)
+            const logo = new Image(50, 50)
             logo.src = standing.team.logoPath
 
             // Initialize data array with null values for each year
@@ -97,11 +112,9 @@ export const StandingsLineChart = ({ data }: StandingsLineChartProps) => {
         }
     }
 
-    // Render the Line chart with the configured data and options
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     return (
-        <div className="w-1/2 h-full bg-gray-900 border-2 border-gray-300 rounded-2xl">
-            <Line data={chartData} options={options} />
+        <div className="w-full h-full bg-gray-800 text-black border-2 rounded-xl">
+            <Line data={chartData} options={options} key={windowSize.width + chartData.datasets.length} />
         </div>
     )
 }

@@ -17,7 +17,7 @@ function Navbar() {
                 <div id="pages-links">
                     <Link to="/schedule">Razpored tekem</Link>
                     <Link to="/standings">Lestvice</Link>
-                    <Link to="/">Grafi</Link>
+                    <Link to="/graphs">Grafi</Link>
                 </div>
                 <div id="user-container">
                     {user ? (
