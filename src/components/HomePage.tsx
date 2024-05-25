@@ -4,10 +4,9 @@ import { Sport } from '../types/SportType.ts'
 import { StadiumMap } from './StadiumMap.tsx'
 import { useQuery } from '@tanstack/react-query'
 import { Loading } from './Loading.tsx'
+import { Season } from '../types/SeasonType.ts'
 
 type Option = 'stadiums' | 'matches'
-
-type Season = 2020 | 2021 | 2022 | 2023 | 2024
 
 const lastWeek = () => {
     const today = new Date()

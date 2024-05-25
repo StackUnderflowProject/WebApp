@@ -22,8 +22,7 @@ export const HandballStandingsGraph = () => {
     if (!isSuccess) return <h2>No data available</h2>
 
     return (
-        <div className="flex flex-row justify-center items-center h-[60em] gap-8 m-8">
-            <h1 className="text-2xl text-white">Handball Standings</h1>
+        <div className="h-full w-full xl:mt-8">
             <StandingsLineChart data={data} />
         </div>
     )

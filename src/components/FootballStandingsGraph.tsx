@@ -2,6 +2,7 @@ import { IStanding } from '../interfaces/IStanding.ts'
 import { StandingsLineChart } from './StandingsLineChart.tsx'
 import { Loading } from './Loading.tsx'
 import { useQuery } from '@tanstack/react-query'
+import { useEffect, useState } from 'react'
 
 const fetchStandings = async () => {
     const response = await fetch(`${import.meta.env.API_URL}/footballStanding`)
@@ -24,8 +25,7 @@ export const FootballStandingsGraph = () => {
     if (!isSuccess) return <h2>No data</h2>
 
     return (
-        <div className="flex flex-row justify-center items-center h-[48em] gap-8 m-8">
-            <h1 className="text-2xl text-white">Football Standings</h1>
+        <div className="h-full w-full xl:mt-8">
             <StandingsLineChart data={data} />
         </div>
     )
