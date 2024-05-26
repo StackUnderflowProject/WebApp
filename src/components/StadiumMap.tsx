@@ -6,6 +6,7 @@ import iconShadow from 'leaflet/dist/images/marker-shadow.png'
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query'
 import { IStadium } from '../interfaces/IStadium.ts'
 import { Loading } from './Loading.tsx'
+import { useState } from 'react'
 
 const DefaultIcon = L.icon({
     iconUrl: icon,
@@ -43,6 +44,25 @@ export const StadiumMap = ({ sport, season, team }: MapComponentProps) => {
         queryFn: () => fetchStadiums(sport, season)
     })
 
+    const [tileLayerURL, setTileLayerURL] = useState('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png')
+    const [tileLayerATTR, setTileLayerATTR] = useState(
+        '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    )
+
+    const switchTileLayer = () => {
+        if (tileLayerURL === 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png') {
+            setTileLayerURL('https://tiles.stadiamaps.com/tiles/alidade_satellite/{z}/{x}/{y}{r}.jpg')
+            setTileLayerATTR(
+                '&copy; CNES, Distribution Airbus DS, © Airbus DS, © PlanetObserver (Contains Copernicus Data) | &copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            )
+        } else {
+            setTileLayerURL('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png')
+            setTileLayerATTR(
+                '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            )
+        }
+    }
+
     if (error) return <h2>Error: {error.message}</h2>
 
     if (isLoading) return <Loading />
@@ -55,12 +75,15 @@ export const StadiumMap = ({ sport, season, team }: MapComponentProps) => {
 
     return (
         <QueryClientProvider client={queryClient}>
-            <div className="h-full w-full border-8 rounded-xl border-white">
+            <div className="h-full w-full border-8 rounded-xl border-white relative">
+                <button
+                    onClick={switchTileLayer}
+                    className="absolute top-2 z-50 right-2 text-black w-fit p-2 bg-white rounded-xl hover:bg-gray-200"
+                >
+                    <strong>View</strong>
+                </button>
                 <MapContainer center={[46.19200522709865, 14.891171889045815]} zoom={8} className="h-full w-full z-40">
-                    <TileLayer
-                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    />
+                    <TileLayer url={tileLayerURL} attribution={tileLayerATTR} />
                     {positions.map((position, index) => (
                         <Marker key={index} position={position}>
                             <Popup>

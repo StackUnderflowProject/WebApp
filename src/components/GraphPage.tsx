@@ -17,9 +17,18 @@ const fetchTeamNames = async (sport: Sport) => {
 }
 
 export const GraphPage = () => {
-    const [selectedSport, setSelectedSport] = useState<Sport>('football')
-    const [selectedOption, setSelectedOption] = useState<Option>('standings')
-    const [selectedTeam, setSelectedTeam] = useState<string>('')
+    const [selectedSport, setSelectedSport] = useState<Sport>(() => {
+        const sport = localStorage.getItem('sportGraph')
+        return (sport as Sport) || ('football' as Sport)
+    })
+    const [selectedOption, setSelectedOption] = useState<Option>(() => {
+        const option = localStorage.getItem('selectedOptionGraph')
+        return (option as Option) || ('standings' as Option)
+    })
+    const [selectedTeam, setSelectedTeam] = useState<string>(() => {
+        const team = localStorage.getItem('teamGraph')
+        return team || ''
+    })
     const {
         data: teamNames,
         error,
@@ -45,6 +54,14 @@ export const GraphPage = () => {
     useEffect(() => {
         setSelectedTeam('')
     }, [selectedSport, selectedOption])
+
+    useEffect(() => {
+        localStorage.setItem('selectedOptionGraph', selectedOption)
+        if (selectedOption === 'clubs') {
+            localStorage.setItem('teamGraph', selectedTeam)
+        }
+        localStorage.setItem('sportGraph', selectedSport)
+    }, [selectedTeam, selectedSport, selectedOption])
 
     return (
         <div className="flex xl:flex-row flex-col w-full xl:h-[88%] h-[92%] gap-6">

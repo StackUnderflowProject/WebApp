@@ -8,7 +8,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import Login from './components/Login.tsx'
 import Register from './components/Register.tsx'
 import Profile from './components/Profile.tsx'
-import Schedule from './components/Schedule.tsx'
+import { Schedule } from './components/Schedule.tsx'
 import Standings from './components/Standings.tsx'
 import { FootballTeam } from './components/FootballTeam.tsx'
 import { HandballTeam } from './components/HandballTeam.tsx'
@@ -35,7 +35,7 @@ function App() {
                             <Route path="/schedule" element={<Schedule />} />
                             <Route path="/standings" element={<Standings />} />
                             <Route path="/footballTeam/:teamId" element={<FootballTeam />} />
-                            <Route path="/handballTeam/:teamId" element={<HandballTeam />} />{' '}
+                            <Route path="/handballTeam/:teamId" element={<HandballTeam />} />
                             <Route path="/createEvent" element={<CreateEvent />} />
                             <Route path="/events" element={<EventList />} />
                             <Route path="/graphs" element={<GraphPage />} />

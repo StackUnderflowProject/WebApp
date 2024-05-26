@@ -23,12 +23,35 @@ const fetchTeams = async (sport: Sport, season: Season) => {
 }
 
 export const HomePage = () => {
-    const [selectedOption, setSelectedOption] = useState<Option>('stadiums')
-    const [season, setSeason] = useState<Season>(2024)
-    const [sport, setSport] = useState<Sport>('football')
-    const [fromDate, setFromDate] = useState<string>(lastWeek())
-    const [toDate, setToDate] = useState<string>(new Date().toISOString().split('T')[0])
-    const [team, setTeam] = useState<string>('')
+    const [selectedOption, setSelectedOption] = useState<Option>(() => {
+        const option = localStorage.getItem('selectedOptionHome') as Option
+        return option || 'stadiums'
+    })
+
+    const [season, setSeason] = useState<Season>(() => {
+        const season = localStorage.getItem('seasonHome')
+        return season ? (parseInt(season, 10) as Season) : (2024 as Season)
+    })
+
+    const [sport, setSport] = useState<Sport>(() => {
+        const sport = localStorage.getItem('sportHome')
+        return (sport as Sport) || ('football' as Sport)
+    })
+
+    const [fromDate, setFromDate] = useState<string>(() => {
+        const fromDate = localStorage.getItem('fromDateHome')
+        return fromDate || lastWeek()
+    })
+
+    const [toDate, setToDate] = useState<string>(() => {
+        const toDate = localStorage.getItem('toDateHome')
+        return toDate || new Date().toISOString().split('T')[0]
+    })
+
+    const [team, setTeam] = useState<string>(() => {
+        const team = localStorage.getItem('teamHome')
+        return team || ''
+    })
 
     const {
         data: teams,
@@ -43,6 +66,15 @@ export const HomePage = () => {
     useEffect(() => {
         setTeam('')
     }, [season, sport, selectedOption])
+
+    useEffect(() => {
+        localStorage.setItem('selectedOptionHome', selectedOption)
+        localStorage.setItem('seasonHome', season.toString())
+        localStorage.setItem('sportHome', sport)
+        localStorage.setItem('fromDateHome', fromDate)
+        localStorage.setItem('toDateHome', toDate)
+        localStorage.setItem('teamHome', team)
+    }, [selectedOption, season, sport, fromDate, toDate, team])
 
     const handleOptionChange = (e: ChangeEvent<HTMLSelectElement>) => {
         setSelectedOption(e.target.value as Option)
