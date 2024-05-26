@@ -47,7 +47,7 @@ export const GraphPage = () => {
     }, [selectedSport, selectedOption])
 
     return (
-        <div className="flex xl:flex-row flex-col w-full xl:h-[88%] h-[92%] gap-4">
+        <div className="flex xl:flex-row flex-col w-full xl:h-[88%] h-[92%] gap-6">
             <div className="w-full xl:w-1/4 h-fit bg-purple-400 p-4 mt-8 rounded-xl flex flex-col gap-4">
                 <select
                     className="text-black p-4 rounded-xl h-fit w-full"
@@ -57,19 +57,24 @@ export const GraphPage = () => {
                     <option value="standings">Standings</option>
                     <option value="clubs">Clubs</option>
                 </select>
-                <select className="text-black p-4 rounded-xl h-fit w-full" onChange={handleSportChange}>
-                    <option value="football">Football</option>
-                    <option value="handball">Handball</option>
-                </select>
-                {selectedOption === 'clubs' && (
-                    <div className="flex xl:flex-col flex-row justify-center items-center gap-4">
-                        <span className="text-xl">Clubs:</span>
-                        <select className={`text-black p-4 rounded-xl h-fit w-full`} onChange={handleTeamChange}>
-                            <option></option>
-                            {isSuccess && [...new Set(teamNames)].map((team) => <option key={team}>{team}</option>)}
+                <div className="flex flex-row xl:flex-col justify-center items-center gap-4 w-full">
+                    <div className="flex justify-center items-center w-full gap-4">
+                        <span className="text-xl">Sport:</span>
+                        <select className="text-black p-4 rounded-xl h-fit w-full" onChange={handleSportChange}>
+                            <option value="football">Football</option>
+                            <option value="handball">Handball</option>
                         </select>
                     </div>
-                )}
+                    {selectedOption === 'clubs' && (
+                        <div className="flex justify-center items-center gap-4 w-full">
+                            <span className="text-xl">Clubs:</span>
+                            <select className={`text-black p-4 rounded-xl h-fit w-full`} onChange={handleTeamChange}>
+                                <option></option>
+                                {isSuccess && [...new Set(teamNames)].map((team) => <option key={team}>{team}</option>)}
+                            </select>
+                        </div>
+                    )}
+                </div>
             </div>
             <div className="w-full xl:w-3/4 h-full xl:h-full">
                 {selectedOption === 'standings' &&

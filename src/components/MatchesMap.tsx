@@ -85,7 +85,7 @@ export const MatchesMap = ({ sport, fromDate, toDate, team }: MatchesMapProps) =
     return (
         <QueryClientProvider client={queryClient}>
             <div className="h-full w-full border-8 rounded-xl border-white">
-                <MapContainer center={[46.19200522709865, 14.891171889045815]} zoom={9} className="h-full w-full z-40">
+                <MapContainer center={[46.19200522709865, 14.891171889045815]} zoom={8} className="h-full w-full z-40">
                     <TileLayer
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
