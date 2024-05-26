@@ -1,6 +1,16 @@
 import { IStanding } from '../interfaces/IStanding.ts'
 import { Bar } from 'react-chartjs-2'
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ChartData } from 'chart.js'
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend,
+    ChartData,
+    ChartDataset
+} from 'chart.js'
 import { Sport } from '../types/SportType.ts'
 import { Loading } from './Loading.tsx'
 import { useQuery } from '@tanstack/react-query'
@@ -53,66 +63,80 @@ export const TeamStatsGraph = ({ name, sport }: TeamStatsGraphProps) => {
 
     if (!isSuccess) return <h2>No data available</h2>
 
-    const barLabels = [2020, 2021, 2022, 2023, 2024] // Use team names as labels
-    const datasetWins = {
+    const uniqueYears = Array.from(new Set(data.map((standing) => standing.season)))
+    const sortedYears = uniqueYears.sort((a, b) => a - b)
+
+    const getDataForYear = (year: number, key: keyof IStanding) => {
+        const standing = data.find((s) => s.season === year)
+        return standing ? standing[key] : 0
+    }
+
+    const datasetWins: ChartDataset = {
         label: 'Wins',
-        data: data.map((standing) => standing.wins),
+        data: sortedYears.map((year) => getDataForYear(year, 'wins')),
         backgroundColor: 'rgba(53,225,105,0.2)',
         borderColor: 'rgb(20,197,58)',
         borderWidth: 1
     }
 
-    const datasetDraws = {
+    const datasetDraws: ChartDataset = {
         label: 'Draws',
-        data: data.map((standing) => standing.draws),
+        data: sortedYears.map((year) => getDataForYear(year, 'draws')),
         backgroundColor: 'rgba(255, 206, 86, 0.2)',
         borderColor: 'rgba(255, 206, 86, 1)',
         borderWidth: 1
     }
 
-    const datasetLosses = {
+    const datasetLosses: ChartDataset = {
         label: 'Losses',
-        data: data.map((standing) => standing.losses),
+        data: sortedYears.map((year) => getDataForYear(year, 'losses')),
         backgroundColor: 'rgba(255, 99, 132, 0.2)',
         borderColor: 'rgba(255, 99, 132, 1)',
         borderWidth: 1
     }
 
-    const datasetGoalsScored = {
+    const datasetGoalsScored: ChartDataset = {
         label: 'Goals Scored',
-        data: data.map((standing) => standing.goalsScored),
+        data: sortedYears.map((year) => getDataForYear(year, 'goalsScored')),
         backgroundColor: 'rgba(102,133,255,0.2)',
         borderColor: 'rgb(102,163,255)',
         borderWidth: 1
     }
 
-    const datasetGoalsConceded = {
+    const datasetGoalsConceded: ChartDataset = {
         label: 'Goals Conceded',
-        data: data.map((standing) => standing.goalsConceded),
+        data: sortedYears.map((year) => getDataForYear(year, 'goalsConceded')),
         backgroundColor: 'rgba(255, 159, 64, 0.2)',
         borderColor: 'rgba(255, 159, 64, 1)',
         borderWidth: 1
     }
 
-    const datasetPoints = {
+    const datasetPoints: ChartDataset = {
         label: 'Points',
-        data: data.map((standing) => standing.points),
+        data: sortedYears.map((year) => getDataForYear(year, 'points')),
         backgroundColor: 'rgba(255, 99, 132, 0.2)',
         borderColor: 'rgba(255, 99, 132, 1)',
         borderWidth: 1
     }
 
     const pointsChartData: ChartData = {
-        labels: barLabels,
+        labels: sortedYears,
         datasets: [datasetWins, datasetDraws, datasetLosses]
     }
 
     const goalsChartData: ChartData = {
-        labels: barLabels,
+        labels: sortedYears,
         datasets: [datasetGoalsScored, datasetGoalsConceded, datasetPoints]
     }
 
     const graphOptions = {
+        scales: {
+            y: {
+                ticks: {
+                    step: 50
+                }
+            }
+        },
         plugins: {
             legend: {
                 labels: {
@@ -139,14 +163,14 @@ export const TeamStatsGraph = ({ name, sport }: TeamStatsGraphProps) => {
                 <img src={data[0].team.logoPath} alt={data[0].team.name} className="h-auto w-auto rounded-xl mx-auto" />
             </div>
             <div className="flex flex-row h-2/3 justify-center w-full gap-4">
-                <div className="bg-black p-4 rounded-xl w-full h-full">
+                <div className="bg-black p-4 rounded-xl w-full xl:h-full h-96">
                     <Bar
                         data={pointsChartData}
                         options={graphOptions}
                         key={windowSize.width + pointsChartData.datasets.length}
                     />
                 </div>
-                <div className="bg-black p-4 rounded-xl w-full h-full">
+                <div className="bg-black p-4 rounded-xl w-full xl:h-full h-96">
                     <Bar
                         data={goalsChartData}
                         options={graphOptions}
