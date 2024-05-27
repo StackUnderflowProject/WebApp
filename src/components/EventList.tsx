@@ -11,62 +11,62 @@ import { useWebSocket } from '../WebsocketContext.tsx';
 
 type Event = {
     location: {
-        type: string,
-        coordinates: [
-            number,
-            number
-        ]
-    },
-    _id: string,
-    name: string,
-    description: string,
-    activity: string,
-    date: string,
-    time: string,
+        type: string
+        coordinates: [number, number]
+    }
+    _id: string
+    name: string
+    description: string
+    activity: string
+    date: string
+    time: string
     host: {
-        _id: string,
-        username: string,
-        email: string,
-        __v: number,
+        _id: string
+        username: string
+        email: string
+        __v: number
         image: string
-    },
-    followers: string[],
+    }
+    followers: string[]
     __v: number
-};
+}
 
 interface MapComponentProps {
-    title: string;
-    location: LatLng;
+    title: string
+    location: LatLng
 }
 
 const MapComponent: React.FC<MapComponentProps> = React.memo(({ title, location }) => {
-    const [tileLayerURL, setTileLayerURL] = useState('https://tiles.stadiamaps.com/tiles/outdoors/{z}/{x}/{y}{r}.png');
-    const [tileLayerATTR, setTileLayerATTR] = useState('&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors');
+    const [tileLayerURL, setTileLayerURL] = useState('https://tiles.stadiamaps.com/tiles/outdoors/{z}/{x}/{y}{r}.png')
+    const [tileLayerATTR, setTileLayerATTR] = useState(
+        '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    )
 
     const switchTileLayer = () => {
         if (tileLayerURL === 'https://tiles.stadiamaps.com/tiles/outdoors/{z}/{x}/{y}{r}.png') {
-            setTileLayerURL("https://tiles.stadiamaps.com/tiles/alidade_satellite/{z}/{x}/{y}{r}.jpg");
-            setTileLayerATTR('&copy; CNES, Distribution Airbus DS, © Airbus DS, © PlanetObserver (Contains Copernicus Data) | &copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors');
+            setTileLayerURL('https://tiles.stadiamaps.com/tiles/alidade_satellite/{z}/{x}/{y}{r}.jpg')
+            setTileLayerATTR(
+                '&copy; CNES, Distribution Airbus DS, © Airbus DS, © PlanetObserver (Contains Copernicus Data) | &copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            )
         } else {
-            setTileLayerURL('https://tiles.stadiamaps.com/tiles/outdoors/{z}/{x}/{y}{r}.png');
-            setTileLayerATTR('&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors');
+            setTileLayerURL('https://tiles.stadiamaps.com/tiles/outdoors/{z}/{x}/{y}{r}.png')
+            setTileLayerATTR(
+                '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            )
         }
     }
 
     return (
         <div className="map-container">
-            <button onClick={switchTileLayer} id="map-mode"><strong>Prikaz</strong></button>
+            <button onClick={switchTileLayer} id="map-mode">
+                <strong>Prikaz</strong>
+            </button>
             <MapContainer
                 center={[location.lat, location.lng]} // Center of Slovenia
                 zoom={12}
                 style={{ height: '400px', width: '100%' }}
             >
-                <TileLayer
-                    url={tileLayerURL}
-                    attribution={tileLayerATTR}
-                    minZoom={0}
-                    maxZoom={20}
-                />
+                <TileLayer url={tileLayerURL} attribution={tileLayerATTR} minZoom={0} maxZoom={20} />
                 <Marker position={location}>
                     <Popup>{title}</Popup>
                 </Marker>
@@ -80,13 +80,14 @@ export default function EventList() {
     const [events, setEvents] = useState<Event[]>([]);
     const [loading, setLoading] = useState(true);
     const { user, isTokenExpired, resetJWT } = useUserContext();
+
     const [following, setFollowing] = useState<string[]>(() => {
-        const storedFollowing = localStorage.getItem("followingEventTable");
-        return storedFollowing ? JSON.parse(storedFollowing) : [];
-    });
+        const storedFollowing = localStorage.getItem('followingEventTable')
+        return storedFollowing ? JSON.parse(storedFollowing) : []
+    })
     useEffect(() => {
-        localStorage.setItem("followingEventTable", JSON.stringify(following));
-    }, [following]);
+        localStorage.setItem('followingEventTable', JSON.stringify(following))
+    }, [following])
 
     useEffect(() => {
         if (socket) {
@@ -105,55 +106,55 @@ export default function EventList() {
 
     const getEvents = async () => {
         try {
-            const response = await fetch('http://localhost:3000/events/upcoming');
-            const data = await response.json();
+            const response = await fetch('http://localhost:3000/events/upcoming')
+            const data = await response.json()
             if (response.ok) {
-              setEvents(data);
+                setEvents(data)
             } else {
-              console.error('Failed to fetch events');
+                console.error('Failed to fetch events')
             }
-          } catch (error) {
-            console.error('Error fetching events:', error);
-          } finally {
-              setLoading(false);
-          }
+        } catch (error) {
+            console.error('Error fetching events:', error)
+        } finally {
+            setLoading(false)
+        }
     }
 
     useEffect(() => {
-        getEvents();
-    }, []);
+        getEvents()
+    }, [])
 
     const followEvent = async (event: Event, e: React.MouseEvent<HTMLButtonElement>) => {
         if (isTokenExpired()) {
-            resetJWT();
-            window.alert("Seja je potekla, potrebna je ponovna prijava.")
-            return;
+            resetJWT()
+            window.alert('Seja je potekla, potrebna je ponovna prijava.')
+            return
         }
-        const button = e.target as HTMLButtonElement;
+        const button = e.target as HTMLButtonElement
         if (following.includes(event._id)) {
-            button.innerHTML = "Sledi +";
+            button.innerHTML = 'Sledi +'
         } else {
-            button.innerHTML = "Sledim ✓";
-        }    
+            button.innerHTML = 'Sledim ✓'
+        }
         try {
             const response = await fetch(`http://localhost:3000/events/follow/${event._id}`, {
                 headers: {
-                    'Authorization': 'Bearer: ' + user?.token
+                    Authorization: 'Bearer: ' + user?.token
                 }
-            });
+            })
             if (response.ok) {
                 setFollowing((prevFollowing) => {
                     if (prevFollowing.includes(event._id)) {
-                        return prevFollowing.filter(eId => eId !== event._id);
+                        return prevFollowing.filter((eId) => eId !== event._id)
                     } else {
-                        return [...prevFollowing, event._id];
+                        return [...prevFollowing, event._id]
                     }
-                });
+                })
             } else {
-                console.error('Failed to follow event');
+                console.error('Failed to follow event')
             }
         } catch (error) {
-            console.error('Error following event:', error);
+            console.error('Error following event:', error)
         }
     };
 
@@ -182,31 +183,31 @@ export default function EventList() {
 
     // CHANGE DATE FORMAT
     const formatDateString = (dateString: string) => {
-        const date = new Date(dateString);
-        const today = new Date();
-        const yesterday = new Date(today);
-        yesterday.setDate(today.getDate() - 1);
-        const tomorrow = new Date(today);
-        tomorrow.setDate(today.getDate() + 1);
+        const date = new Date(dateString)
+        const today = new Date()
+        const yesterday = new Date(today)
+        yesterday.setDate(today.getDate() - 1)
+        const tomorrow = new Date(today)
+        tomorrow.setDate(today.getDate() + 1)
 
-        let dayOfWeek = new Intl.DateTimeFormat('sl-SI', { weekday: 'long' }).format(date);
+        let dayOfWeek = new Intl.DateTimeFormat('sl-SI', { weekday: 'long' }).format(date)
 
         if (date.toDateString() === today.toDateString()) {
-        dayOfWeek = "Danes";
+            dayOfWeek = 'Danes'
         } else if (date.toDateString() === yesterday.toDateString()) {
-        dayOfWeek = "Včeraj";
+            dayOfWeek = 'Včeraj'
         } else if (date.toDateString() === tomorrow.toDateString()) {
-        dayOfWeek = "Jutri";
+            dayOfWeek = 'Jutri'
         }
 
-        const day = new Intl.DateTimeFormat('sl-SI', { day: 'numeric' }).format(date);
-        const month = new Intl.DateTimeFormat('sl-SI', { month: 'long' }).format(date);
-        return `${dayOfWeek.charAt(0).toUpperCase() + dayOfWeek.slice(1)} - ${day} ${month}`;
-    };
+        const day = new Intl.DateTimeFormat('sl-SI', { day: 'numeric' }).format(date)
+        const month = new Intl.DateTimeFormat('sl-SI', { month: 'long' }).format(date)
+        return `${dayOfWeek.charAt(0).toUpperCase() + dayOfWeek.slice(1)} - ${day} ${month}`
+    }
 
     // LOADING SCREEN
     if (loading) {
-        return <LoadingScreen />;
+        return <LoadingScreen />
     }
 
     return (
@@ -240,6 +241,5 @@ export default function EventList() {
                 ))}
             </div>
         </div>
-    );
-    
+    )
 }
