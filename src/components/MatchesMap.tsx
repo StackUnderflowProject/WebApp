@@ -7,6 +7,7 @@ import icon from 'leaflet/dist/images/marker-icon.png'
 import iconShadow from 'leaflet/dist/images/marker-shadow.png'
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import { useState } from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const DefaultIcon = L.icon({
     iconUrl: icon,
@@ -107,9 +108,13 @@ export const MatchesMap = ({ sport, fromDate, toDate, team }: MatchesMapProps) =
             <div className="h-full w-full relative">
                 <button
                     onClick={switchTileLayer}
-                    className="absolute top-2 z-50 right-2 text-black w-fit p-2 bg-white rounded-xl hover:bg-gray-200"
+                    className="absolute top-2 z-50 right-2 text-light-text dark:text-dark-text bg-light-background dark:bg-dark-background hover:bg-light-primary dark:hover:bg-dark-primary w-fit p-4 bg-white rounded-xl"
                 >
-                    <strong>View</strong>
+                    {tileLayerURL === 'https://tiles.stadiamaps.com/tiles/outdoors/{z}/{x}/{y}{r}.png' ? (
+                        <FontAwesomeIcon icon={['fas', 'satellite']} />
+                    ) : (
+                        <FontAwesomeIcon icon={['fas', 'map']} />
+                    )}
                 </button>
                 <MapContainer
                     center={[46.19200522709865, 14.891171889045815]}

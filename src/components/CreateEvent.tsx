@@ -3,8 +3,9 @@ import { useNavigate } from 'react-router-dom'
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet'
 import L, { LatLng } from 'leaflet'
 import 'leaflet/dist/leaflet.css'
-import { useWebSocket } from '../WebsocketContext.tsx';
+import { useWebSocket } from '../WebsocketContext.tsx'
 import { useUserContext } from '../userContext'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const CustomMarkerIcon = L.icon({
     iconUrl: '../../mapMarker.png', // Replace with the path to your checkmark icon
@@ -56,9 +57,13 @@ const MapComponent: React.FC<MapComponentProps> = React.memo(({ selectedLocation
         <div className="h-full w-full relative">
             <button
                 onClick={switchTileLayer}
-                className="absolute top-4 right-4 text-black z-50 w-fit text-xl bg-gray-700 hover:bg-white p-2 rounded-xl"
+                className="absolute top-4 right-4 z-50 w-fit  text-light-text dark:text-dark-text bg-light-background dark:bg-dark-background hover:bg-light-primary dark:hover:bg-dark-primary p-4 rounded-xl"
             >
-                <strong>View</strong>
+                {tileLayerURL === 'https://tiles.stadiamaps.com/tiles/outdoors/{z}/{x}/{y}{r}.png' ? (
+                    <FontAwesomeIcon icon={['fas', 'satellite']} />
+                ) : (
+                    <FontAwesomeIcon icon={['fas', 'map']} />
+                )}
             </button>
             <MapContainer
                 center={[46.1512, 14.9955]} // Center of Slovenia
@@ -78,10 +83,10 @@ const MapComponent: React.FC<MapComponentProps> = React.memo(({ selectedLocation
 })
 
 export default function CreateEvent() {
-    const { socket } = useWebSocket();
-    const navigate = useNavigate();
-    const { user, isTokenExpired, resetJWT } = useUserContext();
-    const today = new Date().toISOString().split('T')[0];
+    const { socket } = useWebSocket()
+    const navigate = useNavigate()
+    const { user, isTokenExpired, resetJWT } = useUserContext()
+    const today = new Date().toISOString().split('T')[0]
 
     const [name, setName] = useState(() => {
         const storedName = localStorage.getItem('eventNameC')
@@ -145,6 +150,7 @@ export default function CreateEvent() {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+        console.log('Submitting form')
         const nameO = (document.getElementById('event-name') as HTMLInputElement).value
         const descriptionO = (document.getElementById('event-description') as HTMLInputElement).value
         const activityO = (document.getElementById('event-activity') as HTMLSelectElement).value
@@ -179,18 +185,18 @@ export default function CreateEvent() {
                 }
             })
             if (response.ok) {
-                console.log('Event created successfully');
-                localStorage.setItem("eventNameC", "");
-                localStorage.setItem("eventDescriptionC", "");
-                localStorage.setItem("eventActivityC", "nogomet");
-                localStorage.setItem("eventDateC", today);
-                localStorage.setItem("eventTimeC", "12:00");
-                localStorage.setItem("eventLocationC", "");
-                localStorage.setItem("eventErrorC", "");
+                console.log('Event created successfully')
+                localStorage.setItem('eventNameC', '')
+                localStorage.setItem('eventDescriptionC', '')
+                localStorage.setItem('eventActivityC', 'football')
+                localStorage.setItem('eventDateC', today)
+                localStorage.setItem('eventTimeC', '12:00')
+                localStorage.setItem('eventLocationC', '')
+                localStorage.setItem('eventErrorC', '')
                 if (socket) {
-                    socket.emit('create-event', user?.token);
+                    socket.emit('create-event', user?.token)
                 }
-                navigate("/");
+                navigate('/')
             }
         } catch (error) {
             console.error('Error creating event:', error)
@@ -235,92 +241,100 @@ export default function CreateEvent() {
     }
 
     return (
-        <div className="bg-gray-400 mt-8 rounded-xl w-full flex flex-col justify-start items-start gap-4 p-4 xl:h-[88%] ">
-            <form
-                onSubmit={(e) => handleSubmit(e)}
-                id="event-form"
-                className="flex flex-col xl:flex-row gap-4 w-full h-full"
-            >
-                <div className="flex flex-col gap-4 xl:w-1/3 h-full">
-                    <div className="flex flex-col gap-4 text-xl p-4 rounded-xl bg-gray-700 w-full">
-                        <label htmlFor="event-name" className="">
-                            Event name:
-                        </label>
-                        <input
-                            value={name}
-                            type="text"
-                            id="event-name"
-                            name="event-name"
-                            onChange={(e) => setName(e.target.value)}
-                            required
-                            className="w-full p-4 rounded-xl"
-                        />
-                    </div>
-                    <div className="flex flex-col gap-4 text-xl p-4 rounded-xl bg-gray-700 w-full h-full">
-                        <label htmlFor="event-description">Event description:</label>
-                        <textarea
-                            value={description}
-                            id="event-description"
-                            name="event-description"
-                            className="p-4 rounded-xl resize-none h-full w-full"
-                            onChange={(e) => setDescription(e.target.value)}
-                            required
-                        ></textarea>
-                    </div>
-                </div>
-                <div className="flex flex-col justify-start items-start xl:w-2/3 h-full gap-4">
-                    <div className="flex flex-row flex-shrink flex-grow w-full justify-center items-start gap-4">
-                        <div className="bg-gray-700 p-4 rounded-xl w-1/2 flex">
-                            <label htmlFor="event-date" className="p-4 text-xl">
-                                Date:
+        <div className="bg-light-background dark:bg-dark-background mt-8 rounded-xl w-full flex flex-col justify-start items-start gap-4 p-4 xl:h-[88%] ">
+            <form onSubmit={(e) => handleSubmit(e)} id="event-form" className="h-full w-full flex flex-col gap-4">
+                <div className="flex flex-col xl:flex-row gap-4 w-full h-full">
+                    <div className="flex flex-col gap-4 xl:w-1/3 h-full">
+                        <div className="flex gap-4 p-4 rounded-xl bg-light-primary dark:bg-dark-primary text-light-text dark:text-dark-text w-full">
+                            <label htmlFor="event-name" className="p-2 w-1/3">
+                                Event name:
                             </label>
                             <input
-                                value={date}
-                                type="date"
-                                id="event-date"
-                                name="event-date"
-                                onChange={(e) => setDate(e.target.value)}
-                                min={getCurrentDate()}
-                                className="p-4 rounded-xl text-black w-full"
+                                value={name}
+                                type="text"
+                                id="event-name"
+                                name="event-name"
+                                onChange={(e) => setName(e.target.value)}
+                                required
+                                className="w-2/3 p-2 rounded-xl text-light-text dark:text-dark-text bg-light-background dark:bg-dark-background"
                             />
                         </div>
-                        <div className="bg-gray-700 p-4 rounded-xl w-1/2 flex">
-                            <label htmlFor="event-time" className="p-4 text-xl">
-                                Time:
+                        <div className="flex flex-col gap-4  p-4 rounded-xl bg-light-primary dark:bg-dark-primary text-light-text dark:text-dark-text w-full h-full">
+                            <label htmlFor="event-description">Event description:</label>
+                            <textarea
+                                value={description}
+                                id="event-description"
+                                name="event-description"
+                                className="p-2 rounded-xl resize-none h-full w-full text-light-text dark:text-dark-text bg-light-background dark:bg-dark-background"
+                                onChange={(e) => setDescription(e.target.value)}
+                                required
+                            ></textarea>
+                        </div>
+                    </div>
+                    <div className="flex flex-col justify-start items-start xl:w-2/3 h-full gap-4">
+                        <div className="flex flex-row flex-shrink flex-grow w-full justify-center items-start gap-4">
+                            <div className="bg-light-primary dark:bg-dark-primary text-light-text dark:text-dark-text p-4 rounded-xl w-1/2 flex">
+                                <label htmlFor="event-date" className=" p-2">
+                                    Date:
+                                </label>
+                                <input
+                                    value={date}
+                                    type="date"
+                                    id="event-date"
+                                    name="event-date"
+                                    onChange={(e) => setDate(e.target.value)}
+                                    min={getCurrentDate()}
+                                    className="p-2 rounded-xl text-light-text dark:text-dark-text bg-light-background dark:bg-dark-background w-full"
+                                    required
+                                />
+                            </div>
+                            <div className="bg-light-primary dark:bg-dark-primary text-light-text dark:text-dark-text p-4 rounded-xl w-1/2 flex">
+                                <label htmlFor="event-time" className="p-2 ">
+                                    Time:
+                                </label>
+                                <input
+                                    value={time}
+                                    type="time"
+                                    id="event-time"
+                                    name="event-time"
+                                    onChange={(e) => setTime(e.target.value)}
+                                    min={getCurrentTime()}
+                                    className="p-2 rounded-xl text-light-text dark:text-dark-text bg-light-background dark:bg-dark-background w-full"
+                                    required
+                                />
+                            </div>
+                        </div>
+                        <div className="bg-light-primary dark:bg-dark-primary text-light-text dark:text-dark-text p-4 rounded-xl w-full flex">
+                            <label htmlFor="event-activity" className="p-2 ">
+                                Activity:
                             </label>
                             <input
-                                value={time}
-                                type="time"
-                                id="event-time"
-                                name="event-time"
-                                onChange={(e) => setTime(e.target.value)}
-                                min={getCurrentTime()}
-                                className="p-4 rounded-xl text-black w-full"
+                                type="text"
+                                value={activity}
+                                id="event-activity"
+                                name="event-activity"
+                                onChange={(e) => setActivity(e.target.value)}
+                                className="p-2 rounded-xl text-light-text dark:text-dark-text bg-light-background dark:bg-dark-background w-full"
+                                required
+                            ></input>
+                        </div>
+                        <div className="w-full xl:h-full h-80">
+                            <MapComponent
+                                selectedLocation={selectedLocation}
+                                setSelectedLocation={setSelectedLocation}
                             />
+                            {error !== '' && <p id="error-label"></p>}
                         </div>
                     </div>
-                    <div className="bg-gray-700 p-4 rounded-xl w-full flex">
-                        <label htmlFor="event-activity" className="p-4 text-xl">
-                            Activity:
-                        </label>
-                        <input
-                            type="text"
-                            value={activity}
-                            id="event-activity"
-                            name="event-activity"
-                            onChange={(e) => setActivity(e.target.value)}
-                            className="p-4 rounded-xl text-black w-full"
-                        ></input>
-                    </div>
-                    <div className="w-full xl:h-full h-80">
-                        <MapComponent selectedLocation={selectedLocation} setSelectedLocation={setSelectedLocation} />
-                        {error !== '' && <p id="error-label"></p>}
-                    </div>
                 </div>
+                <button
+                    type="submit"
+                    className="w-full h-fit rounded-xl p-4 bg-light-primary dark:bg-dark-primary text-light-text dark:text-dark-text"
+                >
+                    <FontAwesomeIcon icon={['fas', 'save']} />
+                    &nbsp; Create New Event
+                </button>
             </form>
-            <button type="submit" className="w-full h-fit text-xl mt-4 rounded-xl p-4 bg-gray-700">
-                Create New Event
-            </button>
         </div>
     )
 }

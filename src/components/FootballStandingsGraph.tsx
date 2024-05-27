@@ -2,7 +2,6 @@ import { IStanding } from '../interfaces/IStanding.ts'
 import { StandingsLineChart } from './StandingsLineChart.tsx'
 import { Loading } from './Loading.tsx'
 import { useQuery } from '@tanstack/react-query'
-import { useEffect, useState } from 'react'
 
 const fetchStandings = async () => {
     const response = await fetch(`${import.meta.env.API_URL}/footballStanding`)

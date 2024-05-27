@@ -21,41 +21,33 @@ nav {
 }
 
 #left-side {
-    background-color: var(--bg);
 }
 
 #right-side {
     display: flex;
-    background-color: var(--bg);
     gap: 30px;
     align-items: center;
 }
 
 #right-side * {
-    background-color: var(--bg);
 }
 
 #user-container p {
     margin: 0;
-    background-color: var(--bg);
     color: var(--fontColor);
 }
 
 a {
     text-decoration: none;
-    color: white;
     color: var(--fontColor);
-    background-color: var(--bg);
 }
 
 #user-container {
     display: flex;
     gap: 30px;
-    background-color: var(--bg);
 }
 
 #pages-links {
     display: flex;
     gap: 30px;
-    background-color: var(--bg);
 }
