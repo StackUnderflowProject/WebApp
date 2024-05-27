@@ -2,10 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+
 @media (prefers-color-scheme: dark) {
     :root {
         --bg: #111;
-        --bg-contrast: #ddd;
+        --bg-contrast: #555;
         --text: #eee;
         --border: #444;
         --shadow: #000;
@@ -15,7 +16,7 @@
 @media (prefers-color-scheme: light) {
     :root {
         --bg: #ddd;
-        --bg-contrast: #111;
+        --bg-contrast: #666;
         --text: #000;
         --border: #ccc;
         --shadow: #ddd;
@@ -24,8 +25,8 @@
 *:root {
     color: var(--text);
     background-color: var(--bg);
-    background-image: radial-gradient(circle, var(--bg-contrast) 1%, transparent 5%);
-    background-size: 1.5em 1.5em;
+    background-image: radial-gradient(circle, var(--bg-contrast) 1%, transparent 4%);
+    background-size: 2.5em 2.5em;
     margin: 0;
     box-sizing: border-box;
 }

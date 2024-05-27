@@ -13,6 +13,7 @@ import {
 } from 'chart.js'
 import { IStanding } from '../interfaces/IStanding.ts'
 import { useEffect, useState } from 'react'
+import { useThemePreference } from '../hooks/useThemePreference.ts'
 
 // Register necessary Chart.js components
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip)
@@ -26,6 +27,7 @@ export const StandingsLineChart = ({ data }: StandingsLineChartProps) => {
     const clubDatasets: Record<string, ChartDataset> = {}
     const labels = [2020, 2021, 2022, 2023, 2024] // Assuming fixed years for the chart
 
+    const theme = useThemePreference()
     const [windowSize, setWindowSize] = useState({ width: window.innerWidth, height: window.innerHeight })
 
     useEffect(() => {
@@ -97,7 +99,8 @@ export const StandingsLineChart = ({ data }: StandingsLineChartProps) => {
             x: {
                 type: 'category', // Use 'category' scale for x-axis (registered as part of CategoryScale)
                 ticks: {
-                    padding: 30
+                    padding: 30,
+                    color: theme === 'dark' ? '#fff' : '#000'
                 }
             },
             y: {
@@ -105,7 +108,8 @@ export const StandingsLineChart = ({ data }: StandingsLineChartProps) => {
                     stepSize: 1, // Display integer values on y-axis ticks
                     callback: (value) =>
                         value === 1 ? '1st' : value === 2 ? '2nd' : value === 3 ? '3rd' : `${value}th`, // Customize tick labels
-                    padding: 30
+                    padding: 30,
+                    color: theme === 'dark' ? '#fff' : '#000'
                 },
                 reverse: true // Invert y-axis so that higher place is at the top
             }
@@ -113,7 +117,7 @@ export const StandingsLineChart = ({ data }: StandingsLineChartProps) => {
     }
 
     return (
-        <div className="w-full h-full bg-gray-800 text-black border-2 rounded-xl">
+        <div className="w-full h-full text-light-text bg-light-background dark:text-dark-text dark:bg-dark-background border-2 rounded-xl">
             <Line data={chartData} options={options} key={windowSize.width + chartData.datasets.length} />
         </div>
     )

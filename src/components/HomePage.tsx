@@ -102,22 +102,24 @@ export const HomePage = () => {
 
     return (
         <main className="flex xl:flex-row flex-col justify-center gap-4 mt-4 pt-4 h-[90%] w-full">
-            <aside className="bg-blue-300 xl:w-1/5 p-4 rounded-xl text-left">
+            <aside className="bg-light-background dark:bg-dark-background xl:w-1/5 p-4 rounded-xl text-left h-fit">
                 <select
-                    className="bg-black p-2 rounded-xl w-full cursor-pointer"
+                    className="bg-light-primary text-light-text dark:bg-dark-primary dark:text-dark-text p-2 rounded-xl w-full cursor-pointer h-fit"
                     value={selectedOption}
                     onChange={handleOptionChange}
                 >
                     <option value={'stadiums'}>Stadiums</option>
                     <option value={'matches'}>Matches</option>
                 </select>
-                <div className="grid grid-cols-2 grid-rows-1 xl:grid-cols-1 xl:grid-rows-2 gap-4">
-                    <div className="flex flex-col justify-center items-left gap-2 mt-4 w-full bg-red-600 p-4 rounded-xl">
-                        <h1>{selectedOption === 'stadiums' ? 'Stadium' : 'Match'} Options</h1>
+                <div className="flex flex-row xl:flex-col gap-4 h-fit">
+                    <div className="bg-light-primary text-light-text dark:bg-dark-primary dark:text-dark-text flex flex-col justify-center items-left gap-2 mt-4 w-full h-fit p-4 rounded-xl">
+                        <h1 className="text-light-text dark:text-dark-text">
+                            {selectedOption === 'stadiums' ? 'Stadium' : 'Match'} Options
+                        </h1>
                         <select
                             value={sport}
                             onChange={handleSportChange}
-                            className="p-2 rounded-xl bg-black cursor-pointer"
+                            className="p-2 rounded-xl bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text cursor-pointer"
                         >
                             <option value="football">Football</option>
                             <option value="handball">Handball</option>
@@ -126,7 +128,7 @@ export const HomePage = () => {
                             <select
                                 value={season}
                                 onChange={handleSeasonChange}
-                                className="p-2 rounded-xl bg-black cursor-pointer"
+                                className="p-2 rounded-xl bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text cursor-pointer"
                             >
                                 <option value={2020}>2020</option>
                                 <option value={2021}>2021</option>
@@ -139,25 +141,28 @@ export const HomePage = () => {
                             <div className="mt-2 flex flex-col gap-4">
                                 <input
                                     type="date"
-                                    className="text-black p-2 rounded-xl"
+                                    className="bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text p-2 rounded-xl"
                                     value={fromDate}
                                     onChange={handleFromDateChange}
                                 />
                                 <input
                                     type="date"
-                                    className="text-black p-2 rounded-xl"
+                                    className="bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text p-2 rounded-xl"
                                     value={toDate}
                                     onChange={handleToDateChange}
                                 />
                             </div>
                         )}
                     </div>
-                    <div className="bg-red-600 p-4 mt-4 xl:mt-0 rounded-xl flex flex-col gap-2 h-fit">
-                        <h1>Team Options</h1>
+                    <div className="bg-light-primary text-light-text dark:bg-dark-primary dark:text-dark-text p-4 mt-4 xl:mt-0 rounded-xl flex flex-col gap-2 h-fit w-full">
+                        <h1 className="text-light-text dark:text-dark-text">Team Options</h1>
                         {teamsError && <p>Error fetching teams</p>}
                         {isLoading && <Loading />}
                         {isSuccess && (
-                            <select className="p-2 rounded-xl bg-black cursor-pointer" onChange={handleTeamChange}>
+                            <select
+                                className="p-2 rounded-xl bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text cursor-pointer"
+                                onChange={handleTeamChange}
+                            >
                                 <option></option>
                                 {teams?.map((team) => (
                                     <option key={team} value={team}>
