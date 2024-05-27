@@ -1,7 +1,20 @@
-import React, { createContext, useState, useContext, ReactNode } from 'react';
+import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import {jwtDecode} from 'jwt-decode';
-import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+// Async function to check if user is admin
+const isAdmin = async (jwtToken: string): Promise<boolean> => {
+    const response = await fetch("http://localhost:3000/admins/isAdmin", {
+        headers: {
+            'Authorization': 'Bearer ' + jwtToken
+        }
+    });
+    if (response.ok) {
+        const json = await response.json();
+        return json.isAdmin;
+    }
+    return false;
+}
 
 type User = {
     _id: string,
@@ -9,7 +22,8 @@ type User = {
     email: string,
     token: string,
     image?: string,
-    __v?: number
+    __v?: number,
+    isAdmin?: boolean,
 }
 
 type UserContextType = {
@@ -26,65 +40,71 @@ export const UserContext = createContext<UserContextType>({
     login: () => {},
     logout: () => {},
     updateUser: () => {},
-    isTokenExpired: () => {return true},
+    isTokenExpired: () => true,
     resetJWT: () => {}
 });
 
 type UserProviderProps = {
-  children: ReactNode;
+    children: ReactNode;
 }
 
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const navigate = useNavigate();
+    const [user, setUser] = useState<User | null>(null);
+    const navigate = useNavigate();
 
-  useEffect(() => {
-    const userStored = localStorage.getItem('user');
-    if (userStored) {
-      try {
-        const parsedUser: User = JSON.parse(userStored);
-        setUser(parsedUser);
-      } catch (e) {
-        console.error("Failed to parse user from localStorage", e);
-      }
-    }
-  }, []);
+    useEffect(() => {
+        const userStored = localStorage.getItem('user');
+        if (userStored) {
+            try {
+                const parsedUser: User = JSON.parse(userStored);
+                setUser(parsedUser);
+            } catch (e) {
+                console.error("Failed to parse user from localStorage", e);
+            }
+        }
+    }, []);
 
-  const login = (newUser: User | null) => {
-    localStorage.setItem('user', JSON.stringify(newUser));
-    setUser(newUser);
-  };
+    const login = async (newUser: User | null) => {
+        if (newUser !== null) {
+            newUser.isAdmin = await isAdmin(newUser.token);
+            localStorage.setItem('user', JSON.stringify(newUser));
+            setUser(newUser);
+        } else {
+            localStorage.removeItem('user');
+            setUser(null);
+        }
+    };
 
-  const logout = () => {
-    localStorage.removeItem('user');
-    setUser(null);
-    navigate('/login');
-  };
+    const logout = () => {
+        localStorage.removeItem('user');
+        setUser(null);
+        navigate('/login');
+    };
 
-  const updateUser = (newUser: User | null) => {
-    localStorage.setItem('user', JSON.stringify(newUser));
-    setUser(newUser);
-  }
+    const updateUser = (newUser: User | null) => {
+        localStorage.setItem('user', JSON.stringify(newUser));
+        setUser(newUser);
+    };
 
-  const isTokenExpired = (): boolean => {
-    if (user === null || !user.token) return true;
+    const isTokenExpired = (): boolean => {
+        if (user === null || !user.token) return true;
 
-    const decoded: { exp: number } = jwtDecode(user.token);
-    const currentTime = Date.now() / 1000;
+        const decoded: { exp: number } = jwtDecode(user.token);
+        const currentTime = Date.now() / 1000;
 
-    return decoded.exp < currentTime + 1;
-  };
+        return decoded.exp < currentTime + 1;
+    };
 
-  const resetJWT = () => {
-    setUser(null);
-    navigate('/login');
-  };
+    const resetJWT = () => {
+        setUser(null);
+        navigate('/login');
+    };
 
-  return (
-    <UserContext.Provider value={{ user, login, logout, updateUser, isTokenExpired, resetJWT }}>
-      {children}
-    </UserContext.Provider>
-  );
+    return (
+        <UserContext.Provider value={{ user, login, logout, updateUser, isTokenExpired, resetJWT }}>
+            {children}
+        </UserContext.Provider>
+    );
 };
 
 // Create a custom hook to use the UserContext
