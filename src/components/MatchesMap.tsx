@@ -104,14 +104,18 @@ export const MatchesMap = ({ sport, fromDate, toDate, team }: MatchesMapProps) =
 
     return (
         <QueryClientProvider client={queryClient}>
-            <div className="h-full w-full border-8 rounded-xl border-white relative">
+            <div className="h-full w-full relative">
                 <button
                     onClick={switchTileLayer}
                     className="absolute top-2 z-50 right-2 text-black w-fit p-2 bg-white rounded-xl hover:bg-gray-200"
                 >
                     <strong>View</strong>
                 </button>
-                <MapContainer center={[46.19200522709865, 14.891171889045815]} zoom={8} className="h-full w-full z-40">
+                <MapContainer
+                    center={[46.19200522709865, 14.891171889045815]}
+                    zoom={8}
+                    className="h-full w-full z-40 rounded-xl"
+                >
                     <TileLayer url={tileLayerURL} attribution={tileLayerATTR} />
                     {matches
                         .filter((x) => team === '' || x.home.name === team || x.away.name === team)

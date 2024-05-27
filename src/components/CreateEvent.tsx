@@ -68,7 +68,7 @@ const MapComponent: React.FC<MapComponentProps> = React.memo(({ selectedLocation
                 <LocationMarker setLocation={setSelectedLocation} />
                 {selectedLocation && (
                     <Marker position={selectedLocation} icon={CustomMarkerIcon}>
-                        <Popup>Označena lokacija</Popup>
+                        <Popup>Marked location</Popup>
                     </Marker>
                 )}
             </MapContainer>
@@ -99,7 +99,7 @@ export default function CreateEvent() {
 
     const [activity, setActivity] = useState(() => {
         const storedActivity = localStorage.getItem('eventActivityC')
-        return storedActivity ? storedActivity : 'nogomet'
+        return storedActivity ? storedActivity : 'football'
     })
     useEffect(() => {
         localStorage.setItem('eventActivityC', activity)
@@ -180,7 +180,7 @@ export default function CreateEvent() {
                 console.log('Event created successfully')
                 localStorage.setItem('eventNameC', '')
                 localStorage.setItem('eventDescriptionC', '')
-                localStorage.setItem('eventActivityC', 'nogomet')
+                localStorage.setItem('eventActivityC', 'football')
                 localStorage.setItem('eventDateC', today)
                 localStorage.setItem('eventTimeC', '12:00')
                 localStorage.setItem('eventLocationC', '')
@@ -230,95 +230,92 @@ export default function CreateEvent() {
     }
 
     return (
-        <>
-            <div className="bg-red-500 mt-8 rounded-xl w-full flex flex-col justify-start items-start gap-4 p-4 h-[88%]">
-                <h2 className="text-black text-3xl h-fit">Create event</h2>
-                <form
-                    onSubmit={(e) => handleSubmit(e)}
-                    id="event-form"
-                    className="flex flex-col xl:flex-row gap-4 w-full h-full"
-                >
-                    <div className="flex flex-col gap-4 w-full h-full">
-                        <div className="flex gap-4 text-black text-xl p-4 rounded-xl bg-blue-300 w-full">
-                            <label htmlFor="event-name" className="p-4 w-1/3">
-                                Event name:
+        <div className="bg-gray-400 mt-8 rounded-xl w-full flex flex-col justify-start items-start gap-4 p-4 xl:h-[88%] ">
+            <form
+                onSubmit={(e) => handleSubmit(e)}
+                id="event-form"
+                className="flex flex-col xl:flex-row gap-4 w-full h-full"
+            >
+                <div className="flex flex-col gap-4 xl:w-1/3 h-full">
+                    <div className="flex flex-col gap-4 text-xl p-4 rounded-xl bg-gray-700 w-full">
+                        <label htmlFor="event-name" className="">
+                            Event name:
+                        </label>
+                        <input
+                            value={name}
+                            type="text"
+                            id="event-name"
+                            name="event-name"
+                            onChange={(e) => setName(e.target.value)}
+                            required
+                            className="w-full p-4 rounded-xl"
+                        />
+                    </div>
+                    <div className="flex flex-col gap-4 text-xl p-4 rounded-xl bg-gray-700 w-full h-full">
+                        <label htmlFor="event-description">Event description:</label>
+                        <textarea
+                            value={description}
+                            id="event-description"
+                            name="event-description"
+                            className="p-4 rounded-xl resize-none h-full w-full"
+                            onChange={(e) => setDescription(e.target.value)}
+                            required
+                        ></textarea>
+                    </div>
+                </div>
+                <div className="flex flex-col justify-start items-start xl:w-2/3 h-full gap-4">
+                    <div className="flex flex-row flex-shrink flex-grow w-full justify-center items-start gap-4">
+                        <div className="bg-gray-700 p-4 rounded-xl w-1/2 flex">
+                            <label htmlFor="event-date" className="p-4 text-xl">
+                                Date:
                             </label>
                             <input
-                                value={name}
-                                type="text"
-                                id="event-name"
-                                name="event-name"
-                                onChange={(e) => setName(e.target.value)}
-                                required
-                                className="w-full p-4 rounded-xl"
+                                value={date}
+                                type="date"
+                                id="event-date"
+                                name="event-date"
+                                onChange={(e) => setDate(e.target.value)}
+                                min={getCurrentDate()}
+                                className="p-4 rounded-xl text-black w-full"
                             />
                         </div>
-                        <div className="flex flex-col gap-4 text-black text-xl p-4 rounded-xl bg-blue-300 w-full h-full">
-                            <label htmlFor="event-description">Opis dogodka</label>
-                            <textarea
-                                value={description}
-                                id="event-description"
-                                name="event-description"
-                                className="p-4 rounded-xl resize-none h-full w-full"
-                                onChange={(e) => setDescription(e.target.value)}
-                                required
-                            ></textarea>
+                        <div className="bg-gray-700 p-4 rounded-xl w-1/2 flex">
+                            <label htmlFor="event-time" className="p-4 text-xl">
+                                Time:
+                            </label>
+                            <input
+                                value={time}
+                                type="time"
+                                id="event-time"
+                                name="event-time"
+                                onChange={(e) => setTime(e.target.value)}
+                                min={getCurrentTime()}
+                                className="p-4 rounded-xl text-black w-full"
+                            />
                         </div>
                     </div>
-                    <div className="flex flex-col justify-start items-start w-full h-full gap-4">
-                        <div className="flex flex-row w-full justify-center items-start gap-4">
-                            <div className="bg-gray-700 p-4 rounded-xl w-full flex">
-                                <label htmlFor="event-date" className="p-4 text-xl">
-                                    Datum
-                                </label>
-                                <input
-                                    value={date}
-                                    type="date"
-                                    id="event-date"
-                                    name="event-date"
-                                    onChange={(e) => setDate(e.target.value)}
-                                    min={getCurrentDate()}
-                                    className="p-4 rounded-xl text-black w-full"
-                                />
-                            </div>
-                            <div className="bg-gray-700 p-4 rounded-xl w-full flex">
-                                <label htmlFor="event-time" className="p-4 text-xl">
-                                    Time
-                                </label>
-                                <input
-                                    value={time}
-                                    type="time"
-                                    id="event-time"
-                                    name="event-time"
-                                    onChange={(e) => setTime(e.target.value)}
-                                    min={getCurrentTime()}
-                                    className="p-4 rounded-xl text-black w-full"
-                                />
-                            </div>
-                            <div className="bg-gray-700 p-4 rounded-xl w-full flex">
-                                <label htmlFor="event-activity" className="p-4 text-xl">
-                                    Activity
-                                </label>
-                                <select
-                                    value={activity}
-                                    id="event-activity"
-                                    name="event-activity"
-                                    onChange={(e) => setActivity(e.target.value)}
-                                    className="p-4 rounded-xl text-black"
-                                >
-                                    <option value="nogomet">Nogomet</option>
-                                    <option value="rokomet">Rokomet</option>
-                                </select>
-                            </div>
-                        </div>
+                    <div className="bg-gray-700 p-4 rounded-xl w-full flex">
+                        <label htmlFor="event-activity" className="p-4 text-xl">
+                            Activity:
+                        </label>
+                        <input
+                            type="text"
+                            value={activity}
+                            id="event-activity"
+                            name="event-activity"
+                            onChange={(e) => setActivity(e.target.value)}
+                            className="p-4 rounded-xl text-black w-full"
+                        ></input>
+                    </div>
+                    <div className="w-full xl:h-full h-80">
                         <MapComponent selectedLocation={selectedLocation} setSelectedLocation={setSelectedLocation} />
-                        {error !== '' ? <p id="error-label"></p> : <></>}
+                        {error !== '' && <p id="error-label"></p>}
                     </div>
-                </form>
-                <button type="submit" className="w-full text-2xl mt-4 rounded-xl p-4 bg-blue-400">
-                    Create New Event
-                </button>
-            </div>
-        </>
+                </div>
+            </form>
+            <button type="submit" className="w-full h-fit text-xl mt-4 rounded-xl p-4 bg-gray-700">
+                Create New Event
+            </button>
+        </div>
     )
 }
