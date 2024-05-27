@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import LoadingScreen from './LoadingScreen';
 import '../stylesheets/eventList.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPersonRunning, faSoccerBall, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faPersonRunning, faSoccerBall, faUser, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { LatLng } from 'leaflet';
 import { useUserContext } from "../userContext";
@@ -104,7 +104,7 @@ export default function EventList() {
 
     useEffect(() => {
         getEvents();
-    }, []);
+    }, [events]);
 
     const followEvent = async (event: Event, e: React.MouseEvent<HTMLButtonElement>) => {
         if (isTokenExpired()) {
@@ -139,6 +139,25 @@ export default function EventList() {
             console.error('Error following event:', error);
         }
     };
+
+    const deleteEvent = async (event: Event) => {
+        try {
+            const response = await fetch(`http://localhost:3000/events/${event._id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': 'Bearer: ' + user?.token 
+                },
+            });
+            if (response.ok) {
+                console.log("Event deleted successfully");
+            } else {
+                console.error(`Failed to delete event: ${response.statusText}`);
+            }
+        } catch (error) {
+            console.error("Error deleting event:", error);
+        }
+    }
+
     // CHANGE DATE FORMAT
     const formatDateString = (dateString: string) => {
         const date = new Date(dateString);
@@ -182,6 +201,7 @@ export default function EventList() {
                             <p className="followers-display">{(user && following.includes(event._id) && !event.followers.includes(user._id)) ? event.followers.length + 1 : (user && !following.includes(event._id) && event.followers.includes(user._id)) ? event.followers.length - 1 : event.followers.length} <FontAwesomeIcon icon={faUser} /></p>
                             <p className="event-activity">{event.activity} <FontAwesomeIcon icon={event.activity === "nogomet" ? faSoccerBall : faPersonRunning}/></p>
                             <button onClick={e => followEvent(event, e)} className="follow-button">{(user && (following.includes(event._id) || event.followers.includes(user._id))) ? "Sledim ✓" : "Sledi +"}</button>
+                            {(user && (user.isAdmin || user._id === event.host._id)) ? (<button onClick={() => deleteEvent(event)} className="delete-event"><FontAwesomeIcon icon={faTrash} /></button>) : (<></>)}
                         </div>
                     </div>
                     <div className="event-info">
