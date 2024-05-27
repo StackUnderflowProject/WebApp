@@ -1,0 +1,145 @@
+/* EventList.css */
+
+.event-card-M {
+    width: 150px;
+    height: 200px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    overflow-y: auto;
+    overflow-x:hidden;
+}
+
+.head-M {
+    display: flex;
+    justify-content: space-between;
+}
+
+.event-header-M {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.follow-M {
+    display: flex;
+    gap: 20px;
+    height: 25px;
+}
+
+.host-info-M {
+    display: flex;
+    align-items: center;
+}
+
+.host-image-M {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.event-title-M {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.event-description-M {
+    margin-top: 0;
+}
+
+.event-activity-M, .event-date-M, .event-time-M {
+    margin: 0;
+}
+
+.follow-button-M {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 0;
+    border-radius: 5px;
+    height: 25px;
+    width: 60px;
+    cursor: pointer;
+}
+
+.follow-button-M:hover {
+    background-color: #0056b3;
+}
+
+.event-info-M {
+    display: block;
+    justify-content: left;
+}
+
+.event-info-M p, h3 {
+    text-align: left;
+}
+
+.event-title-M {
+    color: rgb(0, 0, 173);
+}
+
+.event-activity-M {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px;
+    border: 1px solid black;
+    border-radius: 5px;
+    color: black;
+    margin: 0;
+}
+
+.header-right-side-M {
+    display: flex;
+    gap: 10px;
+}
+
+.followers-display-M {
+    display: flex;
+    align-items: center;
+    gap: 5px;   
+    align-self: center;
+}
+
+.delete-event-M {
+    background-color: red;
+    width: 25px;
+    height: 25px;
+    align-self: center;
+    margin-right: 10px;
+    color: white;
+}
+
+.delete-event-M:hover {
+    background-color: rgb(184, 0, 0);
+}
+
+#map-mode-M {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    padding: 5px 0px;
+    width: 80px;
+    font-size: 0.7em;
+    background-color: rgb(255, 255, 255);
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  
+  #map-mode-M:hover {
+    background-color: rgb(255, 255, 255);
+  }
+
+  .map-M {
+    margin-top: 30px;
+    position: relative;
+  }
+
+  .map-container-M {
+    padding: 10px;
+    border-radius: 5px;
+    background-color: white;
+  }
