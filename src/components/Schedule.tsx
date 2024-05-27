@@ -107,8 +107,17 @@ export const Schedule = () => {
         setSeason(selectedSeason)
     }
 
-    if (!isSuccess) {
+    if (error) {
         return <div>Error fetching data</div>
+    }
+
+    // LOADING SCREEN
+    if (isLoading) {
+        return <Loading />
+    }
+
+    if (!isSuccess) {
+        return <div>No data available</div>
     }
 
     // SORT MATCHES BY DATE
@@ -122,15 +131,6 @@ export const Schedule = () => {
         },
         {} as Record<string, IMatch[]>
     )
-
-    if (error) {
-        return <div>Error fetching data</div>
-    }
-
-    // LOADING SCREEN
-    if (isLoading) {
-        return <Loading />
-    }
 
     return (
         <div className="mt-8 relative">

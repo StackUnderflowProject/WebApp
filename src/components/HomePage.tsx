@@ -152,7 +152,7 @@ export const HomePage = () => {
                             </div>
                         )}
                     </div>
-                    <div className="bg-red-600 p-4 mt-4 xl:mt-0 rounded-xl flex flex-col gap-2">
+                    <div className="bg-red-600 p-4 mt-4 xl:mt-0 rounded-xl flex flex-col gap-2 h-fit">
                         <h1>Team Options</h1>
                         {teamsError && <p>Error fetching teams</p>}
                         {isLoading && <Loading />}
