@@ -6,7 +6,7 @@
 }
 
 .event-card {
-    flex: 1 1 300px;
+    flex: 1 1 400px;
     background-color: #f9f9f9;
     border-radius: 10px;
     padding: 20px;
@@ -98,4 +98,14 @@
     gap: 5px;
     padding: 5px 10px;
     
+}
+
+.delete-event {
+    background-color: red;
+    padding: 5px 10px;
+    width: 50px;
+}
+
+.delete-event:hover {
+    background-color: rgb(184, 0, 0);
 }

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet'
 import L, { LatLng } from 'leaflet'
 import 'leaflet/dist/leaflet.css'
+import { useWebSocket } from '../WebsocketContext.tsx';
 import { useUserContext } from '../userContext'
 
 const CustomMarkerIcon = L.icon({
@@ -77,9 +78,10 @@ const MapComponent: React.FC<MapComponentProps> = React.memo(({ selectedLocation
 })
 
 export default function CreateEvent() {
-    const navigate = useNavigate()
-    const { user, isTokenExpired, resetJWT } = useUserContext()
-    const today = new Date().toISOString().split('T')[0]
+    const { socket } = useWebSocket();
+    const navigate = useNavigate();
+    const { user, isTokenExpired, resetJWT } = useUserContext();
+    const today = new Date().toISOString().split('T')[0];
 
     const [name, setName] = useState(() => {
         const storedName = localStorage.getItem('eventNameC')
@@ -177,15 +179,18 @@ export default function CreateEvent() {
                 }
             })
             if (response.ok) {
-                console.log('Event created successfully')
-                localStorage.setItem('eventNameC', '')
-                localStorage.setItem('eventDescriptionC', '')
-                localStorage.setItem('eventActivityC', 'football')
-                localStorage.setItem('eventDateC', today)
-                localStorage.setItem('eventTimeC', '12:00')
-                localStorage.setItem('eventLocationC', '')
-                localStorage.setItem('eventErrorC', '')
-                navigate('/')
+                console.log('Event created successfully');
+                localStorage.setItem("eventNameC", "");
+                localStorage.setItem("eventDescriptionC", "");
+                localStorage.setItem("eventActivityC", "nogomet");
+                localStorage.setItem("eventDateC", today);
+                localStorage.setItem("eventTimeC", "12:00");
+                localStorage.setItem("eventLocationC", "");
+                localStorage.setItem("eventErrorC", "");
+                if (socket) {
+                    socket.emit('create-event', user?.token);
+                }
+                navigate("/");
             }
         } catch (error) {
             console.error('Error creating event:', error)
