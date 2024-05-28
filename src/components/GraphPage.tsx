@@ -104,7 +104,7 @@ export const GraphPage = () => {
                     (selectedSport === 'football' ? <FootballStandingsGraph /> : <HandballStandingsGraph />)}
 
                 {selectedOption === 'clubs' && selectedTeam === '' && (
-                    <div className="h-full w-full xl:mt-8 bg-transparent border-2 rounded-xl grid place-content-center">
+                    <div className="h-[90%] w-full xl:mt-8 bg-transparent border-2 rounded-xl grid place-content-center">
                         <h2 className="text-3xl">Select a team</h2>
                     </div>
                 )}
