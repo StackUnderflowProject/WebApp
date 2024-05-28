@@ -87,6 +87,10 @@ export function FootballTeam() {
     const navigate = useNavigate()
     const { teamId } = useParams()
 
+    useEffect(() => {
+        localStorage.setItem("lastPath", "/footballTeam/" + teamId);
+    }, [])
+
     const [loading, setLoading] = useState(true)
     const [team, setTeam] = useState<Team | null>(null)
     const [teams, setTeams] = useState<StandingsUnit[]>([])

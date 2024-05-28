@@ -17,6 +17,10 @@ const fetchTeamNames = async (sport: Sport) => {
 }
 
 export const GraphPage = () => {
+    useEffect(() => {
+        localStorage.setItem("lastPath", "/graphs");
+    }, [])
+
     const [selectedSport, setSelectedSport] = useState<Sport>(() => {
         const sport = localStorage.getItem('sportGraph')
         return (sport as Sport) || ('football' as Sport)

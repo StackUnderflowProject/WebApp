@@ -30,6 +30,10 @@ function Standings() {
     const [teams, setTeams] = useState<StandingsUnit[]>([]);
     const [loading, setLoading] = useState(true);
 
+    useEffect(() => {
+        localStorage.setItem("lastPath", "/standings");
+    }, [])
+
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear();
     const [season, setSeason] = useState(() => {

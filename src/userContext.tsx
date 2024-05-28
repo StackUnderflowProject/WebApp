@@ -69,6 +69,9 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
             newUser.isAdmin = await isAdmin(newUser.token);
             localStorage.setItem('user', JSON.stringify(newUser));
             setUser(newUser);
+            const storedPath = localStorage.getItem("lastPath");
+            const lastPath = (storedPath && storedPath !== "/register") ? storedPath : "/";
+            navigate(lastPath);
         } else {
             localStorage.removeItem('user');
             setUser(null);

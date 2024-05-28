@@ -21,7 +21,6 @@ function Login() {
     });
     useEffect(() => {
         localStorage.setItem('usernameText', usernameText);
-        console.log("setting to: " + usernameText)
     }, [usernameText]);
     useEffect(() => {
         localStorage.setItem('passwordText', passwordText);
@@ -36,22 +35,26 @@ function Login() {
         const username: string = usernameInput?.value ?? '';
         const password: string = passwordInput?.value ?? '';
 
-        const response = await fetch("http://localhost:3000/users/login", {
-            method: 'POST', 
-            body: JSON.stringify({username, password}),
-            headers: {
-                'Content-Type': 'application/json' // Specify content type
-            },
-        })
-        if (response.ok) {
-            const data = await response.json();
-            if(data.token !== undefined){
-                login(data);
-            }    
-            localStorage.setItem('usernameText', "");
-            localStorage.setItem('passwordText', "");
-            navigate("/");
-        } else {
+        try {
+            const response = await fetch("http://localhost:3000/users/login", {
+                method: 'POST', 
+                body: JSON.stringify({username, password}),
+                headers: {
+                    'Content-Type': 'application/json' // Specify content type
+                },
+            })
+            if (response.ok) {
+                const data = await response.json();
+                if(data.token !== undefined){
+                    login(data);
+                }    
+                localStorage.setItem('usernameText', "");
+                localStorage.setItem('passwordText', "");
+                navigate("/");
+            } else {
+                setAuthFailed(true);
+            }
+        } catch (err) {
             setAuthFailed(true);
         }
     }

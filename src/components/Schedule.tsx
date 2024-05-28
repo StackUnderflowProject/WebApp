@@ -69,6 +69,7 @@ export const Schedule = () => {
     }
 
     useEffect(() => {
+        localStorage.setItem("lastPath", "/schedule");
         window.addEventListener('scroll', handleScroll)
         return () => window.removeEventListener('scroll', handleScroll)
     }, [])
