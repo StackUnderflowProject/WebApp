@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from "react";
-import LoadingScreen from './LoadingScreen';
-import '../stylesheets/eventList.css';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPersonRunning, faSoccerBall, faUser, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import { LatLng } from 'leaflet';
-import { useUserContext } from "../userContext";
-import MainMap from "./EventsMap";
-import { useWebSocket } from '../WebsocketContext.tsx';
+import React, { useState, useEffect } from 'react'
+import LoadingScreen from './LoadingScreen'
+import '../stylesheets/eventList.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPersonRunning, faSoccerBall, faUser, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
+import { LatLng } from 'leaflet'
+import { useUserContext } from '../userContext'
+import MainMap from './EventsMap'
+import { useWebSocket } from '../WebsocketContext.tsx'
+import { useTranslation } from 'react-i18next'
 
 type Event = {
     location: {
@@ -72,14 +73,15 @@ const MapComponent: React.FC<MapComponentProps> = React.memo(({ title, location 
                 </Marker>
             </MapContainer>
         </div>
-    );
-});
+    )
+})
 
 export default function EventList() {
-    const { socket } = useWebSocket();
-    const [events, setEvents] = useState<Event[]>([]);
-    const [loading, setLoading] = useState(true);
-    const { user, isTokenExpired, resetJWT } = useUserContext();
+    const { t } = useTranslation()
+    const { socket } = useWebSocket()
+    const [events, setEvents] = useState<Event[]>([])
+    const [loading, setLoading] = useState(true)
+    const { user, isTokenExpired, resetJWT } = useUserContext()
 
     const [following, setFollowing] = useState<string[]>(() => {
         const storedFollowing = localStorage.getItem('followingEventTable')
@@ -92,17 +94,17 @@ export default function EventList() {
     useEffect(() => {
         if (socket) {
             socket.on('new-event', () => {
-                console.log("received new event from server.");
-                getEvents();
-            });    
+                console.log('received new event from server.')
+                getEvents()
+            })
             socket.on('error', (obj) => {
-                console.log("Error with event socket: " + obj.message);
-            });   
-              return () => {
-                socket.off('new-event');
-            };
+                console.log('Error with event socket: ' + obj.message)
+            })
+            return () => {
+                socket.off('new-event')
+            }
         }
-      }, [socket]);
+    }, [socket])
 
     const getEvents = async () => {
         try {
@@ -127,14 +129,14 @@ export default function EventList() {
     const followEvent = async (event: Event, e: React.MouseEvent<HTMLButtonElement>) => {
         if (isTokenExpired()) {
             resetJWT()
-            window.alert('Seja je potekla, potrebna je ponovna prijava.')
+            window.alert(t('event_page.session_expired'))
             return
         }
         const button = e.target as HTMLButtonElement
         if (following.includes(event._id)) {
-            button.innerHTML = 'Sledi +'
+            button.innerHTML = `${t('event_page.follow')} +`
         } else {
-            button.innerHTML = 'Sledim ✓'
+            button.innerHTML = `${t('event_page.following')} ✓`
         }
         try {
             const response = await fetch(`http://localhost:3000/events/follow/${event._id}`, {
@@ -156,28 +158,28 @@ export default function EventList() {
         } catch (error) {
             console.error('Error following event:', error)
         }
-    };
+    }
 
     const deleteEvent = async (eventId: string) => {
         if (isTokenExpired()) {
             resetJWT()
-            window.alert('Seja je potekla, potrebna je ponovna prijava.')
+            window.alert(t('event_page.session_expired'))
             return
         }
         try {
             const response = await fetch(`http://localhost:3000/events/${eventId}`, {
                 method: 'DELETE',
                 headers: {
-                    'Authorization': 'Bearer: ' + user?.token 
-                },
-            });
+                    Authorization: 'Bearer: ' + user?.token
+                }
+            })
             if (response.ok) {
-                getEvents();
+                getEvents()
             } else {
-                console.error(`Failed to delete event: ${response.statusText}`);
+                console.error(`Failed to delete event: ${response.statusText}`)
             }
         } catch (error) {
-            console.error("Error deleting event:", error);
+            console.error('Error deleting event:', error)
         }
     }
 
@@ -213,32 +215,81 @@ export default function EventList() {
     return (
         <div className="main-container">
             <div>
-                <MainMap events={events} deleteEvent={deleteEvent} followEvent={followEvent} following={following} formatDateString={formatDateString} />
+                <MainMap
+                    events={events}
+                    deleteEvent={deleteEvent}
+                    followEvent={followEvent}
+                    following={following}
+                    formatDateString={formatDateString}
+                />
             </div>
             <div className="event-list">
-                {events.length === 0 ? 
-                (<p>No events to display...</p>) : events.map(event => (
-                    <div key={event._id} className="event-card">
-                        <div className="event-header">
-                            <div className="host-info">
-                                <img src={(event.host.image) ? ("http://localhost:3000/images/profile_pictures/" + event.host.image) : ("/defaultProfilePicture.png")} alt={event.host.username} className="host-image" />
-                                <p className="host-name">{event.host.username}</p>
+                {events.length === 0 ? (
+                    <p>{t('event_page.no_events')}</p>
+                ) : (
+                    events.map((event) => (
+                        <div key={event._id} className="event-card">
+                            <div className="event-header">
+                                <div className="host-info">
+                                    <img
+                                        src={
+                                            event.host.image
+                                                ? 'http://localhost:3000/images/profile_pictures/' + event.host.image
+                                                : '/defaultProfilePicture.png'
+                                        }
+                                        alt={event.host.username}
+                                        className="host-image"
+                                    />
+                                    <p className="host-name">{event.host.username}</p>
+                                </div>
+                                <div className="header-right-side">
+                                    <p className="followers-display">
+                                        {user && following.includes(event._id) && !event.followers.includes(user._id)
+                                            ? event.followers.length + 1
+                                            : user &&
+                                                !following.includes(event._id) &&
+                                                event.followers.includes(user._id)
+                                              ? event.followers.length - 1
+                                              : event.followers.length}{' '}
+                                        <FontAwesomeIcon icon={faUser} />
+                                    </p>
+                                    <p className="event-activity">
+                                        {event.activity}&nbsp;
+                                        <FontAwesomeIcon
+                                            icon={event.activity === 'nogomet' ? faSoccerBall : faPersonRunning}
+                                        />
+                                    </p>
+                                    <button onClick={(e) => followEvent(event, e)} className="follow-button">
+                                        {user && (following.includes(event._id) || event.followers.includes(user._id))
+                                            ? `${t('event_page.following')} ✓`
+                                            : `${t('event_page.follow')} +`}
+                                    </button>
+                                    {user && (user.isAdmin || user._id === event.host._id) ? (
+                                        <button onClick={() => deleteEvent(event._id)} className="delete-event">
+                                            <FontAwesomeIcon icon={faTrash} />
+                                        </button>
+                                    ) : (
+                                        <></>
+                                    )}
+                                </div>
                             </div>
-                            <div className="header-right-side">
-                                <p className="followers-display">{(user && following.includes(event._id) && !event.followers.includes(user._id)) ? event.followers.length + 1 : (user && !following.includes(event._id) && event.followers.includes(user._id)) ? event.followers.length - 1 : event.followers.length} <FontAwesomeIcon icon={faUser} /></p>
-                                <p className="event-activity">{event.activity} <FontAwesomeIcon icon={event.activity === "nogomet" ? faSoccerBall : faPersonRunning}/></p>
-                                <button onClick={e => followEvent(event, e)} className="follow-button">{(user && (following.includes(event._id) || event.followers.includes(user._id))) ? "Sledim ✓" : "Sledi +"}</button>
-                                {(user && (user.isAdmin || user._id === event.host._id)) ? (<button onClick={() => deleteEvent(event._id)} className="delete-event"><FontAwesomeIcon icon={faTrash} /></button>) : (<></>)}
+                            <div className="event-info">
+                                <h3 className="event-title">{event.name}</h3>
+                                <p className="event-description">{event.description}</p>
+                                <p className="event-date">
+                                    {t('event_page.event_start_at')} <strong>{formatDateString(event.date)}</strong>
+                                    &nbsp;
+                                    {t('event_page.at')}&nbsp;
+                                    <strong>{event.time}</strong>
+                                </p>
                             </div>
+                            <MapComponent
+                                title={event.name}
+                                location={new LatLng(event.location.coordinates[1], event.location.coordinates[0])}
+                            />
                         </div>
-                        <div className="event-info">
-                            <h3 className="event-title">{event.name}</h3>
-                            <p className="event-description">{event.description}</p>
-                            <p className="event-date">Dogodek se prične <strong>{formatDateString(event.date)}</strong> ob <strong>{event.time}</strong></p>
-                        </div>
-                        <MapComponent title={event.name} location={new LatLng(event.location.coordinates[1], event.location.coordinates[0])}/>
-                    </div>
-                ))}
+                    ))
+                )}
             </div>
         </div>
     )

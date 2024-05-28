@@ -17,6 +17,7 @@
   },
   "football": "Football",
   "handball": "Handball",
+  "sport": "Sport",
   "loading": "Loading...",
   "error_fetching_teams": "Error fetching teams",
   "schedule_page": {
@@ -60,5 +61,48 @@
     "goals_short": "G",
     "points": "Points",
     "points_short": "Pts"
+  },
+  "graph_page": {
+    "options": {
+      "standings": "Standings",
+      "clubs": "Clubs"
+    },
+    "select_team": "Select Team"
+  },
+  "event_page": {
+    "follow": "Follow",
+    "following": "Following",
+    "session_expired": "Session has expired. Please sign in again.",
+    "no_events": "No events available",
+    "event_start_at": "Event starts on",
+    "at": "at"
+  },
+  "create_event_page": {
+    "marked_location": "Marked Location",
+    "fill_all_error": "Please fill all fields",
+    "event_name": "Event Name",
+    "event_description": "Event Description",
+    "date": "Date",
+    "time": "Time",
+    "activity": "Activity",
+    "create_event": "Create New Event"
+  },
+  "sign_in_page": {
+    "email": "Email",
+    "username": "Username",
+    "password": "Password",
+    "sign_in": "Sign In",
+    "sign_up": "Sign Up",
+    "sign_in_error": "Error signing in",
+    "sign_up_error": "Error signing up",
+    "email_error": "Please enter a valid email",
+    "password_error": "Password must be at least 6 characters long",
+    "email_placeholder": "Enter your email",
+    "password_placeholder": "Enter your password",
+    "dont_have_account": "Don't have an account?",
+    "passwords_dont_match": "Passwords don't match",
+    "user_exists": "User already exists!",
+    "repeat_password": "Repeat Password",
+    "already_have_account": "Already have an account?"
   }
 }
