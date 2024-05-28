@@ -6,7 +6,7 @@ import L, { LatLng } from 'leaflet'
 import icon from 'leaflet/dist/images/marker-icon.png'
 import iconShadow from 'leaflet/dist/images/marker-shadow.png'
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const DefaultIcon = L.icon({
@@ -68,6 +68,7 @@ interface IMatch {
 }
 
 export const MatchesMap = ({ sport, fromDate, toDate, team }: MatchesMapProps) => {
+    const mapRef = useRef(null)
     const {
         data: matches,
         error,
@@ -117,9 +118,12 @@ export const MatchesMap = ({ sport, fromDate, toDate, team }: MatchesMapProps) =
                     )}
                 </button>
                 <MapContainer
+                    ref={mapRef}
                     center={[46.19200522709865, 14.891171889045815]}
                     zoom={8}
                     className="h-full w-full z-40 rounded-xl"
+                    zoomAnimation={true}
+                    markerZoomAnimation={true}
                 >
                     <TileLayer url={tileLayerURL} attribution={tileLayerATTR} />
                     {matches
@@ -133,6 +137,21 @@ export const MatchesMap = ({ sport, fromDate, toDate, team }: MatchesMapProps) =
                                         match.stadium.location.coordinates[1]
                                     )
                                 }
+                                eventHandlers={{
+                                    click: () => {
+                                        // On marker click, set the map's view to the marker's position with zoom animation
+                                        mapRef.current?.flyTo(
+                                            new LatLng(
+                                                match.stadium.location.coordinates[0],
+                                                match.stadium.location.coordinates[1]
+                                            ),
+                                            14,
+                                            {
+                                                duration: 2 // Adjust the duration of the fly animation as needed
+                                            }
+                                        )
+                                    }
+                                }}
                             >
                                 <Popup>
                                     <div className="flex flex-col justify-center items-center w-80">

@@ -3,6 +3,7 @@ import { Sport } from '../types/SportType.ts'
 import { IStanding } from '../interfaces/IStanding.ts'
 import { useQuery } from '@tanstack/react-query'
 import { Loading } from './Loading.tsx'
+import { useTranslation } from 'react-i18next'
 
 const fetchStandings = async (sport: Sport, season: number) => {
     const response = await fetch(`${import.meta.env.API_URL}/${sport}Standing/filterBySeason/${season}`)
@@ -13,6 +14,7 @@ const fetchStandings = async (sport: Sport, season: number) => {
 }
 
 function Standings() {
+    const { t } = useTranslation()
     const currentDate = new Date()
     const currentYear = currentDate.getFullYear()
     const [season, setSeason] = useState(() => {
@@ -81,8 +83,8 @@ function Standings() {
                     value={sport}
                     className="p-2 bg-light-primary dark:bg-dark-primary text-light-text dark:text-dark-text rounded-xl"
                 >
-                    <option value="football">Football</option>
-                    <option value="handball">Handball</option>
+                    <option value="football">{t('football')}</option>
+                    <option value="handball">{t('handball')}</option>
                 </select>
                 <select
                     onChange={handleSeasonChange}
@@ -99,14 +101,30 @@ function Standings() {
             <table className="w-full h-full table bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text rounded-xl">
                 <thead className="bg-light-primary dark:bg-dark-primary text-light-text dark:text-dark-text table-row-group rounded-xl">
                     <tr className="rounded-xl">
-                        <th className="p-4 rounded-tl-xl border-r">{windowSize.width > 1280 ? 'PLACE' : 'PL.'}</th>
-                        <th className="border-r">TEAM</th>
-                        <th className="border-r">{windowSize.width > 1280 ? 'GAMES PLAYED' : 'G. P.'}</th>
-                        <th className="border-r">{windowSize.width > 1280 ? 'WINS' : 'W.'}</th>
-                        <th className="border-r">{windowSize.width > 1280 ? 'DRAWS' : 'D.'}</th>
-                        <th className="border-r">{windowSize.width > 1280 ? 'LOSSES' : 'L.'}</th>
-                        <th className="border-r">{windowSize.width > 1280 ? 'GOALS' : 'G.'}</th>
-                        <th className="rounded-tr-xl">{windowSize.width > 1280 ? 'POINTS' : 'P.'}</th>
+                        <th className="p-4 rounded-tl-xl border-r">
+                            {windowSize.width > 1280 ? `${t('standings_page.place')}` : t('standings_page.place_short')}
+                        </th>
+                        <th className="border-r">{t('standings_page.team')}</th>
+                        <th className="border-r">
+                            {windowSize.width > 1280
+                                ? t('standings_page.games_played')
+                                : t('standings_page.games_played_short')}
+                        </th>
+                        <th className="border-r">
+                            {windowSize.width > 1280 ? t('standings_page.wins') : t('standings_page.wins_short')}
+                        </th>
+                        <th className="border-r">
+                            {windowSize.width > 1280 ? t('standings_page.draws') : t('standings_page.draws_short')}
+                        </th>
+                        <th className="border-r">
+                            {windowSize.width > 1280 ? t('standings_page.losses') : t('standings_page.losses_short')}
+                        </th>
+                        <th className="border-r">
+                            {windowSize.width > 1280 ? t('standings_page.goals') : t('standings_page.goals_short')}
+                        </th>
+                        <th className="rounded-tr-xl">
+                            {windowSize.width > 1280 ? t('standings_page.points') : t('standings_page.points_short')}
+                        </th>
                     </tr>
                 </thead>
                 <tbody className="table-row-group">

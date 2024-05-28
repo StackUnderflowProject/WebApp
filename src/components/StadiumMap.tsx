@@ -6,14 +6,14 @@ import iconShadow from 'leaflet/dist/images/marker-shadow.png'
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query'
 import { IStadium } from '../interfaces/IStadium.ts'
 import { Loading } from './Loading.tsx'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const DefaultIcon = L.icon({
     iconUrl: icon,
     shadowUrl: iconShadow,
     iconAnchor: [12.5, 41],
-    popupAnchor: [0, 0]
+    popupAnchor: [0, -36]
 })
 
 L.Marker.prototype.options.icon = DefaultIcon
@@ -35,6 +35,7 @@ const fetchStadiums = async (sport: string, season: number) => {
 const queryClient = new QueryClient()
 
 export const StadiumMap = ({ sport, season, team }: MapComponentProps) => {
+    const mapRef = useRef(null)
     const {
         data: stadiums,
         error,
@@ -88,13 +89,27 @@ export const StadiumMap = ({ sport, season, team }: MapComponentProps) => {
                     )}
                 </button>
                 <MapContainer
+                    ref={mapRef}
                     center={[46.19200522709865, 14.891171889045815]}
                     zoom={8}
-                    className="h-full w-full z-40 rounded-xl"
+                    className="h-full w-full z-40 rounded-xl transition-all duration-500"
+                    zoomAnimation={true}
+                    markerZoomAnimation={true}
                 >
                     <TileLayer url={tileLayerURL} attribution={tileLayerATTR} />
                     {positions.map((position, index) => (
-                        <Marker key={index} position={position}>
+                        <Marker
+                            key={index}
+                            position={position}
+                            eventHandlers={{
+                                click: () => {
+                                    // On marker click, set the map's view to the marker's position with zoom animation
+                                    mapRef.current?.flyTo(position, 16, {
+                                        duration: 2 // Adjust the duration of the fly animation as needed
+                                    })
+                                }
+                            }}
+                        >
                             <Popup>
                                 <div className="flex flex-col justify-center items-center w-80">
                                     <h3 className="text-xl mb-2">{stadiums[index].name}</h3>

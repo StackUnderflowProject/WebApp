@@ -5,6 +5,7 @@ import { Sport } from '../types/SportType.ts'
 import { useQuery } from '@tanstack/react-query'
 import { Loading } from './Loading.tsx'
 import { TeamStatsGraph } from './TeamStatsGraph.tsx'
+import { useTranslation } from 'react-i18next'
 
 type Option = 'standings' | 'clubs'
 
@@ -17,6 +18,7 @@ const fetchTeamNames = async (sport: Sport) => {
 }
 
 export const GraphPage = () => {
+    const { t } = useTranslation()
     const [selectedSport, setSelectedSport] = useState<Sport>(() => {
         const sport = localStorage.getItem('sportGraph')
         return (sport as Sport) || ('football' as Sport)
@@ -71,23 +73,23 @@ export const GraphPage = () => {
                     onChange={handleOptionChange}
                     value={selectedOption}
                 >
-                    <option value="standings">Standings</option>
-                    <option value="clubs">Clubs</option>
+                    <option value="standings">{t('graph_page.options.standings')}</option>
+                    <option value="clubs">{t('graph_page.options.clubs')}</option>
                 </select>
                 <div className="flex flex-row xl:flex-col justify-center items-center gap-4 w-full">
                     <div className="flex justify-center items-center w-full gap-4">
-                        <span className="p-2">Sport:</span>
+                        <span className="p-2">{t('sport')}:</span>
                         <select
                             className="text-light-text bg-light-background dark:text-dark-text dark:bg-dark-background p-2 rounded-xl h-fit w-full"
                             onChange={handleSportChange}
                         >
-                            <option value="football">Football</option>
-                            <option value="handball">Handball</option>
+                            <option value="football">{t('football')}</option>
+                            <option value="handball">{t('handball')}</option>
                         </select>
                     </div>
                     {selectedOption === 'clubs' && (
                         <div className="flex justify-center items-center gap-4 w-full">
-                            <span className="p-2">Clubs:</span>
+                            <span className="p-2">{t('graph_page.options.clubs')}:</span>
                             <select
                                 className="text-light-text bg-light-background dark:text-dark-text dark:bg-dark-background p-2 rounded-xl h-fit w-full"
                                 onChange={handleTeamChange}
@@ -105,7 +107,7 @@ export const GraphPage = () => {
 
                 {selectedOption === 'clubs' && selectedTeam === '' && (
                     <div className="h-[90%] w-full xl:mt-8 bg-transparent border-2 rounded-xl grid place-content-center">
-                        <h2 className="text-3xl">Select a team</h2>
+                        <h2 className="text-3xl">{t('graph_page.select_team')}</h2>
                     </div>
                 )}
                 {selectedOption === 'clubs' && selectedTeam !== '' && (
