@@ -143,3 +143,129 @@
     border-radius: 5px;
     background-color: white;
   }
+
+  .preview-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+  
+  .image-preview-container {
+    position: absolute;
+    align-self: center;
+    padding: 20px;
+    padding-top: 35px;
+    border-radius: 5px;
+    background-color: #333;
+    z-index: 500;
+    width: 400px;
+    height: 330px;
+  }
+
+  #close-preview {
+    position: absolute;
+    right: 20px;
+    top: 10px;
+  }
+
+  #image-preview {
+    width: 400px;
+    height: 200px;
+  }
+
+  #upload-button {
+    width: 100%;
+    height: 30px;
+    background-color: gray;
+    margin: 15px 0px;
+  }
+
+  #preview-title {
+    padding-bottom: 10px;
+  }
+
+  .user-details {
+    position: relative;
+    background-color: #515151;
+    padding: 10px;
+    border-radius: 7px;
+  }
+
+  #username-label {
+    font-size: 1.2em;
+    color: gold;
+    padding-bottom: 5px;
+  }
+
+  #edit-user-info-button {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    border-radius: 50%;
+    padding: 5px;
+    width: 35px;
+    height: 35px;
+    background-color: gray;
+  }
+
+  .update-user-form {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    padding-top: 10px;
+  }
+
+  .update-user-form h1 {
+    padding-bottom: 10px;
+  }
+
+  .update-user-form input {
+    display: block;
+    padding: 10px;
+    width: 260px;
+    margin-bottom: 5px;
+    color: black;
+    border-radius: 5px;
+    outline: none;
+  } 
+
+  .update-user-form input:focus {
+    border: 3px solid rgb(230, 102, 255);
+    outline-color: rgb(230, 102, 255);
+  }
+
+  .update-user-form label {
+    align-self: baseline;
+    margin: 0;
+  }
+
+  #password-toggle-button {
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 7px;
+    background-color: #0056b3;
+  }
+
+  #password-toggle-button p {
+    color: white;
+  }
+
+  #submit-user-update-btn {
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 7px;
+    background-color: #009823;
+  }
+
+  #submit-user-update-btn p {
+    color: white;
+  }
+
+  #error-message {
+    color: rgb(255, 112, 112);
+    padding: 5px;
+    align-self: center;
+  }

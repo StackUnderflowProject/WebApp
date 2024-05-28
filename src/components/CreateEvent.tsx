@@ -91,6 +91,10 @@ export default function CreateEvent() {
     const { user, isTokenExpired, resetJWT } = useUserContext()
     const today = new Date().toISOString().split('T')[0]
 
+    useEffect(() => {
+        localStorage.setItem("lastPath", "/createEvent");
+    }, [])
+
     const [name, setName] = useState(() => {
         const storedName = localStorage.getItem('eventNameC')
         return storedName ? storedName : ''
@@ -225,24 +229,6 @@ export default function CreateEvent() {
         return `${year}-${monthS}-${dayS}`
     }
 
-    const getCurrentTime = (): string => {
-        const today = new Date()
-        const hours: number = today.getHours()
-        const minutes: number = today.getMinutes()
-
-        let hoursS = hours.toString()
-        let minutesS = minutes.toString()
-
-        if (hours < 10) {
-            hoursS = `0${hours}`
-        }
-        if (minutes < 10) {
-            minutesS = `0${minutes}`
-        }
-
-        return `${hoursS}:${minutesS}`
-    }
-
     return (
         <div className="bg-light-background dark:bg-dark-background mt-8 rounded-xl w-full flex flex-col justify-start items-start gap-4 p-4 xl:h-[88%] ">
             <form onSubmit={(e) => handleSubmit(e)} id="event-form" className="h-full w-full flex flex-col gap-4">
@@ -301,7 +287,6 @@ export default function CreateEvent() {
                                     id="event-time"
                                     name="event-time"
                                     onChange={(e) => setTime(e.target.value)}
-                                    min={getCurrentTime()}
                                     className="p-2 rounded-xl text-light-text dark:text-dark-text bg-light-background dark:bg-dark-background w-full"
                                     required
                                 />

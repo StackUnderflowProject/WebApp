@@ -94,6 +94,10 @@ export function HandballTeam() {
     const [stadiumPicture, setStadiumPicture] = useState<string>('../../public/defaultStadiumImage.jpg')
 
     useEffect(() => {
+        localStorage.setItem("lastPath", "/handballTeam/" + teamId);
+    }, [])
+
+    useEffect(() => {
         if (team !== null) {
             getStadiumLogo()
             getHandballStandings()

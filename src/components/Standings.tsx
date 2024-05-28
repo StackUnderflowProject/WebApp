@@ -14,9 +14,15 @@ const fetchStandings = async (sport: Sport, season: number) => {
 }
 
 function Standings() {
+
+    useEffect(() => {
+        localStorage.setItem("lastPath", "/standings");
+    }, [])
+    
     const { t } = useTranslation()
     const currentDate = new Date()
     const currentYear = currentDate.getFullYear()
+
     const [season, setSeason] = useState(() => {
         const storedSeason = Number(localStorage.getItem('seasonStandingsF'))
         return storedSeason ? storedSeason : currentYear

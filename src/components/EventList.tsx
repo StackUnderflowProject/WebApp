@@ -94,19 +94,26 @@ export default function EventList() {
     useEffect(() => {
         if (socket) {
             socket.on('new-event', () => {
-                console.log('received new event from server.')
-                getEvents()
-            })
+                console.log("received new event from server.");
+                getEvents();
+            });    
+            socket.on('delete-event', () => {
+                console.log("received new deleted event from server.");
+                getEvents();
+            });   
             socket.on('error', (obj) => {
-                console.log('Error with event socket: ' + obj.message)
-            })
-            return () => {
-                socket.off('new-event')
-            }
+                console.log("Error with event socket: " + obj.message);
+            });   
+              return () => {
+                socket.off('new-event');
+                socket.off('delete-event');
+                socket.off('error');
+            };
         }
     }, [socket])
 
     const getEvents = async () => {
+        localStorage.setItem("lastPath", "/events");
         try {
             const response = await fetch('http://localhost:3000/events/upcoming')
             const data = await response.json()
@@ -174,7 +181,10 @@ export default function EventList() {
                 }
             })
             if (response.ok) {
-                getEvents()
+                if (socket) {
+                    socket.emit("delete-event");
+                }
+                getEvents();
             } else {
                 console.error(`Failed to delete event: ${response.statusText}`)
             }
