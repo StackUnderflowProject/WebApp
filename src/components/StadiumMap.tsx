@@ -103,9 +103,8 @@ export const StadiumMap = ({ sport, season, team }: MapComponentProps) => {
                             position={position}
                             eventHandlers={{
                                 click: () => {
-                                    // On marker click, set the map's view to the marker's position with zoom animation
                                     mapRef.current?.flyTo(position, 16, {
-                                        duration: 2 // Adjust the duration of the fly animation as needed
+                                        duration: 2
                                     })
                                 }
                             }}
