@@ -160,7 +160,7 @@ export const TeamStatsGraph = ({ name, sport }: TeamStatsGraphProps) => {
     }
 
     return (
-        <div className="xl:mt-8 h-[96%] rounded-xl flex flex-col gap-4">
+        <div className="xl:mt-8 rounded-xl flex flex-col gap-4 h-full xl:h-full">
             <div className="h-1/3 text-center flex flex-row gap-4 ">
                 <div className="w-full h-full bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text rounded-xl ">
                     <h1 className="text-light-text dark:text-dark-text text-3xl xl:mt-8 mt-4 mb-4">
@@ -174,17 +174,21 @@ export const TeamStatsGraph = ({ name, sport }: TeamStatsGraphProps) => {
                         Director: {data[0].team.director}
                     </p>
                 </div>
-                <img src={data[0].team.logoPath} alt={data[0].team.name} className="h-auto w-auto rounded-xl mx-auto" />
+                <img
+                    src={data[0].team.logoPath}
+                    alt={data[0].team.name}
+                    className="h-[14em] w-auto rounded-xl mx-auto"
+                />
             </div>
-            <div className="flex flex-row h-2/3 justify-center w-full gap-4">
-                <div className="p-4 rounded-xl w-full xl:h-full h-96 bg-light-background dark:bg-dark-background">
+            <div className="flex flex-row h-full justify-center w-full gap-4">
+                <div className="p-4 rounded-xl w-full h-full max-h-[26em] xl:max-h-full bg-light-background dark:bg-dark-background">
                     <Bar
                         data={pointsChartData}
                         options={graphOptions}
                         key={windowSize.width + pointsChartData.datasets.length}
                     />
                 </div>
-                <div className="p-4 rounded-xl w-full xl:h-full h-96 bg-light-background dark:bg-dark-background">
+                <div className="p-4 rounded-xl w-full h-full max-h-[26em] xl:max-h-full bg-light-background dark:bg-dark-background">
                     <Bar
                         data={goalsChartData}
                         options={graphOptions}

@@ -246,7 +246,7 @@ export default function CreateEvent() {
                 <div className="flex flex-col xl:flex-row gap-4 w-full h-full">
                     <div className="flex flex-col gap-4 xl:w-1/3 h-full">
                         <div className="flex gap-4 p-4 rounded-xl bg-light-primary dark:bg-dark-primary text-light-text dark:text-dark-text w-full">
-                            <label htmlFor="event-name" className="p-2 w-1/3">
+                            <label htmlFor="event-name" className="p-2 w-1/3 min-w-fit">
                                 Event name:
                             </label>
                             <input
