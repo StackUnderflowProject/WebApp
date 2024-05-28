@@ -18,12 +18,13 @@ import CreateEvent from './components/CreateEvent.tsx'
 import { HomePage } from './components/HomePage.tsx'
 import EventList from './components/EventList.tsx'
 import { GraphPage } from './components/GraphPage.tsx'
+import { Footer } from './components/Footer.tsx'
 
 const queryClient = new QueryClient()
 
 function App() {
     return (
-        <div className="h-dvh w-[80%] text-center ml-auto mr-auto">
+        <div className="h-dvh w-[80%] text-center mx-auto">
             <BrowserRouter>
                 <UserProvider>
                     <WebSocketProvider>
@@ -44,6 +45,7 @@ function App() {
                                 <Route path="/graphs" element={<GraphPage />} />
                             </Routes>
                         </QueryClientProvider>
+                        <Footer />
                     </WebSocketProvider>
                 </UserProvider>
             </BrowserRouter>
