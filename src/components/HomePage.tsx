@@ -1,10 +1,11 @@
 import { ChangeEvent, useEffect, useState } from 'react'
-import { MatchesMap } from './MatchesMap.tsx'
-import { Sport } from '../types/SportType.ts'
-import { StadiumMap } from './StadiumMap.tsx'
+import { MatchesMap } from './MatchesMap'
+import { Sport } from '../types/SportType'
+import { StadiumMap } from './StadiumMap'
 import { useQuery } from '@tanstack/react-query'
-import { Loading } from './Loading.tsx'
-import { Season } from '../types/SeasonType.ts'
+import { Loading } from './Loading'
+import { Season } from '../types/SeasonType'
+import { useTranslation } from 'react-i18next'
 
 type Option = 'stadiums' | 'matches'
 
@@ -23,6 +24,7 @@ const fetchTeams = async (sport: Sport, season: Season) => {
 }
 
 export const HomePage = () => {
+    const { t } = useTranslation() // Initialize translation
     const [selectedOption, setSelectedOption] = useState<Option>(() => {
         const option = localStorage.getItem('selectedOptionHome') as Option
         return option || 'stadiums'
@@ -108,21 +110,23 @@ export const HomePage = () => {
                     value={selectedOption}
                     onChange={handleOptionChange}
                 >
-                    <option value={'stadiums'}>Stadiums</option>
-                    <option value={'matches'}>Matches</option>
+                    <option value="stadiums">{t('home_page.stadiums')}</option>
+                    <option value="matches">{t('home_page.matches')}</option>
                 </select>
                 <div className="flex flex-row xl:flex-col gap-4 h-fit">
                     <div className="bg-light-primary text-light-text dark:bg-dark-primary dark:text-dark-text flex flex-col justify-center items-left gap-2 mt-4 w-full h-fit p-4 rounded-xl">
                         <h1 className="text-light-text dark:text-dark-text">
-                            {selectedOption === 'stadiums' ? 'Stadium' : 'Match'} Options
+                            {selectedOption === 'stadiums'
+                                ? t('home_page.stadium_options')
+                                : t('home_page.match_options')}
                         </h1>
                         <select
                             value={sport}
                             onChange={handleSportChange}
                             className="p-2 rounded-xl bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text cursor-pointer"
                         >
-                            <option value="football">Football</option>
-                            <option value="handball">Handball</option>
+                            <option value="football">{t('football')}</option>
+                            <option value="handball">{t('handball')}</option>
                         </select>
                         {selectedOption === 'stadiums' && (
                             <select
@@ -155,8 +159,8 @@ export const HomePage = () => {
                         )}
                     </div>
                     <div className="bg-light-primary text-light-text dark:bg-dark-primary dark:text-dark-text p-4 mt-4 xl:mt-0 rounded-xl flex flex-col gap-2 h-fit w-full">
-                        <h1 className="text-light-text dark:text-dark-text">Team Options</h1>
-                        {teamsError && <p>Error fetching teams</p>}
+                        <h1 className="text-light-text dark:text-dark-text">{t('home_page.team_options')}</h1>
+                        {teamsError && <p>{t('error_fetching_teams')}</p>}
                         {isLoading && <Loading />}
                         {isSuccess && (
                             <select

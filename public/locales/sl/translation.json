@@ -1,0 +1,64 @@
+{
+  "navbar": {
+    "schedule": "Razpored",
+    "standings": "Lestivca",
+    "graphs": "Grafi",
+    "events": "Dogodki",
+    "create_event": "Ustvari Dogodek",
+    "sign_in": "Prijava",
+    "sign_up": "Registracija"
+  },
+  "home_page": {
+    "stadiums": "Stadioni",
+    "matches": "Tekme",
+    "stadium_options": "Možnosti stadiona",
+    "match_options": "Možnosti tekem",
+    "team_options": "Možnosti ekipe"
+  },
+  "football": "Nogomet",
+  "handball": "Rokomet",
+  "loading": "Nalaganje...",
+  "error_fetching_teams": "Napaka pri pridobivanju ekip",
+  "schedule_page": {
+    "sport_options": {
+      "football": "Football",
+      "handball": "Handball"
+    },
+    "season_options": {
+      "2020": "2020",
+      "2021": "2021",
+      "2022": "2022",
+      "2023": "2023",
+      "2024": "2024"
+    },
+    "today": "Danes",
+    "yesterday": "Včeraj",
+    "tomorrow": "Jutri",
+    "monday": "Ponedeljek",
+    "tuesday": "Torek",
+    "wednesday": "Sreda",
+    "thursday": "Četrtek",
+    "friday": "Petek",
+    "saturday": "Sobota",
+    "sunday": "Nedelja",
+    "error_fetching_data": "Error fetching data",
+    "no_data_available": "No data available"
+  },
+  "standings_page": {
+    "place": "Mesto",
+    "place_short": "M",
+    "team": "Ekipa",
+    "games_played": "Odigrane tekme",
+    "games_played_short": "OT",
+    "wins": "Zmage",
+    "wins_short": "Z",
+    "draws": "Neodločeno",
+    "draws_short": "N",
+    "losses": "Porazi",
+    "losses_short": "P",
+    "goals": "Goli",
+    "goals_short": "G",
+    "points": "Točke",
+    "points_short": "T"
+  }
+}

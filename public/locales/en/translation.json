@@ -1,0 +1,64 @@
+{
+  "navbar": {
+    "schedule": "Schedule",
+    "standings": "Standings",
+    "graphs": "Graphs",
+    "events": "Events",
+    "create_event": "Create Event",
+    "sign_in": "Sign In",
+    "sign_up": "Sign Up"
+  },
+  "home_page": {
+    "stadiums": "Stadiums",
+    "matches": "Matches",
+    "stadium_options": "Stadium Options",
+    "match_options": "Match Options",
+    "team_options": "Team Options"
+  },
+  "football": "Football",
+  "handball": "Handball",
+  "loading": "Loading...",
+  "error_fetching_teams": "Error fetching teams",
+  "schedule_page": {
+    "sport_options": {
+      "football": "Football",
+      "handball": "Handball"
+    },
+    "season_options": {
+      "2020": "2020",
+      "2021": "2021",
+      "2022": "2022",
+      "2023": "2023",
+      "2024": "2024"
+    },
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "tomorrow": "Tomorrow",
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday",
+    "sunday": "Sunday",
+    "error_fetching_data": "Error fetching data",
+    "no_data_available": "No data available"
+  },
+  "standings_page": {
+    "place": "Place",
+    "place_short": "#",
+    "team": "Team",
+    "games_played": "Games Played",
+    "games_played_short": "GP",
+    "wins": "Wins",
+    "wins_short": "W",
+    "draws": "Draws",
+    "draws_short": "D",
+    "losses": "Losses",
+    "losses_short": "L",
+    "goals": "Goals",
+    "goals_short": "G",
+    "points": "Points",
+    "points_short": "Pts"
+  }
+}

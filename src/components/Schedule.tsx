@@ -7,17 +7,21 @@ import { Season } from '../types/SeasonType.ts'
 import { useQuery } from '@tanstack/react-query'
 import { Loading } from './Loading.tsx'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { useTranslation } from 'react-i18next'
 
 const fetchMatches = async (sport: Sport, season: Season) => {
-    const response = await fetch(`http://localhost:3000/${sport}Match/filterBySeason/${season}`)
+    const response = await fetch(`${import.meta.env.API_URL}/${sport}Match/filterBySeason/${season}`)
     if (!response.ok) {
         throw new Error('Error fetching data')
     }
-    return response.json()
+    const data = await response.json()
+    console.log(data)
+    return data
 }
 
 export const Schedule = () => {
     const navigate = useNavigate()
+    const { t } = useTranslation()
     const [sport, setSport] = useState(() => {
         const storedSport = localStorage.getItem('scheduleSportS')
         return storedSport ? (storedSport as Sport) : ('football' as Sport)
@@ -74,6 +78,7 @@ export const Schedule = () => {
     }, [])
 
     // CHANGE DATE FORMAT
+    // TODO - implement i18n
     const formatDateString = (dateString: string) => {
         const date = new Date(dateString)
         const today = new Date()
@@ -109,7 +114,7 @@ export const Schedule = () => {
     }
 
     if (error) {
-        return <div>Error fetching data</div>
+        return <div>{t('schedule.error_fetching_data')}</div>
     }
 
     // LOADING SCREEN
@@ -149,8 +154,8 @@ export const Schedule = () => {
                     className="bg-light-primary dark:bg-dark-primary text-light-text dark:text-dark-text rounded-xl p-2"
                     value={sport}
                 >
-                    <option value="football">Football</option>
-                    <option value="handball">Handball</option>
+                    <option value="football">{t('football')}</option>
+                    <option value="handball">{t('handball')}</option>
                 </select>
                 <select
                     className="bg-light-primary dark:bg-dark-primary text-light-text dark:text-dark-text rounded-xl p-2"
@@ -174,47 +179,44 @@ export const Schedule = () => {
                         <div className="date-container">
                             <h2 className="text-light-text dark:text-dark-text">{formatDateString(date)}</h2>
                         </div>
-                        {dateMatches.map((match) => {
-                            return (
-                                <div className="flex w-full">
+                        {dateMatches.map((match) => (
+                            <div className="flex w-full" key={match._id}>
+                                <div
+                                    className="bg-light-primary dark:bg-dark-primary rounded-xl flex justify-evenly items-center p-4 w-full"
+                                    id={match._id}
+                                >
                                     <div
-                                        key={match._id}
-                                        className="bg-light-primary dark:bg-dark-primary rounded-xl flex justify-evenly items-center p-4 w-full"
-                                        id={match._id}
+                                        onClick={() => navigate(`/${sport}Team/${match.home._id}`)}
+                                        className="w-2/5 flex flex-col gap-2 items-center justify-evenly"
                                     >
-                                        <div
-                                            onClick={() => navigate(`/${sport}Team/${match.home._id}`)}
-                                            className="w-2/5 flex flex-col gap-2 items-center justify-evenly"
-                                        >
-                                            <h2 className="text-light-text dark:text-dark-text text-xl">
-                                                {match.home.name}
-                                            </h2>
-                                            <img
-                                                className="rounded-xl max-h-24 max-w-24"
-                                                src={match.home.logoPath}
-                                                alt="home team logo"
-                                            />
-                                        </div>
-                                        <h1 className="text-2xl p-4 bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text rounded-xl w-1/5">
-                                            {match.score === '' ? '- : -' : match.score}
-                                        </h1>
-                                        <div
-                                            onClick={() => navigate(`/${sport}Team/${match.away._id}`)}
-                                            className="w-2/5 flex flex-col gap-2 items-center justify-evenly"
-                                        >
-                                            <h2 className="text-light-text dark:text-dark-text text-xl">
-                                                {match.away.name}
-                                            </h2>
-                                            <img
-                                                className="rounded-xl max-h-24 max-w-24"
-                                                src={match.away.logoPath}
-                                                alt="away team logo"
-                                            />
-                                        </div>
+                                        <h2 className="text-light-text dark:text-dark-text text-xl">
+                                            {match.home?.name}
+                                        </h2>
+                                        <img
+                                            className="rounded-xl max-h-24 max-w-24"
+                                            src={match.home?.logoPath}
+                                            alt="home team logo"
+                                        />
+                                    </div>
+                                    <h1 className="text-2xl p-4 bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text rounded-xl w-1/5">
+                                        {match.score === '' ? '- : -' : match.score}
+                                    </h1>
+                                    <div
+                                        onClick={() => navigate(`/${sport}Team/${match.away._id}`)}
+                                        className="w-2/5 flex flex-col gap-2 items-center justify-evenly"
+                                    >
+                                        <h2 className="text-light-text dark:text-dark-text text-xl">
+                                            {match.away?.name}
+                                        </h2>
+                                        <img
+                                            className="rounded-xl max-h-24 max-w-24"
+                                            src={match.away?.logoPath}
+                                            alt="away team logo"
+                                        />
                                     </div>
                                 </div>
-                            )
-                        })}
+                            </div>
+                        ))}
                     </div>
                 ))}
         </div>
