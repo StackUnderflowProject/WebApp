@@ -203,7 +203,7 @@ export default function CreateEvent() {
                 if (socket) {
                     socket.emit('create-event', user?.token)
                 }
-                navigate('/')
+                navigate('/events')
             }
         } catch (error) {
             console.error('Error creating event:', error)
