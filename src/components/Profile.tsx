@@ -193,6 +193,13 @@ function Profile() {
             updateUser(newUser)
             localStorage.setItem('errorUpdateUser', '')
             setEditUserInfo(false)
+            if (newUser.image) {
+                setProfilePicture('http://localhost:3000/images/profile_pictures/' + newUser.image)
+            } else {
+                setProfilePicture('../../default.png')
+            }
+            setUsername(newUser.username)
+            setEmail(newUser.email)
             return
         }
     }
