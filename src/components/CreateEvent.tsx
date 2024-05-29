@@ -92,7 +92,7 @@ export default function CreateEvent() {
     const today = new Date().toISOString().split('T')[0]
 
     useEffect(() => {
-        localStorage.setItem("lastPath", "/createEvent");
+        localStorage.setItem('lastPath', '/createEvent')
     }, [])
 
     const [name, setName] = useState(() => {
@@ -230,12 +230,15 @@ export default function CreateEvent() {
     }
 
     return (
-        <div className="bg-light-background dark:bg-dark-background mt-8 rounded-xl w-full flex flex-col justify-start items-start gap-4 p-4 xl:h-[88%] ">
+        <div className="bg-light-background dark:bg-dark-background mt-8 mb-16 rounded-xl w-full h-[86dvh] flex flex-col justify-start items-start gap-4 p-4">
             <form onSubmit={(e) => handleSubmit(e)} id="event-form" className="h-full w-full flex flex-col gap-4">
                 <div className="flex flex-col xl:flex-row gap-4 w-full h-full">
                     <div className="flex flex-col gap-4 xl:w-1/3 h-full">
                         <div className="flex gap-4 p-4 rounded-xl bg-light-primary dark:bg-dark-primary text-light-text dark:text-dark-text w-full">
-                            <label htmlFor="event-name" className="p-2 w-1/3 min-w-fit">
+                            <label
+                                htmlFor="event-name"
+                                className="p-2 w-1/3 min-w-fit text-light-background dark:text-dark-text"
+                            >
                                 {t('create_event_page.event_name')}:
                             </label>
                             <input
@@ -249,7 +252,9 @@ export default function CreateEvent() {
                             />
                         </div>
                         <div className="flex flex-col gap-4  p-4 rounded-xl bg-light-primary dark:bg-dark-primary text-light-text dark:text-dark-text w-full h-full">
-                            <label htmlFor="event-description">{t('create_event_page.event_description')}:</label>
+                            <label htmlFor="event-description" className="text-light-background dark:text-dark-text">
+                                {t('create_event_page.event_description')}:
+                            </label>
                             <textarea
                                 value={description}
                                 id="event-description"
@@ -263,7 +268,7 @@ export default function CreateEvent() {
                     <div className="flex flex-col justify-start items-start xl:w-2/3 h-full gap-4">
                         <div className="flex flex-row flex-shrink flex-grow w-full justify-center items-start gap-4">
                             <div className="bg-light-primary dark:bg-dark-primary text-light-text dark:text-dark-text p-4 rounded-xl w-1/2 flex">
-                                <label htmlFor="event-date" className=" p-2">
+                                <label htmlFor="event-date" className="p-2 text-light-background dark:text-dark-text">
                                     {t('create_event_page.date')}:
                                 </label>
                                 <input
@@ -278,7 +283,7 @@ export default function CreateEvent() {
                                 />
                             </div>
                             <div className="bg-light-primary dark:bg-dark-primary text-light-text dark:text-dark-text p-4 rounded-xl w-1/2 flex">
-                                <label htmlFor="event-time" className="p-2 ">
+                                <label htmlFor="event-time" className="p-2 text-light-background dark:text-dark-text">
                                     {t('create_event_page.time')}:
                                 </label>
                                 <input
@@ -293,7 +298,7 @@ export default function CreateEvent() {
                             </div>
                         </div>
                         <div className="bg-light-primary dark:bg-dark-primary text-light-text dark:text-dark-text p-4 rounded-xl w-full flex">
-                            <label htmlFor="event-activity" className="p-2 ">
+                            <label htmlFor="event-activity" className="p-2 text-light-background dark:text-dark-text">
                                 {t('create_event_page.activity')}:
                             </label>
                             <input
@@ -317,7 +322,7 @@ export default function CreateEvent() {
                 </div>
                 <button
                     type="submit"
-                    className="w-full h-fit rounded-xl p-4 bg-light-primary dark:bg-dark-primary text-light-text dark:text-dark-text"
+                    className="w-full h-fit rounded-xl p-4 bg-light-primary dark:bg-dark-primary text-light-background dark:text-dark-text"
                 >
                     <FontAwesomeIcon icon={['fas', 'save']} />
                     &nbsp;{t('create_event_page.create_event')}

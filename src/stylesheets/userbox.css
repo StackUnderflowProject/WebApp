@@ -11,35 +11,47 @@
 
 #profile-picture {
     cursor: pointer;
-    height: 40px;
-    width: 40px;
+    height: 2.5em;
+    width: 2.5em;
     border-radius: 50%;
 }
 
 #user-profile-menu {
     position: absolute;
-    top: 50%;
-    right: 0;
-    margin-top: 35px;
+    top: 4em;
+    right: 2em;
     background-color: var(--bg);
-    padding: 10px;
-    z-index: 999;
-    animation: slideInFromRight 0.5s ease-out;
+    border-radius: .5em;
+    z-index: 100;
+    animation: slideInFromRight 0.5s ease-in-out;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .option {
     display: flex;
     align-items: center;
-    padding: 5px 10px;
+    padding: 0.5em 1em;
     cursor: pointer;
     gap: 10px;
+    color: var(--text);
+    width: 100%;
+}
+
+.option:hover {
+    background-color: var(--text);
+    color: var(--bg);
+    border-radius: 5px;
+
+    & p {
+        color: var(--bg);
+    }
 }
 
 .option p {
-    margin: 0;
     margin-left: 5px;
+    color: var(--text);
 }
+
 
 #user-profile-menu a {
     text-decoration: none;

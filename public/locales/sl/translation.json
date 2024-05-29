@@ -104,5 +104,11 @@
     "user_exists": "Uporabnik že obstaja!",
     "repeat_password": "Ponovite geslo",
     "already_have_account": "Že imate račun?"
+  },
+  "footer": {
+    "about": "O nas",
+    "contact": "Kontakt",
+    "terms": "Pogoji uporabe",
+    "rights": "Vse praice pridržane"
   }
 }
