@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @media (prefers-color-scheme: dark) {
     :root {
         --bg: #111;
@@ -10,6 +9,9 @@
         --text: #eee;
         --border: #444;
         --shadow: #000;
+        --tw-bg: #111827;
+        --tw-primary: #6D28D9;
+        --tw-secondary: rgba(142,60,178,0.73);
     }
 }
 
@@ -20,6 +22,9 @@
         --text: #000;
         --border: #ccc;
         --shadow: #ddd;
+        --tw-bg: #e5e5e8;
+        --tw-primary: #be89ec;
+        --tw-secondary: #a84fff;
     }
 }
 *:root {
@@ -29,4 +34,22 @@
     background-size: 2.5em 2.5em;
     margin: 0;
     box-sizing: border-box;
+}
+
+body::-webkit-scrollbar {
+    width: .75em;
+}
+
+body::-webkit-scrollbar-track {
+    background: var(--tw-bg);
+    border-radius: 5px;
+}
+
+body::-webkit-scrollbar-thumb {
+    background: var(--tw-primary);
+    border-radius: 5px;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+    background: var(--tw-secondary);
 }

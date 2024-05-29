@@ -1,0 +1,108 @@
+{
+  "navbar": {
+    "schedule": "Razpored",
+    "standings": "Lestivca",
+    "graphs": "Grafi",
+    "events": "Dogodki",
+    "create_event": "Ustvari Dogodek",
+    "sign_in": "Prijava",
+    "sign_up": "Registracija"
+  },
+  "home_page": {
+    "stadiums": "Stadioni",
+    "matches": "Tekme",
+    "stadium_options": "Možnosti stadiona",
+    "match_options": "Možnosti tekem",
+    "team_options": "Možnosti ekipe"
+  },
+  "football": "Nogomet",
+  "handball": "Rokomet",
+  "loading": "Nalaganje...",
+  "sport": "Šport",
+  "error_fetching_teams": "Napaka pri pridobivanju ekip",
+  "schedule_page": {
+    "sport_options": {
+      "football": "Football",
+      "handball": "Handball"
+    },
+    "season_options": {
+      "2020": "2020",
+      "2021": "2021",
+      "2022": "2022",
+      "2023": "2023",
+      "2024": "2024"
+    },
+    "today": "Danes",
+    "yesterday": "Včeraj",
+    "tomorrow": "Jutri",
+    "monday": "Ponedeljek",
+    "tuesday": "Torek",
+    "wednesday": "Sreda",
+    "thursday": "Četrtek",
+    "friday": "Petek",
+    "saturday": "Sobota",
+    "sunday": "Nedelja",
+    "error_fetching_data": "Error fetching data",
+    "no_data_available": "No data available"
+  },
+  "standings_page": {
+    "place": "Mesto",
+    "place_short": "M",
+    "team": "Ekipa",
+    "games_played": "Odigrane tekme",
+    "games_played_short": "OT",
+    "wins": "Zmage",
+    "wins_short": "Z",
+    "draws": "Neodločeno",
+    "draws_short": "N",
+    "losses": "Porazi",
+    "losses_short": "P",
+    "goals": "Goli",
+    "goals_short": "G",
+    "points": "Točke",
+    "points_short": "T"
+  },
+  "graph_page": {
+    "options": {
+      "standings": "Lestvica",
+      "clubs": "Ekipe"
+    },
+    "select_team": "Izberi ekipo"
+  },
+  "event_page": {
+    "follow": "Sledi",
+    "following": "Sledim",
+    "session_expired": "Seja je potekla. Ponovno se prijavite.",
+    "no_events": "Ni dogodkov",
+    "event_start_at": "Dogodek se prične",
+    "at": "ob"
+  },
+  "create_event_page": {
+    "marked_location": "Izbrana lokacija",
+    "fill_all_error": "Prosim izpolnite vsa polja",
+    "event_name": "Ime dogodka",
+    "event_description": "Opis dogodka",
+    "date": "Datum",
+    "time": "Čas",
+    "activity": "Aktivnost",
+    "create_event": "Ustvari novi dogodek"
+  },
+  "sign_in_page": {
+    "email": "E-pošta",
+    "username": "Uporabniško ime",
+    "password": "Geslo",
+    "sign_in": "Prijava",
+    "sign_up": "Registracija",
+    "sign_in_error": "Napaka pri prijavi",
+    "sign_up_error": "Napaka pri registraciji",
+    "email_error": "Vnesite veljaven email",
+    "password_error": "Geslo mora biti dolgo vsaj 6 znakov",
+    "email_placeholder": "Vnesite vaš email",
+    "password_placeholder": "Vnesite vaše geslo",
+    "dont_have_account": "Še nimate računa?",
+    "passwords_dont_match": "Gesli se ne ujemata",
+    "user_exists": "Uporabnik že obstaja!",
+    "repeat_password": "Ponovite geslo",
+    "already_have_account": "Že imate račun?"
+  }
+}
