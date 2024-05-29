@@ -6,20 +6,20 @@ export default {
         extend: {
             colors: {
                 light: {
-                    background: '#e5e5e8',
-                    text: '#040404',
-                    primary: '#be89ec',
-                    secondary: '#a84fff',
-                    accent: '#F59E0B',
-                    neutral: '#9CA3AF'
+                    background: '#F0F4F8',
+                    text: '#2C3E50',
+                    primary: '#5B2C6F',
+                    secondary: '#2874A6',
+                    accent: '#5499C7',
+                    neutral: '#D6DBDF'
                 },
                 dark: {
-                    primary: '#6D28D9',
-                    text: '#F3F4F6',
-                    background: '#111827',
-                    secondary: 'rgba(142,60,178,0.73)',
-                    accent: '#FBBF24',
-                    neutral: '#D1D5DB'
+                    background: '#1C2833',
+                    text: '#D5D8DC',
+                    primary: '#5B2C6F',
+                    secondary: '#2E86C1',
+                    accent: '#5DADE2',
+                    neutral: '#566573'
                 }
             }
         }

@@ -94,26 +94,26 @@ export default function EventList() {
     useEffect(() => {
         if (socket) {
             socket.on('new-event', () => {
-                console.log("received new event from server.");
-                getEvents();
-            });    
+                console.log('received new event from server.')
+                getEvents()
+            })
             socket.on('delete-event', () => {
-                console.log("received new deleted event from server.");
-                getEvents();
-            });   
+                console.log('received new deleted event from server.')
+                getEvents()
+            })
             socket.on('error', (obj) => {
-                console.log("Error with event socket: " + obj.message);
-            });   
-              return () => {
-                socket.off('new-event');
-                socket.off('delete-event');
-                socket.off('error');
-            };
+                console.log('Error with event socket: ' + obj.message)
+            })
+            return () => {
+                socket.off('new-event')
+                socket.off('delete-event')
+                socket.off('error')
+            }
         }
     }, [socket])
 
     const getEvents = async () => {
-        localStorage.setItem("lastPath", "/events");
+        localStorage.setItem('lastPath', '/events')
         try {
             const response = await fetch('http://localhost:3000/events/upcoming')
             const data = await response.json()
@@ -182,9 +182,9 @@ export default function EventList() {
             })
             if (response.ok) {
                 if (socket) {
-                    socket.emit("delete-event");
+                    socket.emit('delete-event')
                 }
-                getEvents();
+                getEvents()
             } else {
                 console.error(`Failed to delete event: ${response.statusText}`)
             }
@@ -223,7 +223,7 @@ export default function EventList() {
     }
 
     return (
-        <div className="main-container">
+        <div className="main-container mb-16">
             <div>
                 <MainMap
                     events={events}

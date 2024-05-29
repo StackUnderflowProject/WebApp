@@ -2,7 +2,7 @@
 import { Link } from 'react-router-dom'
 import UserBox from './UserBox'
 import { useUserContext } from '../userContext'
-import '../stylesheets/navbar.css'
+// import '../stylesheets/navbar.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
@@ -20,67 +20,67 @@ function Navbar() {
     }
 
     return (
-        <nav className="relative top-3 p-2 rounded-xl flex flex-row justify-between bg-light-primary dark:bg-dark-primary">
-            <div className="mx-4 hover:text-light-accent transition-all duration-500">
-                <Link to="/">
-                    <FontAwesomeIcon icon={['fas', 'home']} size="2x" />
+        <nav className="relative flex flex-row justify-between items-center bg-light-background dark:bg-dark-background w-full py-4 z-50">
+            <Link to="/" className="mx-8 hover:text-light-accent transition-all duration-500">
+                <FontAwesomeIcon icon={['fas', 'home']} size="2x" />
+            </Link>
+            <div className="w-full flex flex-row justify-end items-center gap-4">
+                <Link
+                    to="/schedule"
+                    className="hover:text-dark-accent hover:bg-dark-background p-2 rounded-xl transition-all duration-500"
+                >
+                    {t('navbar.schedule')}
                 </Link>
+                <Link
+                    to="/standings"
+                    className="hover:text-dark-accent hover:bg-dark-background p-2 rounded-xl transition-all duration-500"
+                >
+                    {t('navbar.standings')}
+                </Link>
+                <Link
+                    to="/graphs"
+                    className="hover:text-dark-accent hover:bg-dark-background p-2 rounded-xl transition-all duration-500"
+                >
+                    {t('navbar.graphs')}
+                </Link>
+                {user ? (
+                    <>
+                        <Link
+                            className="center-self-y hover:text-dark-accent hover:bg-dark-background p-2 rounded-xl transition-all duration-500"
+                            to="/events"
+                        >
+                            {t('navbar.events')}
+                        </Link>
+                        <Link
+                            className="center-self-y hover:text-dark-accent hover:bg-dark-background p-2 rounded-xl transition-all duration-500"
+                            to="/createEvent"
+                        >
+                            {t('navbar.create_event')}
+                        </Link>
+                        <UserBox />
+                    </>
+                ) : (
+                    <>
+                        <Link
+                            to="/login"
+                            className="center-self-y hover:text-dark-accent hover:bg-dark-background p-2 rounded-xl transition-all duration-500"
+                        >
+                            {t('navbar.sign_in')}
+                        </Link>
+                        <Link
+                            to="/register"
+                            className="center-self-y hover:text-dark-accent hover:bg-dark-background p-2 rounded-xl transition-all duration-500"
+                        >
+                            {t('navbar.sign_up')}
+                        </Link>
+                    </>
+                )}
             </div>
-            <div id="right-side" className="bg-light-primary dark:bg-dark-primary">
-                <div id="pages-links">
-                    <Link
-                        to="/schedule"
-                        className="hover:text-dark-accent hover:bg-dark-background p-2 rounded-xl transition-all duration-500"
-                    >
-                        {t('navbar.schedule')}
-                    </Link>
-                    <Link
-                        to="/standings"
-                        className="hover:text-dark-accent hover:bg-dark-background p-2 rounded-xl transition-all duration-500"
-                    >
-                        {t('navbar.standings')}
-                    </Link>
-                    <Link
-                        to="/graphs"
-                        className="hover:text-dark-accent hover:bg-dark-background p-2 rounded-xl transition-all duration-500"
-                    >
-                        {t('navbar.graphs')}
-                    </Link>
-                </div>
-                <div id="user-container">
-                    {user ? (
-                        <>
-                            <Link
-                                className="center-self-y hover:text-dark-accent hover:bg-dark-background p-2 rounded-xl transition-all duration-500"
-                                to="/events"
-                            >
-                                {t('navbar.events')}
-                            </Link>
-                            <Link
-                                className="center-self-y hover:text-dark-accent hover:bg-dark-background p-2 rounded-xl transition-all duration-500"
-                                to="/createEvent"
-                            >
-                                {t('navbar.create_event')}
-                            </Link>
-                            <div id="user-box">
-                                <UserBox />
-                            </div>
-                        </>
-                    ) : (
-                        <>
-                            <p>
-                                <Link to="/login">{t('navbar.sign_in')}</Link>
-                            </p>
-                            <p>
-                                <Link to="/register">{t('navbar.sign_up')}</Link>
-                            </p>
-                        </>
-                    )}
-                </div>
+            <div>
                 {language === 'en' && (
                     <button
                         onClick={() => changeLanguage('sl')}
-                        className="p-2 px-4 bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text rounded-xl hover:bg-light-accent dark:hover:bg-dark-accent transition-all duration-500"
+                        className="py-2 px-4 mr-4 bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text rounded-xl hover:bg-light-accent dark:hover:bg-dark-accent transition-all duration-500"
                     >
                         Sl
                     </button>
@@ -88,7 +88,7 @@ function Navbar() {
                 {language === 'sl' && (
                     <button
                         onClick={() => changeLanguage('en')}
-                        className="p-2 px-4 bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text rounded-xl hover:bg-light-accent dark:hover:bg-dark-accent transition-all duration-500"
+                        className="py-2 px-4 mr-4 bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text rounded-xl hover:bg-light-accent dark:hover:bg-dark-accent transition-all duration-500"
                     >
                         En
                     </button>

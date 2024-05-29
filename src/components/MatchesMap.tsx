@@ -109,9 +109,9 @@ export const MatchesMap = ({ sport, fromDate, toDate, team }: MatchesMapProps) =
             <div className="h-full w-full relative">
                 <button
                     onClick={switchTileLayer}
-                    className="absolute top-2 z-50 right-2 text-light-text dark:text-dark-text bg-light-background dark:bg-dark-background hover:bg-light-primary dark:hover:bg-dark-primary w-fit p-4 bg-white rounded-xl"
+                    className="absolute top-24 z-50 right-4 text-light-text dark:text-dark-text bg-light-background dark:bg-dark-background hover:bg-light-primary hover:text-light-background dark:hover:bg-dark-primary w-fit p-4 rounded-xl"
                 >
-                    {tileLayerURL === 'https://tiles.stadiamaps.com/tiles/outdoors/{z}/{x}/{y}{r}.png' ? (
+                    {tileLayerURL === 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' ? (
                         <FontAwesomeIcon icon={['fas', 'satellite']} />
                     ) : (
                         <FontAwesomeIcon icon={['fas', 'map']} />
@@ -120,7 +120,7 @@ export const MatchesMap = ({ sport, fromDate, toDate, team }: MatchesMapProps) =
                 <MapContainer
                     ref={mapRef}
                     center={[46.19200522709865, 14.891171889045815]}
-                    zoom={8}
+                    zoom={9}
                     className="h-full w-full z-40 rounded-xl"
                     zoomAnimation={true}
                     markerZoomAnimation={true}
