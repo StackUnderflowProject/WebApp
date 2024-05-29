@@ -84,7 +84,10 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
         navigate('/login');
     };
 
-    const updateUser = (newUser: User | null) => {
+    const updateUser = async (newUser: User | null) => {
+        if (newUser !== null) {
+            newUser.isAdmin = await isAdmin(newUser.token);
+        }    
         localStorage.setItem('user', JSON.stringify(newUser));
         setUser(newUser);
     };
