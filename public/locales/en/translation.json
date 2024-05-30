@@ -110,5 +110,7 @@
     "contact": "Contact",
     "terms": "Terms",
     "rights": "All rights reserved"
-  }
+  },
+  "all": "All",
+  "choose_team": "Choose Team"
 }

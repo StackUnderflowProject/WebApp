@@ -142,10 +142,10 @@ export const MatchesMap = ({ sport, fromDate, toDate, team }: MatchesMapProps) =
                                         // On marker click, set the map's view to the marker's position with zoom animation
                                         mapRef.current?.flyTo(
                                             new LatLng(
-                                                match.stadium.location.coordinates[0],
+                                                match.stadium.location.coordinates[0] + 0.002,
                                                 match.stadium.location.coordinates[1]
                                             ),
-                                            14,
+                                            16,
                                             {
                                                 duration: 2 // Adjust the duration of the fly animation as needed
                                             }
@@ -154,7 +154,7 @@ export const MatchesMap = ({ sport, fromDate, toDate, team }: MatchesMapProps) =
                                 }}
                             >
                                 <Popup>
-                                    <div className="flex flex-col justify-center items-center w-80">
+                                    <div className="flex flex-col justify-center items-center w-80 h-full">
                                         <span className="text-xl flex flex-row justify-center items-center">
                                             <div className=" p-2 m-2 border-2 rounded-xl flex-col flex items-center justify-center gap-2">
                                                 {match.home.name}

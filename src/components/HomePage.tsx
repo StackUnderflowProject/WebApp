@@ -172,7 +172,7 @@ export const HomePage = () => {
                                     className="p-2 rounded-xl bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text cursor-pointer"
                                     onChange={handleTeamChange}
                                 >
-                                    <option></option>
+                                    <option>{t('all')}</option>
                                     {teams?.map((team) => (
                                         <option key={team} value={team}>
                                             {team}

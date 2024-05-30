@@ -101,7 +101,7 @@ export const GraphPage = () => {
                                 className="text-light-text bg-light-background dark:text-dark-text dark:bg-dark-background p-2 rounded-xl h-fit w-full"
                                 onChange={handleTeamChange}
                             >
-                                <option></option>
+                                <option>{t('choose_team')}</option>
                                 {isSuccess && [...new Set(teamNames)].map((team) => <option key={team}>{team}</option>)}
                             </select>
                         </div>
