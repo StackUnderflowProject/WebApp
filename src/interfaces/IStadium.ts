@@ -13,4 +13,5 @@ export interface IStadium {
     buildYear: number
     imageUrl: string
     season: string
+    sport?: string
 }

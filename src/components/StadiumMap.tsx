@@ -1,35 +1,55 @@
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
 import L, { LatLng } from 'leaflet'
-import icon from 'leaflet/dist/images/marker-icon.png'
-import iconShadow from 'leaflet/dist/images/marker-shadow.png'
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query'
 import { IStadium } from '../interfaces/IStadium.ts'
 import { Loading } from './Loading.tsx'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-
-const DefaultIcon = L.icon({
-    iconUrl: icon,
-    shadowUrl: iconShadow,
-    iconAnchor: [12.5, 41],
-    popupAnchor: [0, -36]
-})
-
-L.Marker.prototype.options.icon = DefaultIcon
+import { Sport } from '../types/SportType.ts'
 
 interface MapComponentProps {
-    sport: string
+    sport: Sport
     season: number
     team: string
 }
 
-const fetchStadiums = async (sport: string, season: number) => {
+interface IStadiumPosition {
+    sport: string
+    position: LatLng
+}
+
+const fetchStadiums = async (sport: Sport, season: number) => {
+    if (sport === 'all') {
+        const responseFootball = await fetch(`${import.meta.env.API_URL}/footballStadium/filterBySeason/${season}`)
+        const responseHandball = await fetch(`${import.meta.env.API_URL}/handballStadium/filterBySeason/${season}`)
+        if (!responseFootball.ok || !responseHandball.ok) {
+            throw new Error('Network response was not ok')
+        }
+        const footballStadiums = await responseFootball.json().then((stadiums) =>
+            stadiums.map((stadium: IStadium) => {
+                stadium.sport = 'football'
+                return stadium
+            })
+        )
+        const handballStadiums = await responseHandball.json().then((stadiums) =>
+            stadiums.map((stadium: IStadium) => {
+                stadium.sport = 'handball'
+                return stadium
+            })
+        )
+        return footballStadiums.concat(handballStadiums)
+    }
     const response = await fetch(`${import.meta.env.API_URL}/${sport}Stadium/filterBySeason/${season}`)
     if (!response.ok) {
         throw new Error('Network response was not ok')
     }
-    return response.json()
+    return await response.json().then((stadiums) =>
+        stadiums.map((stadium: IStadium) => {
+            stadium.sport = sport
+            return stadium
+        })
+    )
 }
 
 const queryClient = new QueryClient()
@@ -71,16 +91,21 @@ export const StadiumMap = ({ sport, season, team }: MapComponentProps) => {
 
     if (!isSuccess) return <h2>No data</h2>
 
-    const positions: LatLng[] = stadiums
+    const stadiumPositions: IStadiumPosition[] = stadiums
         .filter((x) => team === '' || x.teamId.name === team)
-        .map((stadium: IStadium) => new LatLng(stadium.location.coordinates[0], stadium.location.coordinates[1]))
+        .map((stadium: IStadium) => {
+            return {
+                sport: stadium.sport || '',
+                position: new LatLng(stadium.location.coordinates[0], stadium.location.coordinates[1])
+            }
+        })
 
     return (
         <QueryClientProvider client={queryClient}>
             <div className="h-full w-full relative">
                 <button
                     onClick={switchTileLayer}
-                    className="absolute top-24 z-50 right-4 text-light-text dark:text-dark-text bg-light-background dark:bg-dark-background hover:bg-light-primary hover:text-light-background dark:hover:bg-dark-primary w-fit p-4 rounded-xl"
+                    className="absolute top-44 z-50 right-4 text-light-text dark:text-dark-text bg-light-background dark:bg-dark-background hover:bg-light-primary hover:text-light-background dark:hover:bg-dark-primary w-fit p-4 rounded-xl"
                 >
                     {tileLayerURL === 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' ? (
                         <FontAwesomeIcon icon={['fas', 'satellite']} />
@@ -92,22 +117,29 @@ export const StadiumMap = ({ sport, season, team }: MapComponentProps) => {
                     ref={mapRef}
                     center={[46.19200522709865, 14.891171889045815]}
                     zoom={9}
-                    className="h-full w-full z-40 rounded-xl transition-all duration-500"
+                    minZoom={8}
+                    className="h-full w-full z-40 transition-all duration-500"
                     zoomAnimation={true}
                     markerZoomAnimation={true}
                 >
                     <TileLayer url={tileLayerURL} attribution={tileLayerATTR} />
-                    {positions.map((position, index) => (
+                    {stadiumPositions.map((stadium, index) => (
                         <Marker
                             key={index}
-                            position={position}
+                            position={stadium.position}
                             eventHandlers={{
                                 click: () => {
-                                    mapRef.current?.flyTo(position, 16, {
+                                    mapRef.current?.flyTo(stadium.position, 16, {
                                         duration: 2
                                     })
                                 }
                             }}
+                            icon={L.icon({
+                                iconUrl: stadium.sport === 'football' ? '/stadiumMarker.png' : '/arenaMarker.png',
+                                iconSize: [46, 50],
+                                iconAnchor: [12.5, 41],
+                                popupAnchor: [0, -36]
+                            })}
                         >
                             <Popup>
                                 <div className="flex flex-col justify-center items-center w-80">

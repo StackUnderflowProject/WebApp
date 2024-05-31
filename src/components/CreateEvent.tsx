@@ -70,6 +70,7 @@ const MapComponent: React.FC<MapComponentProps> = React.memo(({ selectedLocation
             <MapContainer
                 center={[46.1512, 14.9955]} // Center of Slovenia
                 zoom={8}
+                minZoom={6}
                 className="h-full w-full rounded-xl z-10"
             >
                 <TileLayer url={tileLayerURL} attribution={tileLayerATTR} minZoom={0} maxZoom={20} />

@@ -87,6 +87,7 @@ export const GraphPage = () => {
                         <select
                             className="text-light-text bg-light-background dark:text-dark-text dark:bg-dark-background p-2 rounded-xl h-fit w-full"
                             onChange={handleSportChange}
+                            value={selectedSport}
                         >
                             <option value="football">{t('football')}</option>
                             <option value="handball">{t('handball')}</option>
@@ -100,6 +101,7 @@ export const GraphPage = () => {
                             <select
                                 className="text-light-text bg-light-background dark:text-dark-text dark:bg-dark-background p-2 rounded-xl h-fit w-full"
                                 onChange={handleTeamChange}
+                                value={selectedTeam}
                             >
                                 <option>{t('choose_team')}</option>
                                 {isSuccess && [...new Set(teamNames)].map((team) => <option key={team}>{team}</option>)}

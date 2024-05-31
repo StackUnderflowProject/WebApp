@@ -58,14 +58,22 @@ const MapComponent: React.FC<MapComponentProps> = React.memo(({ title, location 
     }
 
     return (
-        <div className="map-container">
-            <button onClick={switchTileLayer} id="map-mode">
-                <strong>Prikaz</strong>
+        <div className="map-container relative">
+            <button
+                onClick={switchTileLayer}
+                className="absolute top-6 right-4 z-50 w-fit  text-light-text dark:text-dark-text bg-light-background dark:bg-dark-background hover:bg-light-primary dark:hover:bg-dark-primary p-4 rounded-xl"
+            >
+                {tileLayerURL === 'https://tiles.stadiamaps.com/tiles/outdoors/{z}/{x}/{y}{r}.png' ? (
+                    <FontAwesomeIcon icon={['fas', 'satellite']} />
+                ) : (
+                    <FontAwesomeIcon icon={['fas', 'map']} />
+                )}
             </button>
             <MapContainer
                 center={[location.lat, location.lng]} // Center of Slovenia
                 zoom={12}
                 style={{ height: '400px', width: '100%' }}
+                className="rounded-xl z-40"
             >
                 <TileLayer url={tileLayerURL} attribution={tileLayerATTR} minZoom={0} maxZoom={20} />
                 <Marker position={location}>
@@ -238,7 +246,7 @@ export default function EventList() {
                     <p>{t('event_page.no_events')}</p>
                 ) : (
                     events.map((event) => (
-                        <div key={event._id} className="event-card">
+                        <div key={event._id} className="event-card dark:bg-dark-background text-dark-text">
                             <div className="event-header">
                                 <div className="host-info">
                                     <img
@@ -263,7 +271,7 @@ export default function EventList() {
                                               : event.followers.length}{' '}
                                         <FontAwesomeIcon icon={faUser} />
                                     </p>
-                                    <p className="event-activity">
+                                    <p className="event-activity dark:bg-dark-primary dark:text-dark-text">
                                         {event.activity}&nbsp;
                                         <FontAwesomeIcon
                                             icon={event.activity === 'nogomet' ? faSoccerBall : faPersonRunning}
@@ -284,7 +292,7 @@ export default function EventList() {
                                 </div>
                             </div>
                             <div className="event-info">
-                                <h3 className="event-title">{event.name}</h3>
+                                <h3 className="event-title dark:text-dark-accent">{event.name}</h3>
                                 <p className="event-description">{event.description}</p>
                                 <p className="event-date">
                                     {t('event_page.event_start_at')} <strong>{formatDateString(event.date)}</strong>
