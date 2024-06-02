@@ -6,7 +6,6 @@ import { Sport } from '../types/SportType.ts'
 import { Season } from '../types/SeasonType.ts'
 import { useQuery } from '@tanstack/react-query'
 import { Loading } from './Loading.tsx'
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useTranslation } from 'react-i18next'
 import { formatDateString } from '../utils/dateUtil.ts'
 
@@ -194,7 +193,7 @@ export const Schedule = () => {
                                 id={match._id}
                             >
                                 <div
-                                    onClick={() => navigate(`/${sport}Team/${match.home._id}`)}
+                                    onClick={() => navigate(`/${sport}Team/${match.home._id}/${match.season}`)}
                                     className="w-2/5 flex gap-2 items-center justify-evenly"
                                 >
                                     <h2 className="text-light-text dark:text-dark-text text-xl w-1/2">
@@ -210,7 +209,7 @@ export const Schedule = () => {
                                     {match.score === '' ? '- : -' : match.score}
                                 </h1>
                                 <div
-                                    onClick={() => navigate(`/${sport}Team/${match.away._id}`)}
+                                    onClick={() => navigate(`/${sport}Team/${match.away._id}/${match.season}`)}
                                     className="w-2/5 flex gap-2 items-center justify-evenly"
                                 >
                                     <img

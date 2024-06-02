@@ -112,5 +112,9 @@
     "rights": "Vse praice pridržane"
   },
   "all": "Vsi",
-  "choose_team": "Izberi ekipo"
+  "choose_team": "Izberi ekipo",
+  "place": "Mesto",
+  "president": "Predsednik",
+  "coach": "Trener",
+  "director": "Direktor"
 }
