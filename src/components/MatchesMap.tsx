@@ -4,7 +4,7 @@ import { Sport } from '../types/SportType.ts'
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query'
 import L, { LatLng } from 'leaflet'
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const queryClient = new QueryClient()
@@ -168,6 +168,7 @@ export const MatchesMap = ({ sport, fromDate, toDate, team }: MatchesMapProps) =
                                 eventHandlers={{
                                     click: () => {
                                         // On marker click, set the map's view to the marker's position with zoom animation
+                                        // @ts-ignore
                                         mapRef.current?.flyTo(
                                             new LatLng(
                                                 match.stadium.location.coordinates[0] + 0.002,

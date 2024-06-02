@@ -4,7 +4,7 @@ import L, { LatLng } from 'leaflet'
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query'
 import { IStadium } from '../interfaces/IStadium.ts'
 import { Loading } from './Loading.tsx'
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Sport } from '../types/SportType.ts'
 
@@ -129,6 +129,7 @@ export const StadiumMap = ({ sport, season, team }: MapComponentProps) => {
                             position={stadium.position}
                             eventHandlers={{
                                 click: () => {
+                                    // @ts-expect-error flyTo is not in the types
                                     mapRef.current?.flyTo(stadium.position, 16, {
                                         duration: 2
                                     })
