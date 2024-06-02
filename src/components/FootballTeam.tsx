@@ -42,7 +42,7 @@ const fetchStandings = async (season: Season) => {
 
 const fetchMatches = async (season: Season, teamId?: string) => {
     if (!teamId) return
-    const response = await fetch(`${import.meta.env.API_URL}/footballMatch/filterByTeamAndSeason/${season}/${teamId}`)
+    const response = await fetch(`${import.meta.env.API_URL}/footballMatch/filterBySeasonAndTeam/${season}/${teamId}`)
     const data = await response.json()
     if (response.ok) {
         return data.sort((a: IMatch, b: IMatch) => {
@@ -157,7 +157,7 @@ export function FootballTeam() {
         <>
             <div className="cover-photo">
                 <img src={stadiumPicture} alt="Stadium" className="stadium-photo" />
-                <div className="profile-details absolute bottom-0">
+                <div className="profile-details">
                     <img src={team.logoPath} alt={`${team.name} logo`} className="team-logo" />
                     <h1 className="team-name">{team.name}</h1>
                 </div>
