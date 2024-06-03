@@ -53,7 +53,7 @@ function Register() {
             return
         }
 
-        const response = await fetch('http://localhost:3000/users/register', {
+        const response = await fetch(`${import.meta.env.API_URL}/users/register`, {
             method: 'POST',
             body: JSON.stringify({ username, password, email }),
             headers: {

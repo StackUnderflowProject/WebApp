@@ -89,7 +89,7 @@ const MainMap: React.FC<MainMapProps> = ({ events, deleteEvent, followEvent, fol
                                             <img
                                                 src={
                                                     event.host.image
-                                                        ? 'http://localhost:3000/images/profile_pictures/' +
+                                                        ? `${import.meta.env.API_URL}/images/profile_pictures/` +
                                                           event.host.image
                                                         : '/defaultProfilePicture.png'
                                                 }
