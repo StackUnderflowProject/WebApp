@@ -22,7 +22,7 @@ function UserBox() {
             <img
                 src={
                     user && user.image
-                        ? 'http://localhost:3000/images/profile_pictures/' + user.image
+                        ? `${import.meta.env.API_URL}/images/profile_pictures/${user.image}`
                         : '/defaultProfilePicture.png'
                 }
                 alt="profile-picture"
