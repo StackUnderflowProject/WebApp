@@ -38,8 +38,8 @@ function App() {
                                     <Route path="/profile/:userId" element={<Profile />} />
                                     <Route path="/schedule" element={<Schedule />} />
                                     <Route path="/standings" element={<Standings />} />
-                                    <Route path="/footballTeam/:teamId" element={<FootballTeam />} />
-                                    <Route path="/handballTeam/:teamId" element={<HandballTeam />} />
+                                    <Route path="/footballTeam/:teamId/:season" element={<FootballTeam />} />
+                                    <Route path="/handballTeam/:teamId/:season" element={<HandballTeam />} />
                                     <Route path="/createEvent" element={<CreateEvent />} />
                                     <Route path="/events" element={<EventList />} />
                                     <Route path="/graphs" element={<GraphPage />} />

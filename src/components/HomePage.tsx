@@ -16,7 +16,17 @@ const lastWeek = () => {
 }
 
 const fetchTeams = async (sport: Sport, season: Season) => {
-    const response = await fetch(`http://localhost:3000/${sport}Team/name/${season}`)
+    if (sport === 'all') {
+        const responseFootball = await fetch(`${import.meta.env.API_URL}/footballTeam/name/${season}`)
+        const responseHandball = await fetch(`${import.meta.env.API_URL}/handballTeam/name/${season}`)
+        if (!responseFootball.ok || !responseHandball.ok) {
+            throw new Error('Failed to fetch teams')
+        }
+        const footballTeams = await responseFootball.json()
+        const handballTeams = await responseHandball.json()
+        return footballTeams.concat(handballTeams)
+    }
+    const response = await fetch(`${import.meta.env.API_URL}/${sport}Team/name/${season}`)
     if (!response.ok) {
         throw new Error('Failed to fetch teams')
     }
@@ -37,7 +47,7 @@ export const HomePage = () => {
 
     const [sport, setSport] = useState<Sport>(() => {
         const sport = localStorage.getItem('sportHome')
-        return (sport as Sport) || ('football' as Sport)
+        return (sport as Sport) || ('all' as Sport)
     })
 
     const [fromDate, setFromDate] = useState<string>(() => {
@@ -130,6 +140,7 @@ export const HomePage = () => {
                                 onChange={handleSportChange}
                                 className="p-2 rounded-xl bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text cursor-pointer"
                             >
+                                <option value="all">{t('all')}</option>
                                 <option value="football">{t('football')}</option>
                                 <option value="handball">{t('handball')}</option>
                             </select>
@@ -171,8 +182,9 @@ export const HomePage = () => {
                                 <select
                                     className="p-2 rounded-xl bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text cursor-pointer"
                                     onChange={handleTeamChange}
+                                    value={team}
                                 >
-                                    <option>{t('all')}</option>
+                                    <option value="">{t('all')}</option>
                                     {teams?.map((team) => (
                                         <option key={team} value={team}>
                                             {team}
@@ -183,7 +195,7 @@ export const HomePage = () => {
                         </div>
                     </div>
                 </aside>
-                <section className="w-full h-full absolute top-0 left-0">
+                <section className="w-full h-full absolute left-0 bottom-20">
                     {selectedOption === 'stadiums' ? (
                         <StadiumMap season={season} sport={sport} team={team} />
                     ) : (

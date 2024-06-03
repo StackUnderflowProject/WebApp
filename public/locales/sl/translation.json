@@ -1,7 +1,7 @@
 {
   "navbar": {
     "schedule": "Razpored",
-    "standings": "Lestivca",
+    "standings": "Lestvica",
     "graphs": "Grafi",
     "events": "Dogodki",
     "create_event": "Ustvari Dogodek",
@@ -112,5 +112,9 @@
     "rights": "Vse praice pridržane"
   },
   "all": "Vsi",
-  "choose_team": "Izberi ekipo"
+  "choose_team": "Izberi ekipo",
+  "place": "Mesto",
+  "president": "Predsednik",
+  "coach": "Trener",
+  "director": "Direktor"
 }

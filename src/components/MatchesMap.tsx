@@ -3,20 +3,9 @@
 import { Sport } from '../types/SportType.ts'
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query'
 import L, { LatLng } from 'leaflet'
-import icon from 'leaflet/dist/images/marker-icon.png'
-import iconShadow from 'leaflet/dist/images/marker-shadow.png'
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import { useRef, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-
-const DefaultIcon = L.icon({
-    iconUrl: icon,
-    shadowUrl: iconShadow,
-    iconAnchor: [12.5, 41],
-    popupAnchor: [0, 0]
-})
-
-L.Marker.prototype.options.icon = DefaultIcon
 
 const queryClient = new QueryClient()
 
@@ -28,13 +17,42 @@ interface MatchesMapProps {
 }
 
 const fetchMatches = async (sport: Sport, fromDate: Date, toDate: Date) => {
+    if (sport === 'all') {
+        const responseFootball = await fetch(
+            `${import.meta.env.API_URL}/footballMatch/filterByDateRange/${fromDate.toISOString().split('T')[0]}/${toDate.toISOString().split('T')[0]}`
+        )
+        const responseHandball = await fetch(
+            `${import.meta.env.API_URL}/handballMatch/filterByDateRange/${fromDate.toISOString().split('T')[0]}/${toDate.toISOString().split('T')[0]}`
+        )
+        if (!responseFootball.ok || !responseHandball.ok) {
+            throw new Error('Network response was not ok')
+        }
+        const footballMatches = await responseFootball.json().then((data) => {
+            return data.map((match: IMatch) => {
+                match.sport = 'football'
+                return match
+            })
+        })
+        const handballMatches = await responseHandball.json().then((data) => {
+            return data.map((match: IMatch) => {
+                match.sport = 'handball'
+                return match
+            })
+        })
+        return footballMatches.concat(handballMatches)
+    }
     const response = await fetch(
         `${import.meta.env.API_URL}/${sport}Match/filterByDateRange/${fromDate.toISOString().split('T')[0]}/${toDate.toISOString().split('T')[0]}`
     )
     if (!response.ok) {
         throw new Error('Network response was not ok')
     }
-    return response.json()
+    return await response.json().then((data) => {
+        return data.map((match: IMatch) => {
+            match.sport = sport
+            return match
+        })
+    })
 }
 
 interface ITeam {
@@ -65,6 +83,7 @@ interface IMatch {
     score: string
     location: string
     stadium: IStadium
+    sport?: string
 }
 
 export const MatchesMap = ({ sport, fromDate, toDate, team }: MatchesMapProps) => {
@@ -75,7 +94,7 @@ export const MatchesMap = ({ sport, fromDate, toDate, team }: MatchesMapProps) =
         isLoading,
         isSuccess
     } = useQuery<IMatch[]>({
-        queryKey: [`${sport}Match`, sport, fromDate, toDate],
+        queryKey: [`matches`, sport, fromDate, toDate],
         queryFn: () => fetchMatches(sport, fromDate, toDate)
     })
 
@@ -109,7 +128,7 @@ export const MatchesMap = ({ sport, fromDate, toDate, team }: MatchesMapProps) =
             <div className="h-full w-full relative">
                 <button
                     onClick={switchTileLayer}
-                    className="absolute top-24 z-50 right-4 text-light-text dark:text-dark-text bg-light-background dark:bg-dark-background hover:bg-light-primary hover:text-light-background dark:hover:bg-dark-primary w-fit p-4 rounded-xl"
+                    className="absolute top-44 z-50 right-4 text-light-text dark:text-dark-text bg-light-background dark:bg-dark-background hover:bg-light-primary hover:text-light-background dark:hover:bg-dark-primary w-fit p-4 rounded-xl"
                 >
                     {tileLayerURL === 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' ? (
                         <FontAwesomeIcon icon={['fas', 'satellite']} />
@@ -121,7 +140,8 @@ export const MatchesMap = ({ sport, fromDate, toDate, team }: MatchesMapProps) =
                     ref={mapRef}
                     center={[46.19200522709865, 14.891171889045815]}
                     zoom={9}
-                    className="h-full w-full z-40 rounded-xl"
+                    minZoom={8}
+                    className="h-full w-full z-40"
                     zoomAnimation={true}
                     markerZoomAnimation={true}
                 >
@@ -130,6 +150,14 @@ export const MatchesMap = ({ sport, fromDate, toDate, team }: MatchesMapProps) =
                         .filter((x) => team === '' || x.home.name === team || x.away.name === team)
                         .map((match, index) => (
                             <Marker
+                                icon={L.icon({
+                                    iconUrl:
+                                        (match?.sport === 'football' ? '/footballMarker.png' : '/handballMarker.png') ||
+                                        '/footballMarker.png',
+                                    iconSize: [60, 70],
+                                    iconAnchor: [30, 70],
+                                    popupAnchor: [1, -10]
+                                })}
                                 key={index}
                                 position={
                                     new LatLng(
@@ -140,6 +168,7 @@ export const MatchesMap = ({ sport, fromDate, toDate, team }: MatchesMapProps) =
                                 eventHandlers={{
                                     click: () => {
                                         // On marker click, set the map's view to the marker's position with zoom animation
+                                        // @ts-ignore
                                         mapRef.current?.flyTo(
                                             new LatLng(
                                                 match.stadium.location.coordinates[0] + 0.002,

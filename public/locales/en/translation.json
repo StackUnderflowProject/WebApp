@@ -112,5 +112,9 @@
     "rights": "All rights reserved"
   },
   "all": "All",
-  "choose_team": "Choose Team"
+  "choose_team": "Choose Team",
+  "place": "Place",
+  "president": "President",
+  "coach": "Coach",
+  "director": "Director"
 }
