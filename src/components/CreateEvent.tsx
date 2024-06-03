@@ -174,7 +174,7 @@ export default function CreateEvent() {
             return
         }
         try {
-            const response = await fetch('http://localhost:3000/events', {
+            const response = await fetch(`${import.meta.env.API_URL}/events`, {
                 method: 'POST',
                 body: JSON.stringify({
                     name: nameO,

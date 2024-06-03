@@ -123,7 +123,7 @@ export default function EventList() {
     const getEvents = async () => {
         localStorage.setItem('lastPath', '/events')
         try {
-            const response = await fetch('http://localhost:3000/events/upcoming')
+            const response = await fetch(`${import.meta.env.API_URL}/events/upcoming`)
             const data = await response.json()
             if (response.ok) {
                 setEvents(data)
@@ -154,7 +154,7 @@ export default function EventList() {
             button.innerHTML = `${t('event_page.following')} ✓`
         }
         try {
-            const response = await fetch(`http://localhost:3000/events/follow/${event._id}`, {
+            const response = await fetch(`${import.meta.env.API_URL}/events/follow/${event._id}`, {
                 headers: {
                     Authorization: 'Bearer: ' + user?.token
                 }
@@ -182,7 +182,7 @@ export default function EventList() {
             return
         }
         try {
-            const response = await fetch(`http://localhost:3000/events/${eventId}`, {
+            const response = await fetch(`${import.meta.env.API_URL}/events/${eventId}`, {
                 method: 'DELETE',
                 headers: {
                     Authorization: 'Bearer: ' + user?.token
