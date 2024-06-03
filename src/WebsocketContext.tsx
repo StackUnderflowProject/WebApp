@@ -14,7 +14,7 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     const [socket, setSocket] = useState<Socket | null>(null)
 
     useEffect(() => {
-        const newSocket = io(`${import.meta.env.SOCKET_URL}`)
+        const newSocket = io(import.meta.env.SOCKET_URL, {})
         setSocket(newSocket)
 
         return () => {
