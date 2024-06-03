@@ -38,7 +38,7 @@ function Login() {
         const password: string = passwordInput?.value ?? ''
 
         try {
-            const response = await fetch('http://localhost:3000/users/login', {
+            const response = await fetch(`${import.meta.env.API_URL}/users/login`, {
                 method: 'POST',
                 body: JSON.stringify({ username, password }),
                 headers: {
