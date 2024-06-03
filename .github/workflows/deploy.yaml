@@ -35,10 +35,10 @@ jobs:
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
       - name: Build Docker image
-        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/web-app:latest .
+        run: docker build -t stackunderflow03/web-app:latest .
 
       - name: Push Docker image
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/web-app:latest
+        run: docker push stackunderflow03/web-app:latest
 
       - name: Send webhook to server
         run: curl -X POST ${{ secrets.WEBHOOK_URL }}
