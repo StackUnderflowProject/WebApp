@@ -9,6 +9,7 @@ import { useUserContext } from '../userContext'
 import MainMap from './EventsMap'
 import { useWebSocket } from '../WebsocketContext.tsx'
 import { useTranslation } from 'react-i18next'
+import { CustomMarkerIcon } from './CreateEvent.tsx'
 
 type Event = {
     location: {
@@ -76,7 +77,7 @@ const MapComponent: React.FC<MapComponentProps> = React.memo(({ title, location 
                 className="rounded-xl z-40"
             >
                 <TileLayer url={tileLayerURL} attribution={tileLayerATTR} minZoom={0} maxZoom={20} />
-                <Marker position={location}>
+                <Marker position={location} icon={CustomMarkerIcon}>
                     <Popup>{title}</Popup>
                 </Marker>
             </MapContainer>
