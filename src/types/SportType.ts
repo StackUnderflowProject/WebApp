@@ -1,1 +1,1 @@
-export type Sport = "football" | "handball"
+export type Sport = 'football' | 'handball' | 'all'

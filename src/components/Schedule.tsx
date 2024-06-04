@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import '../stylesheets/schedule.css'
 import { useNavigate } from 'react-router-dom'
 import { IMatch } from '../interfaces/IMatch.ts'
@@ -6,7 +6,6 @@ import { Sport } from '../types/SportType.ts'
 import { Season } from '../types/SeasonType.ts'
 import { useQuery } from '@tanstack/react-query'
 import { Loading } from './Loading.tsx'
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useTranslation } from 'react-i18next'
 import { formatDateString } from '../utils/dateUtil.ts'
 
@@ -45,7 +44,7 @@ export const Schedule = () => {
     })
 
     const [page, setPage] = useState(1)
-    const [limit] = useState(30)
+    const limit = 30
 
     const {
         data: count = 0,
@@ -104,23 +103,9 @@ export const Schedule = () => {
     //     return () => window.removeEventListener('scroll', handleScroll)
     // }, [])
 
-    const containerRef = useRef<HTMLDivElement | null>(null)
-
-    // Endless scroll
     useEffect(() => {
-        const handleScroll = () => {
-            if (containerRef.current) {
-                const { scrollTop, clientHeight, scrollHeight } = containerRef.current
-                if (scrollTop + clientHeight >= scrollHeight - 100) {
-                    // Adjust threshold as needed
-                    setPage((prevPage) => prevPage + 1)
-                }
-            }
-        }
-
-        window.addEventListener('scroll', handleScroll)
-        return () => window.removeEventListener('scroll', handleScroll)
-    }, [])
+        window.scrollTo(0, 0)
+    }, [page])
 
     // CHANGE SPORT FILTER
     const handleSportChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -139,13 +124,13 @@ export const Schedule = () => {
         return <div>{t('schedule.error_fetching_data')}</div>
     }
 
-    if (!isSuccess || !countIsSuccess) {
-        return <div>No data available</div>
-    }
-
     // LOADING SCREEN
     if (isLoading || countIsLoading) {
         return <Loading />
+    }
+
+    if (!isSuccess || !countIsSuccess) {
+        return <div>No data available</div>
     }
 
     console.log(count)
@@ -208,7 +193,7 @@ export const Schedule = () => {
                                 id={match._id}
                             >
                                 <div
-                                    onClick={() => navigate(`/${sport}Team/${match.home._id}`)}
+                                    onClick={() => navigate(`/${sport}Team/${match.home._id}/${match.season}`)}
                                     className="w-2/5 flex gap-2 items-center justify-evenly"
                                 >
                                     <h2 className="text-light-text dark:text-dark-text text-xl w-1/2">
@@ -224,7 +209,7 @@ export const Schedule = () => {
                                     {match.score === '' ? '- : -' : match.score}
                                 </h1>
                                 <div
-                                    onClick={() => navigate(`/${sport}Team/${match.away._id}`)}
+                                    onClick={() => navigate(`/${sport}Team/${match.away._id}/${match.season}`)}
                                     className="w-2/5 flex gap-2 items-center justify-evenly"
                                 >
                                     <img
@@ -241,7 +226,7 @@ export const Schedule = () => {
                     ))}
                 </div>
             ))}
-            <div className="flex gap-4 justify-center items-center">
+            <div className="flex gap-4 justify-center items-center my-8">
                 {page > 1 && (
                     <button
                         className="p-2 rounded-xl bg-light-accent dark:bg-dark-accent text-light-text dark:text-dark-text w-fit hover:bg-light-primary dark:hover:bg-dark-primary hover:text-light-text dark:hover:text-dark-text"

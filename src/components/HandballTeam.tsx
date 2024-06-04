@@ -1,278 +1,239 @@
 //import { CSSProperties } from "react";
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import LoadingScreen from './LoadingScreen'
 import '../stylesheets/team.css'
+import { Season } from '../types/SeasonType.ts'
+import { IMatch } from '../interfaces/IMatch.ts'
+import { useTranslation } from 'react-i18next'
+import { useQuery } from '@tanstack/react-query'
+import { Loading } from './Loading.tsx'
+import { IStanding } from '../interfaces/IStanding.ts'
 
-type Team = {
-    _id: string
-    name: string
-    president: string
-    director: string
-    coach: string
-    logoPath: string
-    season?: number
-    __v?: number
+const fetchTeam = async (teamId?: string) => {
+    if (!teamId) return
+    const response = await fetch(`${import.meta.env.API_URL}/handballTeam/${teamId}`)
+    const data = await response.json()
+    if (response.ok) {
+        return data
+    } else {
+        console.error('Failed to fetch football team')
+    }
 }
 
-type StandingsUnit = {
-    _id: string
-    place: number
-    team: {
-        _id: string
-        name: string
-        president: string
-        director: string
-        coach: string
-        logoPath: string
-        season: number
-        __v: number
+const fetchStandings = async (season: Season) => {
+    const response = await fetch(`${import.meta.env.API_URL}/handballStanding/filterBySeason/${season}`)
+    const data = await response.json()
+    if (response.ok) {
+        return data
+    } else {
+        console.error('Failed to fetch football standings')
     }
-    gamesPlayed: number
-    wins: number
-    draws: number
-    losses: number
-    goalsScored: number
-    goalsConceded: number
-    points: number
-    season: number
-    __v: number
 }
 
-type Match = {
-    _id: string
-    date: string
-    time: string
-    home: {
-        _id: string
-        name: string
-        president: string
-        director: string
-        coach: string
-        logoPath: string
-        season: number
-        __v: number
+const fetchMatches = async (season: Season, teamId?: string) => {
+    if (!teamId) return
+    const response = await fetch(`${import.meta.env.API_URL}/handballMatch/filterBySeasonAndTeam/${season}/${teamId}`)
+    const data = await response.json()
+    if (response.ok) {
+        console.log(data)
+
+        return data.sort((a: IMatch, b: IMatch) => {
+            return new Date(a.date).getTime() - new Date(b.date).getTime()
+        })
+    } else {
+        console.error('Failed to fetch football matches')
     }
-    away: {
-        _id: string
-        name: string
-        president: string
-        director: string
-        coach: string
-        logoPath: string
-        season: number
-        __v: number
-    }
-    score: string
-    location: string
-    stadium: {
-        location: {
-            type: string
-            coordinates: [number, number]
-        }
-        _id: string
-        name: string
-        teamId: string
-        capacity: number
-        buildYear: number
-        imageUrl: string
-        season: number
-        __v: number
-    }
-    season: number
-    __v: number
 }
 
 export function HandballTeam() {
     const navigate = useNavigate()
-    const { teamId } = useParams()
+    const { t } = useTranslation()
+    const { teamId, season } = useParams()
 
-    const [loading, setLoading] = useState(true)
-    const [team, setTeam] = useState<Team | null>(null)
-    const [teams, setTeams] = useState<StandingsUnit[]>([])
-    const [matches, setMatches] = useState<Match[]>([])
-    const [stadiumPicture, setStadiumPicture] = useState<string>('../../public/defaultStadiumImage.jpg')
+    const [windowSize, setWindowSize] = useState({ width: window.innerWidth, height: window.innerHeight })
 
     useEffect(() => {
-        localStorage.setItem("lastPath", "/handballTeam/" + teamId);
+        const handleResize = () => {
+            setWindowSize({ width: window.innerWidth, height: window.innerHeight })
+        }
+
+        window.addEventListener('resize', handleResize)
+
+        return () => {
+            window.removeEventListener('resize', handleResize)
+        }
     }, [])
 
     useEffect(() => {
-        if (team !== null) {
-            getStadiumLogo()
-            getHandballStandings()
-            getHandballMatches()
-        }
-    }, [team])
-
-    const getTeam = async () => {
-        try {
-            const response = await fetch('http://localhost:3000/handballTeam/latest/' + teamId)
-            const data = await response.json()
-            if (response.ok) {
-                setTeam(data)
-            } else {
-                console.error('Failed to fetch handball team')
-            }
-        } catch (error) {
-            console.error('Error fetching handball team:', error)
-        } finally {
-            setLoading(false)
-        }
-    }
-
-    const getStadiumLogo = async () => {
-        try {
-            const response = await fetch('http://localhost:3000/handballStadium/getByTeam/' + team?._id)
-            const data = await response.json()
-            if (response.ok) {
-                setStadiumPicture(data.imageUrl)
-            } else {
-                console.error('Failed to fetch handball stadium')
-            }
-        } catch (error) {
-            console.error('Error fetching handball stadium:', error)
-        }
-    }
-
-    const getHandballStandings = async () => {
-        try {
-            const response = await fetch(
-                'http://localhost:3000/handballStanding/filterBySeason/' + new Date().getFullYear()
-            )
-            const data = await response.json()
-            if (response.ok) {
-                setTeams(data)
-            } else {
-                console.error('Failed to fetch handball standings')
-            }
-        } catch (error) {
-            console.error('Error fetching handball standings:', error)
-        } finally {
-            setLoading(false)
-        }
-    }
-
-    const getHandballMatches = async () => {
-        try {
-            const response = await fetch(
-                'http://localhost:3000/handballMatch/filterByTeamAndSeason/' +
-                    new Date().getFullYear() +
-                    '/' +
-                    team?._id
-            )
-            const data = await response.json()
-            if (response.ok) {
-                const sortedMatches = data.sort(
-                    (a: Match, b: Match) => new Date(b.date).getTime() - new Date(a.date).getTime()
-                )
-                setMatches(sortedMatches)
-            } else {
-                console.error('Failed to fetch handball matches')
-            }
-        } catch (error) {
-            console.error('Error fetching handball matches:', error)
-        } finally {
-            setLoading(false)
-        }
-    }
-
-    useEffect(() => {
-        setLoading(true)
-        getTeam()
+        localStorage.setItem('lastPath', '/handballTeam/' + teamId)
     }, [teamId])
 
-    // LOADING SCREEN
-    if (loading) {
-        return <LoadingScreen />
+    const {
+        data: team,
+        error: teamError,
+        isLoading: teamLoading,
+        isSuccess: teamSuccess
+    } = useQuery({
+        queryKey: ['footballTeam', teamId],
+        queryFn: () => fetchTeam(teamId)
+    })
+
+    const {
+        data: teams,
+        error: standingsError,
+        isLoading: standingsLoading,
+        isSuccess: standingsSuccess
+    } = useQuery({
+        queryKey: ['standings', parseInt(season || '2024')],
+        queryFn: () => fetchStandings(parseInt(season || '2024') as Season)
+    })
+
+    const {
+        data: matches,
+        error: matchesError,
+        isLoading: matchesLoading,
+        isSuccess: matchesSuccess
+    } = useQuery({
+        queryKey: ['matches', teamId, parseInt(season || '2024')],
+        queryFn: () => fetchMatches(parseInt(season || '2024') as Season, teamId)
+    })
+
+    if (teamError) {
+        return <div>Error: {teamError.message}</div>
     }
 
-    if (team === null) {
-        return <h1>Given team was not found!</h1>
+    if (standingsError) {
+        return <div>Error: {standingsError.message}</div>
+    }
+
+    if (matchesError) {
+        return <div>Error: {matchesError.message}</div>
+    }
+
+    // LOADING SCREEN
+    if (teamLoading || standingsLoading || matchesLoading) {
+        return <Loading />
+    }
+
+    if (!teamSuccess) {
+        return <div>Failed to load team</div>
+    }
+
+    if (!standingsSuccess) {
+        return <div>Failed to load standings</div>
+    }
+
+    if (!matchesSuccess) {
+        return <div>Failed to load matches</div>
     }
 
     return (
-        <>
-            <div className="cover-photo">
-                <img src={stadiumPicture} alt="Stadium" className="stadium-photo" />
+        <div className="mb-8">
+            <div className="cover-photo bg-light-background dark:bg-dark-background">
+                <div className="stadium-photo" />
                 <div className="profile-details">
                     <img src={team.logoPath} alt={`${team.name} logo`} className="team-logo" />
                     <h1 className="team-name">{team.name}</h1>
                 </div>
             </div>
-            <div className="team-info">
-                <p>
-                    <strong>{teams.find((standing) => standing.team.name === team.name)?.place}. Mesto</strong>
+            <div className="team-info bg-light-primary dark:bg-dark-primary text-light-text dark:text-dark-text">
+                <p className="bg-light-background dark:bg-dark-background">
+                    <strong>
+                        {teams.find((standing: IStanding) => standing.team.name === team.name)?.place}. {t('place')}
+                    </strong>
                 </p>
-                <p>
-                    <strong>Precednik:</strong> {team.president}
-                </p>
-                <p>
-                    <strong>Direktor:</strong> {team.director}
-                </p>
-                <p>
-                    <strong>Trener:</strong> {team.coach}
+                <p className="text-light-text dark:text-dark-text bg-light-background dark:bg-dark-background">
+                    <strong>{t('coach')}:</strong> {team.coach}
                 </p>
             </div>
 
-            <div className="stat-container">
+            <div className="stat-container w-full">
                 <div className="standings">
-                    <table className="standings-table-small">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th>T</th>
-                                <th>Z</th>
-                                <th>N</th>
-                                <th>P</th>
-                                <th>D:P</th>
-                                <th>T</th>
+                    <table className="w-full h-full table bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text rounded-xl">
+                        <thead className="bg-light-primary dark:bg-dark-primary text-light-background dark:text-dark-text table-row-group rounded-xl">
+                            <tr className="rounded-xl">
+                                <th className="p-4 rounded-tl-xl border-r">
+                                    {windowSize.width > 1600
+                                        ? `${t('standings_page.place')}`
+                                        : t('standings_page.place_short')}
+                                </th>
+                                <th className="border-r">{t('standings_page.team')}</th>
+                                <th className="border-r px-2">
+                                    {windowSize.width > 1600
+                                        ? t('standings_page.games_played')
+                                        : t('standings_page.games_played_short')}
+                                </th>
+                                <th className="border-r px-2">
+                                    {windowSize.width > 1600
+                                        ? t('standings_page.wins')
+                                        : t('standings_page.wins_short')}
+                                </th>
+                                <th className="border-r px-2">
+                                    {windowSize.width > 1600
+                                        ? t('standings_page.draws')
+                                        : t('standings_page.draws_short')}
+                                </th>
+                                <th className="border-r px-2">
+                                    {windowSize.width > 1600
+                                        ? t('standings_page.losses')
+                                        : t('standings_page.losses_short')}
+                                </th>
+                                <th className="border-r px-2">
+                                    {windowSize.width > 1600
+                                        ? t('standings_page.goals')
+                                        : t('standings_page.goals_short')}
+                                </th>
+                                <th className="rounded-tr-xl px-2">
+                                    {windowSize.width > 1600
+                                        ? t('standings_page.points')
+                                        : t('standings_page.points_short')}
+                                </th>
                             </tr>
                         </thead>
-                        <tbody>
-                            {teams.map((standing) => (
+                        <tbody className="table-row-group">
+                            {teams.map((standing: IStanding) => (
                                 <tr
-                                    id={standing.team.name === team.name ? 'colored-team' : undefined}
                                     key={standing._id}
+                                    className={`border-t ${standing.team.name === team.name && 'bg-light-accent dark:bg-dark-accent text-light-background dark:text-dark-background'}`}
                                 >
-                                    <td>{standing.place}.</td>
-                                    <td>
+                                    <td className="border-r text-xl">{standing.place}.</td>
+                                    <td className="border-r text-xl flex justify-center items-center gap-2 p-4 flex-wrap">
                                         <img
                                             src={standing.team.logoPath}
                                             alt={standing.team.name}
-                                            className="team-logo-small"
+                                            className="h-16 w-16 mx-auto rounded-xl min-w-fit"
                                         />
+                                        <span className="w-1/2 min-w-fit">{standing.team.name}</span>
                                     </td>
-                                    <td>{standing.team.name}</td>
-                                    <td>{standing.gamesPlayed}</td>
-                                    <td>{standing.wins}</td>
-                                    <td>{standing.draws}</td>
-                                    <td>{standing.losses}</td>
-                                    <td>
+                                    <td className="border-r text-xl">{standing.gamesPlayed}</td>
+                                    <td className="border-r text-xl">{standing.wins}</td>
+                                    <td className="border-r text-xl">{standing.draws}</td>
+                                    <td className="border-r text-xl">{standing.losses}</td>
+                                    <td className="border-r text-xl">
                                         {standing.goalsScored}:{standing.goalsConceded}
                                     </td>
-                                    <td>{standing.points}</td>
+                                    <td className="text-xl">{standing.points}</td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
                 </div>
                 <div className="matches-container">
-                    <table className="matches-table">
+                    <table className="matches-table bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text rounded-xl ">
                         <tbody>
-                            {matches.map((match) => (
+                            {matches.map((match: IMatch) => (
                                 <tr
                                     id={match.score === '' ? 'toBePlayed' : undefined}
                                     key={match._id}
-                                    className="match-row"
+                                    className="match-row text-light-text dark:text-dark-text hover:bg-light-accent dark:hover:bg-dark-accent hover:text-light-background dark:hover:text-dark-background"
                                 >
                                     <td className="home-name">{match.home.name}</td>
                                     <td>
                                         <div className="center-wrapper-small">
                                             <div
-                                                onClick={() => navigate('/handballTeam/' + match.home._id)}
+                                                onClick={() =>
+                                                    navigate(`/handballTeam/${match.home._id}/${match.season}`)
+                                                }
                                                 className="home-team-small"
                                             >
                                                 <img
@@ -281,11 +242,11 @@ export function HandballTeam() {
                                                     alt="home team logo"
                                                 />
                                             </div>
-                                            <div className="score-container-small">
-                                                <p id="score-small">{match.score === '' ? '- : -' : match.score}</p>
-                                            </div>
+                                            <p id="score-small">{match.score === '' ? '- : -' : match.score}</p>
                                             <div
-                                                onClick={() => navigate('/handballTeam/' + match.away._id)}
+                                                onClick={() =>
+                                                    navigate(`/handballTeam/${match.away._id}/${match.season}`)
+                                                }
                                                 className="away-team-small"
                                             >
                                                 <img
@@ -303,6 +264,6 @@ export function HandballTeam() {
                     </table>
                 </div>
             </div>
-        </>
+        </div>
     )
 }

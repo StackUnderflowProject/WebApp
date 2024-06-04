@@ -1,7 +1,7 @@
 {
   "navbar": {
     "schedule": "Razpored",
-    "standings": "Lestivca",
+    "standings": "Lestvica",
     "graphs": "Grafi",
     "events": "Dogodki",
     "create_event": "Ustvari Dogodek",
@@ -104,5 +104,17 @@
     "user_exists": "Uporabnik že obstaja!",
     "repeat_password": "Ponovite geslo",
     "already_have_account": "Že imate račun?"
-  }
+  },
+  "footer": {
+    "about": "O nas",
+    "contact": "Kontakt",
+    "terms": "Pogoji uporabe",
+    "rights": "Vse praice pridržane"
+  },
+  "all": "Vsi",
+  "choose_team": "Izberi ekipo",
+  "place": "Mesto",
+  "president": "Predsednik",
+  "coach": "Trener",
+  "director": "Direktor"
 }

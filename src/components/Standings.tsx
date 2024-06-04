@@ -14,11 +14,10 @@ const fetchStandings = async (sport: Sport, season: number) => {
 }
 
 function Standings() {
-
     useEffect(() => {
-        localStorage.setItem("lastPath", "/standings");
+        localStorage.setItem('lastPath', '/standings')
     }, [])
-    
+
     const { t } = useTranslation()
     const currentDate = new Date()
     const currentYear = currentDate.getFullYear()
@@ -82,12 +81,12 @@ function Standings() {
     if (!isSuccess) return <div>No data available</div>
 
     return (
-        <div className="w-full my-8 flex flex-col items-end justify-start gap-4 rounded-xl">
+        <div className="my-8 flex flex-col items-end justify-start gap-4 rounded-xl">
             <div className="flex justify-end gap-4">
                 <select
                     onChange={handleSportChange}
                     value={sport}
-                    className="p-2 bg-light-primary dark:bg-dark-primary text-light-text dark:text-dark-text rounded-xl"
+                    className="p-2 bg-light-primary dark:bg-dark-primary text-light-background dark:text-dark-text rounded-xl"
                 >
                     <option value="football">{t('football')}</option>
                     <option value="handball">{t('handball')}</option>
@@ -95,7 +94,7 @@ function Standings() {
                 <select
                     onChange={handleSeasonChange}
                     value={season}
-                    className="p-2 bg-light-primary dark:bg-dark-primary text-light-text dark:text-dark-text rounded-xl"
+                    className="p-2 bg-light-primary dark:bg-dark-primary text-light-background dark:text-dark-text rounded-xl"
                 >
                     {Array.from({ length: 5 }, (_, i) => currentYear - i).map((year) => (
                         <option key={year} value={year}>
@@ -105,30 +104,30 @@ function Standings() {
                 </select>
             </div>
             <table className="w-full h-full table bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text rounded-xl">
-                <thead className="bg-light-primary dark:bg-dark-primary text-light-text dark:text-dark-text table-row-group rounded-xl">
+                <thead className="bg-light-primary dark:bg-dark-primary text-light-background dark:text-dark-text table-row-group rounded-xl">
                     <tr className="rounded-xl">
                         <th className="p-4 rounded-tl-xl border-r">
                             {windowSize.width > 1280 ? `${t('standings_page.place')}` : t('standings_page.place_short')}
                         </th>
                         <th className="border-r">{t('standings_page.team')}</th>
-                        <th className="border-r">
+                        <th className="border-r px-2">
                             {windowSize.width > 1280
                                 ? t('standings_page.games_played')
                                 : t('standings_page.games_played_short')}
                         </th>
-                        <th className="border-r">
+                        <th className="border-r px-2">
                             {windowSize.width > 1280 ? t('standings_page.wins') : t('standings_page.wins_short')}
                         </th>
-                        <th className="border-r">
+                        <th className="border-r px-2">
                             {windowSize.width > 1280 ? t('standings_page.draws') : t('standings_page.draws_short')}
                         </th>
-                        <th className="border-r">
+                        <th className="border-r px-2">
                             {windowSize.width > 1280 ? t('standings_page.losses') : t('standings_page.losses_short')}
                         </th>
-                        <th className="border-r">
+                        <th className="border-r px-2">
                             {windowSize.width > 1280 ? t('standings_page.goals') : t('standings_page.goals_short')}
                         </th>
-                        <th className="rounded-tr-xl">
+                        <th className="rounded-tr-xl px-2">
                             {windowSize.width > 1280 ? t('standings_page.points') : t('standings_page.points_short')}
                         </th>
                     </tr>

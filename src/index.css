@@ -36,20 +36,20 @@
     box-sizing: border-box;
 }
 
-body::-webkit-scrollbar {
+*::-webkit-scrollbar {
     width: .75em;
 }
 
-body::-webkit-scrollbar-track {
+*::-webkit-scrollbar-track {
     background: var(--tw-bg);
     border-radius: 5px;
 }
 
-body::-webkit-scrollbar-thumb {
+*::-webkit-scrollbar-thumb {
     background: var(--tw-primary);
     border-radius: 5px;
 }
 
-body::-webkit-scrollbar-thumb:hover {
+*::-webkit-scrollbar-thumb:hover {
     background: var(--tw-secondary);
 }

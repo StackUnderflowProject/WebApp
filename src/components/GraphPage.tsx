@@ -19,11 +19,11 @@ const fetchTeamNames = async (sport: Sport) => {
 
 export const GraphPage = () => {
     useEffect(() => {
-        localStorage.setItem("lastPath", "/graphs");
+        localStorage.setItem('lastPath', '/graphs')
     }, [])
 
     const { t } = useTranslation()
-    
+
     const [selectedSport, setSelectedSport] = useState<Sport>(() => {
         const sport = localStorage.getItem('sportGraph')
         return (sport as Sport) || ('football' as Sport)
@@ -71,7 +71,7 @@ export const GraphPage = () => {
     }, [selectedTeam, selectedSport, selectedOption])
 
     return (
-        <div className="flex xl:flex-row flex-col w-full xl:h-[88%] h-[92%] gap-6">
+        <div className="flex xl:flex-row flex-col w-full xl:h-[86dvh] h-[100dvh] gap-6 mb-16">
             <div className="w-full xl:w-1/4 h-fit bg-light-primary dark:bg-dark-primary p-4 mt-8 rounded-xl flex flex-col gap-4">
                 <select
                     className="text-light-text bg-light-background dark:text-dark-text dark:bg-dark-background p-2 rounded-xl h-fit w-full"
@@ -83,10 +83,11 @@ export const GraphPage = () => {
                 </select>
                 <div className="flex flex-row xl:flex-col justify-center items-center gap-4 w-full">
                     <div className="flex justify-center items-center w-full gap-4">
-                        <span className="p-2">{t('sport')}:</span>
+                        <span className="p-2 text-light-background dark:text-dark-text">{t('sport')}:</span>
                         <select
                             className="text-light-text bg-light-background dark:text-dark-text dark:bg-dark-background p-2 rounded-xl h-fit w-full"
                             onChange={handleSportChange}
+                            value={selectedSport}
                         >
                             <option value="football">{t('football')}</option>
                             <option value="handball">{t('handball')}</option>
@@ -94,12 +95,15 @@ export const GraphPage = () => {
                     </div>
                     {selectedOption === 'clubs' && (
                         <div className="flex justify-center items-center gap-4 w-full">
-                            <span className="p-2">{t('graph_page.options.clubs')}:</span>
+                            <span className="p-2 text-light-background dark:text-dark-text">
+                                {t('graph_page.options.clubs')}:
+                            </span>
                             <select
                                 className="text-light-text bg-light-background dark:text-dark-text dark:bg-dark-background p-2 rounded-xl h-fit w-full"
                                 onChange={handleTeamChange}
+                                value={selectedTeam}
                             >
-                                <option></option>
+                                <option>{t('choose_team')}</option>
                                 {isSuccess && [...new Set(teamNames)].map((team) => <option key={team}>{team}</option>)}
                             </select>
                         </div>
@@ -111,7 +115,7 @@ export const GraphPage = () => {
                     (selectedSport === 'football' ? <FootballStandingsGraph /> : <HandballStandingsGraph />)}
 
                 {selectedOption === 'clubs' && selectedTeam === '' && (
-                    <div className="h-[90%] w-full xl:mt-8 bg-transparent border-2 rounded-xl grid place-content-center">
+                    <div className="h-full w-full xl:mt-8 bg-transparent border-2 border-light-accent dark:border-dark-accent rounded-xl grid place-content-center">
                         <h2 className="text-3xl">{t('graph_page.select_team')}</h2>
                     </div>
                 )}

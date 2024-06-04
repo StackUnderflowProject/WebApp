@@ -24,26 +24,27 @@ const queryClient = new QueryClient()
 
 function App() {
     return (
-        <div className="h-dvh w-[80%] text-center mx-auto">
+        <div className="h-dvh text-center mx-auto flex flex-col overflow-x-hidden">
             <BrowserRouter>
                 <UserProvider>
                     <WebSocketProvider>
                         <Navbar />
                         <QueryClientProvider client={queryClient}>
-                            <Routes>
-                                <Route path="/" element={<HomePage />} />
-                                <Route path="/register" element={<Register />} />
-                                <Route path="/login" element={<Login />} />
-                                <Route path="/profile/:userId" element={<Profile />} />
-                                <Route path="/settings" element={<p></p>} />
-                                <Route path="/schedule" element={<Schedule />} />
-                                <Route path="/standings" element={<Standings />} />
-                                <Route path="/footballTeam/:teamId" element={<FootballTeam />} />
-                                <Route path="/handballTeam/:teamId" element={<HandballTeam />} />
-                                <Route path="/createEvent" element={<CreateEvent />} />
-                                <Route path="/events" element={<EventList />} />
-                                <Route path="/graphs" element={<GraphPage />} />
-                            </Routes>
+                            <div className="w-[80%] mx-auto">
+                                <Routes>
+                                    <Route path="/" element={<HomePage />} />
+                                    <Route path="/register" element={<Register />} />
+                                    <Route path="/login" element={<Login />} />
+                                    <Route path="/profile/:userId" element={<Profile />} />
+                                    <Route path="/schedule" element={<Schedule />} />
+                                    <Route path="/standings" element={<Standings />} />
+                                    <Route path="/footballTeam/:teamId/:season" element={<FootballTeam />} />
+                                    <Route path="/handballTeam/:teamId/:season" element={<HandballTeam />} />
+                                    <Route path="/createEvent" element={<CreateEvent />} />
+                                    <Route path="/events" element={<EventList />} />
+                                    <Route path="/graphs" element={<GraphPage />} />
+                                </Routes>
+                            </div>
                         </QueryClientProvider>
                         <Footer />
                     </WebSocketProvider>

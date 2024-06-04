@@ -118,6 +118,7 @@ export const StandingsLineChart = ({ data }: StandingsLineChartProps) => {
 
     return (
         <div className="w-full h-full text-light-text bg-light-background dark:text-dark-text dark:bg-dark-background border-2 rounded-xl">
+            {/* @ts-expect-error Chart.js types are not up-to-date*/}
             <Line data={chartData} options={options} key={windowSize.width + chartData.datasets.length} />
         </div>
     )

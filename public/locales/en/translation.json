@@ -104,5 +104,17 @@
     "user_exists": "User already exists!",
     "repeat_password": "Repeat Password",
     "already_have_account": "Already have an account?"
-  }
+  },
+  "footer": {
+    "about": "About",
+    "contact": "Contact",
+    "terms": "Terms",
+    "rights": "All rights reserved"
+  },
+  "all": "All",
+  "choose_team": "Choose Team",
+  "place": "Place",
+  "president": "President",
+  "coach": "Coach",
+  "director": "Director"
 }
