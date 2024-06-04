@@ -65,8 +65,8 @@ function Login() {
         <div className="mt-16 w-max mx-auto p-4 rounded-xl flex flex-col justify-center items-center gap-4 bg-light-background dark:bg-dark-background">
             <h2 className="mt-4 text-2xl text-light-text dark:text-dark-text">{t('sign_in_page.sign_in')}</h2>
             <form id="loginForm" className="w-max p-4 rounded-xl flex flex-col gap-4" onSubmit={(e) => makeLogin(e)}>
-                <div className="flex justify-evenly items-center gap-2 bg-light-primary dark:bg-dark-primary p-2 rounded-xl">
-                    <label htmlFor="username" className="ml-auto w-1/2 text-light-background dark:text-dark-text">
+                <div className="relative flex flex-col justify-start items-start gap-2 bg-light-primary dark:bg-dark-primary p-2 rounded-xl">
+                    <label htmlFor="username" className="mx-2 text-light-background dark:text-dark-text">
                         {t('sign_in_page.username')}:
                     </label>
                     <input
@@ -76,11 +76,12 @@ function Login() {
                         onChange={(e) => setUsernameText(e.target.value)}
                         name="username"
                         required
-                        className="w-1/2 p-2 rounded-xl bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text"
+                        className="w-full p-2 pl-12 rounded-xl bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text"
                     />
+                    <FontAwesomeIcon icon={['fas', 'user']} className="absolute bottom-3 left-4 p-2" />
                 </div>
-                <div className="flex justify-evenly items-center gap-2 bg-light-primary dark:bg-dark-primary p-2 rounded-xl">
-                    <label htmlFor="password" className="ml-auto w-1/2 text-light-background dark:text-dark-text">
+                <div className="relative flex flex-col justify-start items-start gap-2 bg-light-primary dark:bg-dark-primary p-2 rounded-xl">
+                    <label htmlFor="password" className="mx-2 text-light-background dark:text-dark-text">
                         {t('sign_in_page.password')}:
                     </label>
                     <input
@@ -90,13 +91,14 @@ function Login() {
                         onChange={(e) => setPasswordText(e.target.value)}
                         name="password"
                         required
-                        className="w-1/2 p-2 rounded-xl bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text"
+                        className="w-full p-2 pl-12 rounded-xl bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text"
                     />
+                    <FontAwesomeIcon icon={['fas', 'lock']} className="absolute bottom-3 left-4 p-2" />
                 </div>
                 {authFailed ? <p id="auth-failed">{t('sign_in_page.sign_in_error')}</p> : <></>}
                 <button
                     type="submit"
-                    className="bg-light-primary dark:bg-dark-primary w-fit mx-auto p-2 rounded-xl text-light-background dark:text-dark-text"
+                    className="bg-light-primary dark:bg-dark-primary w-fit mx-auto p-2 rounded-xl hover:bg-light-accent hover:dark:bg-dark-accent transition-all duration-500"
                 >
                     {t('sign_in_page.sign_in')}
                     &nbsp;
@@ -104,8 +106,12 @@ function Login() {
                 </button>
             </form>
             <div className="flex gap-4">
-                <p>{t('sign_in_page.dont_have_account')}</p>
-                <Link to="/register">{t('sign_in_page.sign_up')}</Link>
+                <p className="text-sm text-light-neutral dark:text-dark-neutral">
+                    {t('sign_in_page.dont_have_account')}
+                </p>
+                <Link to="/register" className="text-sm hover:text-light-accent hover:dark:text-dark-accent">
+                    {t('sign_in_page.sign_up')}
+                </Link>
             </div>
         </div>
     )

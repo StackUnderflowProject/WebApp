@@ -130,9 +130,13 @@ export const StadiumMap = ({ sport, season, team }: MapComponentProps) => {
                             eventHandlers={{
                                 click: () => {
                                     // @ts-expect-error flyTo is not in the types
-                                    mapRef.current?.flyTo(stadium.position, 16, {
-                                        duration: 2
-                                    })
+                                    mapRef.current?.flyTo(
+                                        new LatLng(stadium.position.lat + 0.001, stadium.position.lng),
+                                        16,
+                                        {
+                                            duration: 2
+                                        }
+                                    )
                                 }
                             }}
                             icon={L.icon({

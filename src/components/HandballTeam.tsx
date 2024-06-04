@@ -128,7 +128,7 @@ export function HandballTeam() {
     }
 
     return (
-        <>
+        <div className="mb-8">
             <div className="cover-photo bg-light-background dark:bg-dark-background">
                 <div className="stadium-photo" />
                 <div className="profile-details">
@@ -264,6 +264,6 @@ export function HandballTeam() {
                     </table>
                 </div>
             </div>
-        </>
+        </div>
     )
 }
