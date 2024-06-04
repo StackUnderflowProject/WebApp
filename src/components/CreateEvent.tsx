@@ -8,8 +8,8 @@ import { useUserContext } from '../userContext'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useTranslation } from 'react-i18next'
 
-const CustomMarkerIcon = L.icon({
-    iconUrl: '../../mapMarker.png', // Replace with the path to your checkmark icon
+export const CustomMarkerIcon = L.icon({
+    iconUrl: '/mapMarker.png', // Replace with the path to your checkmark icon
     iconSize: [32, 32], // Adjust size as needed
     iconAnchor: [16, 40], // Adjust anchor to the center of the icon
     popupAnchor: [0, -16] // Adjust popup anchor if needed

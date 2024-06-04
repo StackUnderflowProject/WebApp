@@ -1,20 +1,30 @@
-# Use an official Node.js runtime as a parent image
-FROM node:20-alpine
+# Stage 1: Build the Vite project
+FROM node:20-alpine AS build
 
-# Set the working directory in the container
+# Set working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json to the working directory
-COPY package*.json ./
-
-# Install app dependencies
+# Install dependencies
+COPY package.json package-lock.json ./
 RUN npm install
 
-# Copy the rest of your application code to the working directory
+# Copy project files into the Docker image
 COPY . .
 
-# Expose a port to communicate with the React app
+# Build the project
+RUN npm run build
+
+# Stage 2: Serve the build files with Nginx
+FROM nginx:alpine
+
+# Copy the built files from the previous stage
+COPY --from=build /app/dist /usr/share/nginx/html
+
+# Copy Nginx configuration file
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Expose port 80
 EXPOSE 80
 
-# Start your React app
-CMD ["npm", "run", "dev"]
+# Start Nginx
+CMD ["nginx", "-g", "daemon off;"]

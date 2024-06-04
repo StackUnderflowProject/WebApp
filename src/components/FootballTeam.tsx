@@ -154,7 +154,7 @@ export function FootballTeam() {
     }
 
     return (
-        <>
+        <div className="mb-8">
             <div className="cover-photo">
                 <img src={stadiumPicture} alt="Stadium" className="stadium-photo" />
                 <div className="profile-details">
@@ -295,6 +295,6 @@ export function FootballTeam() {
                     </table>
                 </div>
             </div>
-        </>
+        </div>
     )
 }

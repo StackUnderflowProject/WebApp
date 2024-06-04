@@ -258,7 +258,9 @@ export default function EventList() {
                                         alt={event.host.username}
                                         className="host-image"
                                     />
-                                    <p className="host-name">{event.host.username}</p>
+                                    <p className="host-name text-light-text dark:text-dark-text">
+                                        {event.host.username}
+                                    </p>
                                 </div>
                                 <div className="header-right-side">
                                     <p className="followers-display">
