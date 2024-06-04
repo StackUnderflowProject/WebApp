@@ -9,7 +9,6 @@ import { useUserContext } from '../userContext'
 import MainMap from './EventsMap'
 import { useWebSocket } from '../WebsocketContext.tsx'
 import { useTranslation } from 'react-i18next'
-import { Await } from 'react-router-dom'
 
 type Event = {
     location: {
