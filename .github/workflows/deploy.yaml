@@ -6,7 +6,6 @@ on:
       - production
   push:
     branches:
-      - SCRUM-144-add-github-workflow
       - production
 
 jobs:

@@ -48,7 +48,6 @@ function Register() {
         const email: string = emailInput?.value ?? ''
         const password: string = passwordInput?.value ?? ''
         const confirmPassword: string = confirmPasswordInput?.value ?? ''
-        console.log({ username, password, email })
         if (password !== confirmPassword) {
             setError(t('sign_in_page.passwords_dont_match'))
             return

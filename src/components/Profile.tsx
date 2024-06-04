@@ -109,7 +109,6 @@ function Profile() {
 
         const fileUploadElement = document.getElementById('file-upload') as HTMLInputElement
         if (!fileUploadElement || !fileUploadElement.files || fileUploadElement.files.length < 1) {
-            console.log('failed to upload profile picture.')
             return
         }
         const image: File = fileUploadElement?.files[0] ?? null
@@ -122,12 +121,12 @@ function Profile() {
         }
 
         const response = await fetch(`${import.meta.env.API_URL}/users/profilePicture`, {
-            method: 'POST',
-            body: form,
+            method: 'PUT',
             headers: {
-                'Content-Type': 'application/json',
                 Authorization: 'Bearer ' + user?.token
-            }
+            },
+            body: form,
+            credentials: 'include'
         })
         if (response.ok) {
             const newUser = await response.json()
@@ -196,7 +195,7 @@ function Profile() {
             if (newUser.image) {
                 setProfilePicture(`${import.meta.env.API_URL}/images/profile_pictures/` + newUser.image)
             } else {
-                setProfilePicture('../../default.png')
+                setProfilePicture('/default.png')
             }
             setUsername(newUser.username)
             setEmail(newUser.email)
