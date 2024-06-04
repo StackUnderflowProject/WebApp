@@ -35,8 +35,6 @@ const fetchMatches = async (season: Season, teamId?: string) => {
     const response = await fetch(`${import.meta.env.API_URL}/handballMatch/filterBySeasonAndTeam/${season}/${teamId}`)
     const data = await response.json()
     if (response.ok) {
-        console.log(data)
-
         return data.sort((a: IMatch, b: IMatch) => {
             return new Date(a.date).getTime() - new Date(b.date).getTime()
         })

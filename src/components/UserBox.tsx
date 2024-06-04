@@ -13,7 +13,6 @@ function UserBox() {
     const [userMenuOpened, setUserMenuOpened] = useState(false)
 
     const userMenuToggle = () => {
-        console.log('show')
         setUserMenuOpened(!userMenuOpened)
     }
 

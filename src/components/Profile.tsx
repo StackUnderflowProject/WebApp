@@ -108,10 +108,6 @@ function Profile() {
         const form = new FormData()
 
         const fileUploadElement = document.getElementById('file-upload') as HTMLInputElement
-        if (!fileUploadElement || !fileUploadElement.files || fileUploadElement.files.length < 1) {
-            console.log('failed to upload profile picture.')
-            return
-        }
         const image: File = fileUploadElement?.files[0] ?? null
         form.append('profile_picture', image)
 

@@ -158,7 +158,6 @@ export default function CreateEvent() {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        console.log('Submitting form')
         const nameO = (document.getElementById('event-name') as HTMLInputElement).value
         const descriptionO = (document.getElementById('event-description') as HTMLInputElement).value
         const activityO = (document.getElementById('event-activity') as HTMLSelectElement).value
@@ -193,7 +192,6 @@ export default function CreateEvent() {
                 }
             })
             if (response.ok) {
-                console.log('Event created successfully')
                 localStorage.setItem('eventNameC', '')
                 localStorage.setItem('eventDescriptionC', '')
                 localStorage.setItem('eventActivityC', 'football')
