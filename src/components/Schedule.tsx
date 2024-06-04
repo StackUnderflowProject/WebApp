@@ -14,9 +14,7 @@ const fetchMatchCount = async (sport: Sport, season: Season) => {
     if (!response.ok) {
         throw new Error('Error fetching data')
     }
-    const data = await response.json()
-    console.log(data)
-    return data
+    return await response.json()
 }
 
 const fetchMatches = async (sport: Sport, season: Season, page: number, limit: number) => {
@@ -26,9 +24,7 @@ const fetchMatches = async (sport: Sport, season: Season, page: number, limit: n
     if (!response.ok) {
         throw new Error('Error fetching data')
     }
-    const data = await response.json()
-    console.log(data)
-    return data
+    return await response.json()
 }
 
 export const Schedule = () => {
@@ -132,8 +128,6 @@ export const Schedule = () => {
     if (!isSuccess || !countIsSuccess) {
         return <div>No data available</div>
     }
-
-    console.log(count)
 
     // SORT MATCHES BY DATE
     const matchesByDate = matches.reduce(

@@ -167,58 +167,70 @@ export const MatchesMap = ({ sport, fromDate, toDate, team }: MatchesMapProps) =
                                 }
                                 eventHandlers={{
                                     click: () => {
-                                        // On marker click, set the map's view to the marker's position with zoom animation
                                         // @ts-ignore
                                         mapRef.current?.flyTo(
                                             new LatLng(
-                                                match.stadium.location.coordinates[0] + 0.002,
+                                                match.stadium.location.coordinates[0] + 0.004,
                                                 match.stadium.location.coordinates[1]
                                             ),
                                             16,
                                             {
-                                                duration: 2 // Adjust the duration of the fly animation as needed
+                                                duration: 2
                                             }
                                         )
                                     }
                                 }}
                             >
-                                <Popup>
-                                    <div className="flex flex-col justify-center items-center w-80 h-full">
-                                        <span className="text-xl flex flex-row justify-center items-center">
-                                            <div className=" p-2 m-2 border-2 rounded-xl flex-col flex items-center justify-center gap-2">
+                                <Popup
+                                    className="bg-red-600 rounded-xl p-0 m-0"
+                                    autoClose
+                                    closeButton
+                                    closeOnEscapeKey
+                                    i18nIsDynamicList
+                                    interactive
+                                    keepInView
+                                    minWidth={400}
+                                >
+                                    <div className="flex flex-col justify-center items-center w-full h-full p-4 bg-light-background dark:bg-dark-background rounded-xl text-light-text dark:text-dark-text">
+                                        <div
+                                            className={`text-xl flex ${match.home.name.includes('RK') || match.home.name.includes('RD') ? 'flex-col' : 'flex-row'} justify-center items-center h-full w-full p-2`}
+                                        >
+                                            <div className="m-2 flex-col flex items-center justify-center gap-2 w-full min-w-max h-full">
                                                 {match.home.name}
                                                 <br />
                                                 {match.home.logoPath && (
                                                     <img
                                                         src={match.home.logoPath}
                                                         alt={match.home.name + ' logo'}
-                                                        className="w-16 h-16"
+                                                        className="w-16 h-16 rounded-xl"
                                                     />
                                                 )}
                                             </div>
                                             vs
-                                            <div className=" p-2 m-2 text-center border-2 rounded-xl flex-col flex items-center justify-center gap-2">
+                                            <div className="p-2 m-2 text-center flex-col flex items-center justify-center gap-2 w-full min-w-max h-full">
                                                 {match.away.name}
                                                 {match.away.logoPath && (
                                                     <img
                                                         src={match.away.logoPath}
                                                         alt={match.away.name + ' logo'}
-                                                        className="w-16 h-16"
+                                                        className="w-16 h-16 rounded-xl"
                                                     />
                                                 )}
                                             </div>
-                                        </span>
+                                        </div>
                                         <span className="text-xl p-0 m-0">
                                             {match.date.split('T')[0]} {match.time}
                                         </span>
-                                        <span className="text-2xl text-black p-0 m-0">{match.score}</span>
-                                        <div className="text-black">
-                                            <h1>{match.stadium.name}</h1>
+                                        <span className="text-2xl text-light-neutral dark:text-dark-neutral p-0 m-0">
+                                            {match.score}
+                                        </span>
+                                        <div className="mt-4">
+                                            <h1 className="mb-2">{match.stadium.name}</h1>
                                             {match.stadium.imageUrl && (
                                                 <img
                                                     src={match.stadium.imageUrl}
                                                     alt={match.stadium.name}
-                                                    className="h-36 max-h-full w-auto rounded-lg"
+                                                    className="h-42 max-h-full w-auto rounded-lg"
                                                 />
                                             )}
                                         </div>

@@ -59,11 +59,11 @@ function Profile() {
     }, [editUserInfo])
 
     const getUser = async () => {
-        const response = await fetch('http://localhost:3000/users/show/' + userId)
+        const response = await fetch(`${import.meta.env.API_URL}/users/show/` + userId)
         const data = await response.json()
         if (response.ok) {
             if (data.image) {
-                setProfilePicture('http://localhost:3000/images/profile_pictures/' + data.image)
+                setProfilePicture(`${import.meta.env.API_URL}/images/profile_pictures/` + data.image)
             } else {
                 setProfilePicture('../../default.png')
             }
@@ -109,7 +109,6 @@ function Profile() {
 
         const fileUploadElement = document.getElementById('file-upload') as HTMLInputElement
         if (!fileUploadElement || !fileUploadElement.files || fileUploadElement.files.length < 1) {
-            console.log('failed to upload profile picture.')
             return
         }
         const image: File = fileUploadElement?.files[0] ?? null
@@ -121,19 +120,19 @@ function Profile() {
             return
         }
 
-        const response = await fetch('http://localhost:3000/users/profilePicture', {
-            method: 'POST',
-            body: form,
+        const response = await fetch(`${import.meta.env.API_URL}/users/profilePicture`, {
+            method: 'PUT',
             headers: {
-                'Content-Type': 'application/json',
                 Authorization: 'Bearer ' + user?.token
-            }
+            },
+            body: form,
+            credentials: 'include'
         })
         if (response.ok) {
             const newUser = await response.json()
             newUser.token = user?.token
             updateUser(newUser)
-            setProfilePicture('http://localhost:3000/images/profile_pictures/' + newUser?.image)
+            setProfilePicture(`${import.meta.env.API_URL}/images/profile_pictures/` + newUser?.image)
             setShowUploadButton(false)
         }
     }
@@ -179,7 +178,7 @@ function Profile() {
             form.password = password
         }
 
-        const response = await fetch('http://localhost:3000/users/update/' + user?._id, {
+        const response = await fetch(`${import.meta.env.API_URL}/users/update/` + user?._id, {
             method: 'PUT',
             body: JSON.stringify(form),
             headers: {
@@ -194,9 +193,9 @@ function Profile() {
             localStorage.setItem('errorUpdateUser', '')
             setEditUserInfo(false)
             if (newUser.image) {
-                setProfilePicture('http://localhost:3000/images/profile_pictures/' + newUser.image)
+                setProfilePicture(`${import.meta.env.API_URL}/images/profile_pictures/` + newUser.image)
             } else {
-                setProfilePicture('../../default.png')
+                setProfilePicture('/default.png')
             }
             setUsername(newUser.username)
             setEmail(newUser.email)

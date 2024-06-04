@@ -9,6 +9,7 @@ import { useUserContext } from '../userContext'
 import MainMap from './EventsMap'
 import { useWebSocket } from '../WebsocketContext.tsx'
 import { useTranslation } from 'react-i18next'
+import { CustomMarkerIcon } from './CreateEvent.tsx'
 
 type Event = {
     location: {
@@ -76,7 +77,7 @@ const MapComponent: React.FC<MapComponentProps> = React.memo(({ title, location 
                 className="rounded-xl z-40"
             >
                 <TileLayer url={tileLayerURL} attribution={tileLayerATTR} minZoom={0} maxZoom={20} />
-                <Marker position={location}>
+                <Marker position={location} icon={CustomMarkerIcon}>
                     <Popup>{title}</Popup>
                 </Marker>
             </MapContainer>
@@ -101,16 +102,14 @@ export default function EventList() {
 
     useEffect(() => {
         if (socket) {
-            socket.on('new-event', () => {
-                console.log('received new event from server.')
-                getEvents()
+            socket.on('new-event', async () => {
+                await getEvents()
             })
-            socket.on('delete-event', () => {
-                console.log('received new deleted event from server.')
-                getEvents()
+            socket.on('delete-event', async () => {
+                await getEvents()
             })
             socket.on('error', (obj) => {
-                console.log('Error with event socket: ' + obj.message)
+                console.error('Error with event socket: ' + obj.message)
             })
             return () => {
                 socket.off('new-event')
@@ -123,7 +122,7 @@ export default function EventList() {
     const getEvents = async () => {
         localStorage.setItem('lastPath', '/events')
         try {
-            const response = await fetch('http://localhost:3000/events/upcoming')
+            const response = await fetch(`${import.meta.env.API_URL}/events/upcoming`)
             const data = await response.json()
             if (response.ok) {
                 setEvents(data)
@@ -154,7 +153,7 @@ export default function EventList() {
             button.innerHTML = `${t('event_page.following')} ✓`
         }
         try {
-            const response = await fetch(`http://localhost:3000/events/follow/${event._id}`, {
+            const response = await fetch(`${import.meta.env.API_URL}/events/follow/${event._id}`, {
                 headers: {
                     Authorization: 'Bearer: ' + user?.token
                 }
@@ -182,7 +181,7 @@ export default function EventList() {
             return
         }
         try {
-            const response = await fetch(`http://localhost:3000/events/${eventId}`, {
+            const response = await fetch(`${import.meta.env.API_URL}/events/${eventId}`, {
                 method: 'DELETE',
                 headers: {
                     Authorization: 'Bearer: ' + user?.token
@@ -252,13 +251,16 @@ export default function EventList() {
                                     <img
                                         src={
                                             event.host.image
-                                                ? 'http://localhost:3000/images/profile_pictures/' + event.host.image
+                                                ? `${import.meta.env.API_URL}/images/profile_pictures/` +
+                                                  event.host.image
                                                 : '/defaultProfilePicture.png'
                                         }
                                         alt={event.host.username}
                                         className="host-image"
                                     />
-                                    <p className="host-name">{event.host.username}</p>
+                                    <p className="host-name text-light-text dark:text-dark-text">
+                                        {event.host.username}
+                                    </p>
                                 </div>
                                 <div className="header-right-side">
                                     <p className="followers-display">

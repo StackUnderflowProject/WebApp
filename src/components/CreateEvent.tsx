@@ -8,8 +8,8 @@ import { useUserContext } from '../userContext'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useTranslation } from 'react-i18next'
 
-const CustomMarkerIcon = L.icon({
-    iconUrl: '../../mapMarker.png', // Replace with the path to your checkmark icon
+export const CustomMarkerIcon = L.icon({
+    iconUrl: '/mapMarker.png', // Replace with the path to your checkmark icon
     iconSize: [32, 32], // Adjust size as needed
     iconAnchor: [16, 40], // Adjust anchor to the center of the icon
     popupAnchor: [0, -16] // Adjust popup anchor if needed
@@ -158,7 +158,6 @@ export default function CreateEvent() {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        console.log('Submitting form')
         const nameO = (document.getElementById('event-name') as HTMLInputElement).value
         const descriptionO = (document.getElementById('event-description') as HTMLInputElement).value
         const activityO = (document.getElementById('event-activity') as HTMLSelectElement).value
@@ -174,7 +173,7 @@ export default function CreateEvent() {
             return
         }
         try {
-            const response = await fetch('http://localhost:3000/events', {
+            const response = await fetch(`${import.meta.env.API_URL}/events`, {
                 method: 'POST',
                 body: JSON.stringify({
                     name: nameO,
@@ -193,7 +192,6 @@ export default function CreateEvent() {
                 }
             })
             if (response.ok) {
-                console.log('Event created successfully')
                 localStorage.setItem('eventNameC', '')
                 localStorage.setItem('eventDescriptionC', '')
                 localStorage.setItem('eventActivityC', 'football')
