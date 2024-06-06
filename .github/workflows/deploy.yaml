@@ -1,40 +1,39 @@
 name: Build and Deploy
 
 on:
-  pull_request:
-    branches:
-      - production
-  push:
-    branches:
-      - production
-
+    pull_request:
+        branches:
+            - production
 jobs:
-  build:
-    runs-on: ubuntu-latest
+    build:
+        runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'
+            - name: Set up Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: '20'
 
-      - name: Install dependencies
-        run: npm install
+            - name: Install dependencies
+              run: npm install
 
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+            - name: Log in to Docker Hub
+              uses: docker/login-action@v2
+              with:
+                  username: ${{ secrets.DOCKERHUB_USERNAME }}
+                  password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-      - name: Build Docker image
-        run: docker build -t stackunderflow03/web-app:latest .
+            - name: Build Docker image
+              run: docker build -t stackunderflow03/web-app:latest .
 
-      - name: Push Docker image
-        run: docker push stackunderflow03/web-app:latest
+            - name: Push Docker image
+              run: docker push stackunderflow03/web-app:latest
 
-      - name: Send webhook to server
-        run: curl -X POST ${{ secrets.WEBHOOK_URL }}
+            - name: Send webhook
+              uses: distributhor/workflow-webhook@v3
+              with:
+                  webhook_url: '${{ secrets.WEBHOOK_URL }}'
+                  data: '{"message": "New Docker image deployed"}'
