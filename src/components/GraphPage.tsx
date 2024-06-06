@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next'
 type Option = 'standings' | 'clubs'
 
 const fetchTeamNames = async (sport: Sport) => {
+    // changed url
     const response = await fetch(`${import.meta.env.API_URL}/${sport}Team/name`)
     if (!response.ok) {
         throw new Error('Failed to fetch teams')
