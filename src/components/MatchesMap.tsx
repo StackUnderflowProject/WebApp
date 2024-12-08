@@ -148,96 +148,111 @@ export const MatchesMap = ({ sport, fromDate, toDate, team }: MatchesMapProps) =
                     <TileLayer url={tileLayerURL} attribution={tileLayerATTR} />
                     {matches
                         .filter((x) => team === '' || x.home.name === team || x.away.name === team)
-                        .map((match, index) => (
-                            <Marker
-                                icon={L.icon({
-                                    iconUrl:
-                                        (match?.sport === 'football' ? '/footballMarker.png' : '/handballMarker.png') ||
-                                        '/footballMarker.png',
-                                    iconSize: [60, 70],
-                                    iconAnchor: [30, 70],
-                                    popupAnchor: [1, -10]
-                                })}
-                                key={index}
-                                position={
-                                    new LatLng(
-                                        match.stadium.location.coordinates[0],
-                                        match.stadium.location.coordinates[1]
-                                    )
-                                }
-                                eventHandlers={{
-                                    click: () => {
-                                        // @ts-ignore
-                                        mapRef.current?.flyTo(
-                                            new LatLng(
-                                                match.stadium.location.coordinates[0] + 0.004,
-                                                match.stadium.location.coordinates[1]
-                                            ),
-                                            16,
-                                            {
-                                                duration: 2
-                                            }
+                        .map((match, index) => {
+                            // Check if location and coordinates exist
+                            const hasLocation =
+                                match.stadium &&
+                                match.stadium.location &&
+                                Array.isArray(match.stadium.location.coordinates) &&
+                                match.stadium.location.coordinates.length === 2
+
+                            // Only render the Marker if the location exists
+                            if (!hasLocation) {
+                                return null // Skip rendering if location doesn't exist
+                            }
+
+                            return (
+                                <Marker
+                                    icon={L.icon({
+                                        iconUrl:
+                                            (match?.sport === 'football'
+                                                ? '/footballMarker.png'
+                                                : '/handballMarker.png') || '/footballMarker.png',
+                                        iconSize: [60, 70],
+                                        iconAnchor: [30, 70],
+                                        popupAnchor: [1, -10]
+                                    })}
+                                    key={index}
+                                    position={
+                                        new LatLng(
+                                            match.stadium.location.coordinates[0],
+                                            match.stadium.location.coordinates[1]
                                         )
                                     }
-                                }}
-                            >
-                                <Popup
-                                    className="bg-red-600 rounded-xl p-0 m-0"
-                                    autoClose
-                                    closeButton
-                                    closeOnEscapeKey
-                                    i18nIsDynamicList
-                                    interactive
-                                    keepInView
-                                    minWidth={400}
+                                    eventHandlers={{
+                                        click: () => {
+                                            // @ts-ignore
+                                            mapRef.current?.flyTo(
+                                                new LatLng(
+                                                    match.stadium.location.coordinates[0] + 0.004,
+                                                    match.stadium.location.coordinates[1]
+                                                ),
+                                                16,
+                                                {
+                                                    duration: 2
+                                                }
+                                            )
+                                        }
+                                    }}
                                 >
-                                    <div className="flex flex-col justify-center items-center w-full h-full p-4 bg-light-background dark:bg-dark-background rounded-xl text-light-text dark:text-dark-text">
-                                        <div
-                                            className={`text-xl flex ${match.home.name.includes('RK') || match.home.name.includes('RD') ? 'flex-col' : 'flex-row'} justify-center items-center h-full w-full p-2`}
-                                        >
-                                            <div className="m-2 flex-col flex items-center justify-center gap-2 w-full min-w-max h-full">
-                                                {match.home.name}
-                                                <br />
-                                                {match.home.logoPath && (
-                                                    <img
-                                                        src={match.home.logoPath}
-                                                        alt={match.home.name + ' logo'}
-                                                        className="w-16 h-16 rounded-xl"
-                                                    />
-                                                )}
+                                    <Popup
+                                        className="bg-red-600 rounded-xl p-0 m-0"
+                                        autoClose
+                                        closeButton
+                                        closeOnEscapeKey
+                                        i18nIsDynamicList
+                                        interactive
+                                        keepInView
+                                        minWidth={400}
+                                    >
+                                        <div className="flex flex-col justify-center items-center w-full h-full p-4 bg-light-background dark:bg-dark-background rounded-xl text-light-text dark:text-dark-text">
+                                            <div
+                                                className={`text-xl flex ${match.home.name.includes('RK') || match.home.name.includes('RD') ? 'flex-col' : 'flex-row'} justify-center items-center h-full w-full p-2`}
+                                            >
+                                                <div className="m-2 flex-col flex items-center justify-center gap-2 w-full min-w-max h-full">
+                                                    {match.home.name}
+                                                    <br />
+                                                    {match.home.logoPath && (
+                                                        <img
+                                                            src={match.home.logoPath}
+                                                            alt={match.home.name + ' logo'}
+                                                            className="w-16 h-16 rounded-xl"
+                                                        />
+                                                    )}
+                                                </div>
+                                                vs
+                                                <div className="p-2 m-2 text-center flex-col flex items-center justify-center gap-2 w-full min-w-max h-full">
+                                                    {match.away.name}
+                                                    {match.away.logoPath && (
+                                                        <img
+                                                            src={match.away.logoPath}
+                                                            alt={match.away.name + ' logo'}
+                                                            className="w-16 h-16 rounded-xl"
+                                                        />
+                                                    )}
+                                                </div>
                                             </div>
-                                            vs
-                                            <div className="p-2 m-2 text-center flex-col flex items-center justify-center gap-2 w-full min-w-max h-full">
-                                                {match.away.name}
-                                                {match.away.logoPath && (
+                                            <span className="text-xl p-0 m-0">
+                                                {match.date.split('T')[0]} {match.time}
+                                            </span>
+                                            <span className="text-2xl text-light-neutral dark:text-dark-neutral p-0 m-0">
+                                                {match.score}
+                                            </span>
+                                            <div className="mt-4">
+                                                <h1 className="mb-2">{match.stadium.name}</h1>
+                                                {match.stadium.imageUrl && (
                                                     <img
-                                                        src={match.away.logoPath}
-                                                        alt={match.away.name + ' logo'}
-                                                        className="w-16 h-16 rounded-xl"
+                                                        src={match.stadium.imageUrl}
+                                                        alt={match.stadium.name}
+                                                        className="h-42 max-h-full w-auto rounded-lg"
                                                     />
                                                 )}
                                             </div>
                                         </div>
-                                        <span className="text-xl p-0 m-0">
-                                            {match.date.split('T')[0]} {match.time}
-                                        </span>
-                                        <span className="text-2xl text-light-neutral dark:text-dark-neutral p-0 m-0">
-                                            {match.score}
-                                        </span>
-                                        <div className="mt-4">
-                                            <h1 className="mb-2">{match.stadium.name}</h1>
-                                            {match.stadium.imageUrl && (
-                                                <img
-                                                    src={match.stadium.imageUrl}
-                                                    alt={match.stadium.name}
-                                                    className="h-42 max-h-full w-auto rounded-lg"
-                                                />
-                                            )}
-                                        </div>
-                                    </div>
-                                </Popup>
-                            </Marker>
-                        ))}
+                                    </Popup>
+                                </Marker>
+                            )
+                        })}
                 </MapContainer>
             </div>
         </QueryClientProvider>

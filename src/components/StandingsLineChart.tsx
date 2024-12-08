@@ -25,7 +25,7 @@ interface StandingsLineChartProps {
 export const StandingsLineChart = ({ data }: StandingsLineChartProps) => {
     // Prepare datasets for each club based on provided data
     const clubDatasets: Record<string, ChartDataset> = {}
-    const labels = [2020, 2021, 2022, 2023, 2024] // Assuming fixed years for the chart
+    const labels = [2020, 2021, 2022, 2023, 2024, 2025] // Assuming fixed years for the chart
 
     const theme = useThemePreference()
     const [windowSize, setWindowSize] = useState({ width: window.innerWidth, height: window.innerHeight })
