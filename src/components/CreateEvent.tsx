@@ -224,7 +224,6 @@ export default function CreateEvent() {
         if (day < 10) {
             dayS = `0${day}`
         }
-
         return `${year}-${monthS}-${dayS}`
     }
 

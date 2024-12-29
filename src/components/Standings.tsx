@@ -4,8 +4,9 @@ import { IStanding } from '../interfaces/IStanding.ts'
 import { useQuery } from '@tanstack/react-query'
 import { Loading } from './Loading.tsx'
 import { useTranslation } from 'react-i18next'
+import { Season } from '../types/SeasonType.ts'
 
-const fetchStandings = async (sport: Sport, season: number) => {
+const fetchStandings = async (sport: Sport, season: Season) => {
     const response = await fetch(`${import.meta.env.API_URL}/${sport}Standing/filterBySeason/${season}`)
     if (!response.ok) {
         throw new Error('Failed to fetch standings')
@@ -20,10 +21,10 @@ function Standings() {
 
     const { t } = useTranslation()
     const currentDate = new Date()
-    const currentYear = currentDate.getFullYear()
+    const currentYear = currentDate.getFullYear() as Season
 
-    const [season, setSeason] = useState(() => {
-        const storedSeason = Number(localStorage.getItem('seasonStandingsF'))
+    const [season, setSeason] = useState<Season>(() => {
+        const storedSeason = Number(localStorage.getItem('seasonStandingsF')) as Season
         return storedSeason ? storedSeason : currentYear
     })
 
@@ -42,7 +43,7 @@ function Standings() {
         isError
     } = useQuery<IStanding[]>({
         queryKey: ['standings', sport, season],
-        queryFn: () => fetchStandings(sport, season)
+        queryFn: () => fetchStandings(sport, season as Season)
     })
 
     const [windowSize, setWindowSize] = useState({ width: window.innerWidth, height: window.innerHeight })
@@ -70,7 +71,7 @@ function Standings() {
 
     // CHANGE SEASON FILTER
     const handleSeasonChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setSeason(Number(event.target.value))
+        setSeason(Number(event.target.value) as Season)
     }
 
     // LOADING SCREEN
@@ -96,11 +97,12 @@ function Standings() {
                     value={season}
                     className="p-2 bg-light-primary dark:bg-dark-primary text-light-background dark:text-dark-text rounded-xl"
                 >
-                    {Array.from({ length: 5 }, (_, i) => currentYear - i).map((year) => (
-                        <option key={year} value={year}>
-                            {year}
-                        </option>
-                    ))}
+                    <option value={2020}>2020</option>
+                    <option value={2021}>2021</option>
+                    <option value={2022}>2022</option>
+                    <option value={2023}>2023</option>
+                    <option value={2024}>2024</option>
+                    <option value={2025}>2025</option>
                 </select>
             </div>
             <table className="w-full h-full table bg-light-background dark:bg-dark-background text-light-text dark:text-dark-text rounded-xl">
