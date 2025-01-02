@@ -5,12 +5,15 @@ import '../stylesheets/userbox.css'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAddressCard, faGear, faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
+import { useTranslation } from 'react-i18next'
 //import { faAddressCard, faGear } from '@fortawesome/free-regular-svg-icons'; // Import the regular icon
 
 function UserBox() {
     const { user, logout } = useUserContext() // setUserContext
     //const { token, setToken, isTokenExpired } = useJWTContext();
     const [userMenuOpened, setUserMenuOpened] = useState(false)
+
+    const { t } = useTranslation()
 
     const userMenuToggle = () => {
         setUserMenuOpened(!userMenuOpened)
@@ -21,7 +24,7 @@ function UserBox() {
             <img
                 src={
                     user && user.image
-                        ? `${import.meta.env.API_URL}/images/profile_pictures/${user.image}`
+                        ? `${import.meta.env.API_URL}/public/images/profile_pictures/${user.image}`
                         : '/defaultProfilePicture.png'
                 }
                 alt="profile-picture"
@@ -33,18 +36,18 @@ function UserBox() {
                     <Link to={'/profile/' + user?._id}>
                         <div className="option">
                             <FontAwesomeIcon icon={faAddressCard} />
-                            <p>Profil</p>
+                            <p>{t('user_box.profile')}</p>
                         </div>
                     </Link>
                     <Link to="/settings">
                         <div className="option">
                             <FontAwesomeIcon icon={faGear} />
-                            <p>Nastavitve</p>
+                            <p>{t('user_box.settings')}</p>
                         </div>
                     </Link>
                     <div className="option" onClick={logout}>
                         <FontAwesomeIcon icon={faRightFromBracket} />
-                        <p>Odjava</p>
+                        <p>{t('user_box.sign_out')}</p>
                     </div>
                 </div>
             )}

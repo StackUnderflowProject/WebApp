@@ -6,28 +6,7 @@ import { faPersonRunning, faSoccerBall, faUser, faTrash } from '@fortawesome/fre
 import '../stylesheets/eventMap.css'
 import { useTranslation } from 'react-i18next'
 import { CustomMarkerIcon } from './CreateEvent.tsx'
-
-type Event = {
-    location: {
-        type: string
-        coordinates: [number, number]
-    }
-    _id: string
-    name: string
-    description: string
-    activity: string
-    date: string
-    time: string
-    host: {
-        _id: string
-        username: string
-        email: string
-        __v: number
-        image: string
-    }
-    followers: string[]
-    __v: number
-}
+import { Event } from './EventList.tsx'
 
 interface MainMapProps {
     events: Event[]

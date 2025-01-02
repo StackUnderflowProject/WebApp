@@ -11,7 +11,7 @@ import { useWebSocket } from '../WebsocketContext.tsx'
 import { useTranslation } from 'react-i18next'
 import { CustomMarkerIcon } from './CreateEvent.tsx'
 
-type Event = {
+export type Event = {
     location: {
         type: string
         coordinates: [number, number]
@@ -30,6 +30,8 @@ type Event = {
         image: string
     }
     followers: string[]
+    image: string
+    predicted_count: number
     __v: number
 }
 
@@ -91,6 +93,7 @@ export default function EventList() {
     const [events, setEvents] = useState<Event[]>([])
     const [loading, setLoading] = useState(true)
     const { user, isTokenExpired, resetJWT } = useUserContext()
+    const [density, setDensity] = useState('dense')
 
     const [following, setFollowing] = useState<string[]>(() => {
         const storedFollowing = localStorage.getItem('followingEventTable')
@@ -224,6 +227,87 @@ export default function EventList() {
         return `${dayOfWeek.charAt(0).toUpperCase() + dayOfWeek.slice(1)} - ${day} ${month}`
     }
 
+    const uploadImage = async (eventId: string, file: File) => {
+        if (isTokenExpired()) {
+            resetJWT()
+            window.alert(t('event_page.session_expired'))
+            return
+        }
+
+        const formData = new FormData()
+        formData.append('density', density)
+        formData.append('image', file)
+
+        console.log('event name', events.find((event) => event._id === eventId)?.name)
+
+        try {
+            // Step 1: Upload the image to the event
+            const uploadResponse = await fetch(`${import.meta.env.API_URL}/events/${eventId}/image`, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    Authorization: `Bearer: ${user?.token}`
+                }
+            })
+
+            if (!uploadResponse.ok) {
+                console.error('Failed to upload image')
+                alert(t('event_page.image_upload_failed'))
+                return
+            }
+
+            const updatedEvent = await uploadResponse.json()
+
+            // Step 2: Predict the count
+            const predictResponse = await fetch(`${import.meta.env.PREDICT_URL}/predict`, {
+                method: 'POST',
+                body: formData
+            })
+
+            if (!predictResponse.ok) {
+                console.error('Failed to predict count')
+                alert(t('event_page.prediction_failed'))
+                return
+            }
+
+            const prediction = await predictResponse.json()
+            const predictedCount = prediction.predicted_count
+            console.log('Prediction result:', predictedCount)
+
+            // Step 3: Save the predicted count in the event
+            const updateResponse = await fetch(`${import.meta.env.API_URL}/events/${eventId}/predicted-count`, {
+                method: 'PATCH',
+                headers: {
+                    Authorization: `Bearer: ${user?.token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ predicted_count: predictedCount })
+            })
+
+            if (!updateResponse.ok) {
+                console.error('Failed to update event with predicted count')
+                alert(t('event_page.update_predicted_count_failed'))
+                return
+            }
+
+            const finalUpdatedEvent = await updateResponse.json()
+            console.log('Updated event with predicted count:', finalUpdatedEvent)
+
+            // Step 4: Update the frontend state
+            console.log(events)
+
+            setEvents((prevEvents) =>
+                prevEvents.map((event) => (event._id === updatedEvent._id ? updatedEvent : event))
+            )
+
+            console.log(events)
+            alert(t('event_page.image_upload_success'))
+        } catch (error) {
+            console.error('Error uploading image or predicting count:', error)
+            alert(t('event_page.upload_error'))
+        }
+    }
+
     // LOADING SCREEN
     if (loading) {
         return <LoadingScreen />
@@ -244,14 +328,14 @@ export default function EventList() {
                 {events.length === 0 ? (
                     <p>{t('event_page.no_events')}</p>
                 ) : (
-                    events.map((event) => (
+                    events.map((event: Event) => (
                         <div key={event._id} className="event-card dark:bg-dark-background text-dark-text">
                             <div className="event-header">
                                 <div className="host-info">
                                     <img
                                         src={
                                             event.host.image
-                                                ? `${import.meta.env.API_URL}/images/profile_pictures/` +
+                                                ? `${import.meta.env.API_URL}/public/images/profile_pictures/` +
                                                   event.host.image
                                                 : '/defaultProfilePicture.png'
                                         }
@@ -279,6 +363,7 @@ export default function EventList() {
                                             icon={event.activity === 'nogomet' ? faSoccerBall : faPersonRunning}
                                         />
                                     </p>
+
                                     <button onClick={(e) => followEvent(event, e)} className="follow-button">
                                         {user && (following.includes(event._id) || event.followers.includes(user._id))
                                             ? `${t('event_page.following')} ✓`
@@ -296,6 +381,12 @@ export default function EventList() {
                             <div className="event-info">
                                 <h3 className="event-title dark:text-dark-accent">{event.name}</h3>
                                 <p className="event-description">{event.description}</p>
+                                {event.predicted_count != 0 && (
+                                    <p className="event-predicted-count">
+                                        {t('event_page.predicted_count')}:{' '}
+                                        {event.predicted_count ?? t('event_page.not_available')}
+                                    </p>
+                                )}
                                 <p className="event-date">
                                     {t('event_page.event_start_at')} <strong>{formatDateString(event.date)}</strong>
                                     &nbsp;
@@ -307,6 +398,45 @@ export default function EventList() {
                                 title={event.name}
                                 location={new LatLng(event.location.coordinates[1], event.location.coordinates[0])}
                             />
+                            {event.image && (
+                                <div>
+                                    <img
+                                        src={`${import.meta.env.API_URL}/${event.image}`}
+                                        alt="Event"
+                                        className="rounded-xl mt-4 w-full max-w-4xl"
+                                    />
+                                </div>
+                            )}
+
+                            <div className="flex flex-row gap-8 items-center justify-center space-y-4">
+                                <select
+                                    className="mt-4 p-2 bg-dark-primary text-white rounded-md hover:bg-dark-neutral focus:ring focus:ring-blue-300"
+                                    value={density}
+                                    onChange={(e) => {
+                                        setDensity(e.target.value)
+                                    }}
+                                >
+                                    <option value="dense">{t('event_page.dense')}</option>
+                                    <option value="sparse">{t('event_page.sparse')}</option>
+                                </select>
+
+                                <input
+                                    type="file"
+                                    id={`fileUpload-${event._id}`}
+                                    className="hidden"
+                                    onChange={(e) => {
+                                        e.target.files && uploadImage(event._id, e.target.files[0])
+                                    }}
+                                />
+
+                                {/* Custom File Upload Button */}
+                                <label
+                                    htmlFor={`fileUpload-${event._id}`}
+                                    className="cursor-pointer px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:ring focus:ring-blue-300"
+                                >
+                                    {event.image ? t('event_page.change_image') : t('event_page.upload_image')}
+                                </label>
+                            </div>
                         </div>
                     ))
                 )}
