@@ -6,7 +6,8 @@
     "events": "Events",
     "create_event": "Create Event",
     "sign_in": "Sign In",
-    "sign_up": "Sign Up"
+    "sign_up": "Sign Up",
+    "predict": "Predict"
   },
   "home_page": {
     "stadiums": "Stadiums",
@@ -75,7 +76,19 @@
     "session_expired": "Session has expired. Please sign in again.",
     "no_events": "No events available",
     "event_start_at": "Event starts on",
-    "at": "at"
+    "at": "at",
+    "image_upload_failed": "Image upload failed",
+    "image_upload_success": "Image uploaded successfully",
+    "prediction_failed": "Prediction failed",
+    "update_predicted_count_failed": "Failed to update predicted count",
+    "upload_error": "Error uploading image",
+    "predicted_count": "Predicted count",
+    "not_available": "Not available",
+    "change_image": "Change Image",
+    "upload_image": "Upload Image",
+    "dense": "Dense population",
+    "sparse": "Sparse population"
+
   },
   "create_event_page": {
     "marked_location": "Marked Location",
@@ -110,6 +123,11 @@
     "contact": "Contact",
     "terms": "Terms",
     "rights": "All rights reserved"
+  },
+  "user_box": {
+    "profile": "Profile",
+    "sign_out": "Sign Out",
+    "settings": "Settings"
   },
   "all": "All",
   "choose_team": "Choose Team",

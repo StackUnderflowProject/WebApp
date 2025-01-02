@@ -6,7 +6,8 @@
     "events": "Dogodki",
     "create_event": "Ustvari Dogodek",
     "sign_in": "Prijava",
-    "sign_up": "Registracija"
+    "sign_up": "Registracija",
+    "predict": "Oceni"
   },
   "home_page": {
     "stadiums": "Stadioni",
@@ -75,7 +76,18 @@
     "session_expired": "Seja je potekla. Ponovno se prijavite.",
     "no_events": "Ni dogodkov",
     "event_start_at": "Dogodek se prične",
-    "at": "ob"
+    "at": "ob",
+    "image_upload_failed": "Napaka pri nalaganju slike",
+    "image_upload_success": "Slika uspešno naložena",
+    "prediction_failed": "Napaka pri ocenitvi števila ljudi",
+    "update_predicted_count_failed": "Napaka pri posodabljanju ocenjenega števila ljudi",
+    "upload_error": "Napaka pri nalaganju slike",
+    "predicted_count": "Ocenjeno število ljudi",
+    "not_available": "Ni na voljo",
+    "change_image": "Spremeni sliko",
+    "upload_image": "Naloži sliko",
+    "dense": "Gosto naseljeno",
+    "sparse": "Redko naseljeno"
   },
   "create_event_page": {
     "marked_location": "Izbrana lokacija",
@@ -110,6 +122,11 @@
     "contact": "Kontakt",
     "terms": "Pogoji uporabe",
     "rights": "Vse pravice pridržane"
+  },
+  "user_box": {
+    "profile": "Profil",
+    "sign_out": "Odjavi",
+    "settings": "Nastavitve"
   },
   "all": "Vsi",
   "choose_team": "Izberi ekipo",
