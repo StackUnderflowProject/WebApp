@@ -4,8 +4,9 @@ import { Sport } from '../types/SportType.ts'
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query'
 import L, { LatLng } from 'leaflet'
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { useWebSocket } from '../WebsocketContext.tsx'
 
 const queryClient = new QueryClient()
 
@@ -92,7 +93,8 @@ export const MatchesMap = ({ sport, fromDate, toDate, team }: MatchesMapProps) =
         data: matches,
         error,
         isLoading,
-        isSuccess
+        isSuccess,
+        refetch
     } = useQuery<IMatch[]>({
         queryKey: [`matches`, sport, fromDate, toDate],
         queryFn: () => fetchMatches(sport, fromDate, toDate)
@@ -102,6 +104,20 @@ export const MatchesMap = ({ sport, fromDate, toDate, team }: MatchesMapProps) =
     const [tileLayerATTR, setTileLayerATTR] = useState(
         '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     )
+    const { socket } = useWebSocket()
+
+    useEffect(() => {
+        if (socket) {
+            socket.on('update-match', async () => {
+                console.log('update-match')
+                await refetch()
+                console.log(matches)
+            })
+            return () => {
+                socket.off('update-match')
+            }
+        }
+    }, [socket])
 
     const switchTileLayer = () => {
         if (tileLayerURL === 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png') {
