@@ -109,9 +109,7 @@ export const MatchesMap = ({ sport, fromDate, toDate, team }: MatchesMapProps) =
     useEffect(() => {
         if (socket) {
             socket.on('update-match', async () => {
-                console.log('update-match')
                 await refetch()
-                console.log(matches)
             })
             return () => {
                 socket.off('update-match')
